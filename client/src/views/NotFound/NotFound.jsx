@@ -24,7 +24,7 @@ const NotFound = () => {
           ¡Lo sentimos! Por favor, visita nuestra página principal para llegar a
           donde necesitas ir.
         </p>
-        <button className="bg-customBlue my-4 w-full rounded-md border px-1 py-5 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-opacity-50 sm:px-16 lg:w-auto">
+        <button className="bg-customBlue my-4 w-full rounded-md border px-1 py-5 text-white hover:bg-indigo-700/50 focus:outline-none focus:ring-2 focus:ring-indigo-800/50 sm:px-16 lg:w-auto">
           <Link to="home">Volver al Home</Link>
         </button>
       </div>

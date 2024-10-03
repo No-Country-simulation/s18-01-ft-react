@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 try {
   // Initialize Husky
-  execSync('cd .. && npx husky frontend/.husky', { stdio: 'inherit' });
+  execSync('cd .. && npx husky client/.husky', { stdio: 'inherit' });
 
   // Create .husky directory if it doesn't exist
   const huskyDir = path.join(__dirname, '.husky');
@@ -49,7 +49,7 @@ fi
 
 cd client
 
-npx --no lint-staged`;
+npx --no lint-staged || { echo -e "$(tput setaf 1)❌There is a bug in Eslint or Prettier, you cannot commit with these errors.$(tput sgr0)"; exit 1; }`;
   fs.writeFileSync(preCommitPath, preCommitHook);
 
   // Create pre-push hook
@@ -65,7 +65,9 @@ npx vitest run --passWithNoTests || { echo -e "$(tput setaf 1)❌Tests failed. P
     //execSync(`chmod +x ${prePushPath}`, { stdio: 'inherit' });
   }
 
-  console.log('Husky has been set up with a commit-msg, pre-commit and pre-push hook');
+  console.log(
+    'Husky has been set up with a commit-msg, pre-commit and pre-push hook'
+  );
 } catch (error) {
   console.error('Error setting up Husky:', error);
   process.exit(1);

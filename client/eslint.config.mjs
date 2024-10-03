@@ -13,8 +13,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-  recommendedConfig: {...js.configs.recommended, ...react.configs.recommended, ...reactHooks.configs.recommended},
-  allConfig: js.configs.all,
+  recommendedConfig: {...react.configs.recommended, ...reactHooks.configs.recommended},
+  allConfig: react.configs.all,
 });
 
 
@@ -39,7 +39,6 @@ export default [
       'eslint:recommended',
       'plugin:prettier/recommended',
       'eslint-config-prettier',
-      'react-app',
       'plugin:tailwindcss/recommended'
     )
   ),
@@ -76,19 +75,8 @@ export default [
     },
 
     rules: {
+      ...js.configs.rules,
        ...react.configs['jsx-runtime'].rules,
-      'no-unused-vars': [
-        'error',
-        {
-          vars: 'local',
-          varsIgnorePattern: '^_',
-          args: 'none',
-          argsIgnorePattern: '[iI]gnored',
-          caughtErrors: 'all',
-          destructuredArrayIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
       'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: false }],
       'react-refresh/only-export-components': [
         'warn',
