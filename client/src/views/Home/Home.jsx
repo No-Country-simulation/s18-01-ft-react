@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const Home = () => {
   return (
-    <div className='text-green-700 text-4xl bg-gray-600 text-center'>El que no trabaja se va al cielo</div>
-  )
-}
+    <main className="flex max-w-3xl flex-col items-center justify-center">
+      <div className="w-full text-center">Esta es la home</div>
+    </main>
+  );
+};
 
-export default Home
+export default Home;

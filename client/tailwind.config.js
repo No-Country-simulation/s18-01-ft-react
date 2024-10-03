@@ -5,4 +5,9 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  future: {
+    hoverOnlyWhenSupported: true,
+    removeDeprecatedGapUtilities: true,
+    standardFontWeights: true,
+  },
 }

@@ -5,7 +5,7 @@ import { Home, NotFound } from '../views';
 const AppRouter = () => {
   const routes = useRoutes([
     {
-      path: '/home',
+      path: '/',
       element: <Home />,
     },
     {

@@ -56,5 +56,20 @@
     "prettier-plugin-tailwindcss": "0.6.8",
     "tailwindcss": "3.4.13",
     "vite": "5.4.8"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
