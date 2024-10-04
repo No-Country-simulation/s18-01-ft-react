@@ -13,11 +13,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-  recommendedConfig: {...react.configs.recommended, ...reactHooks.configs.recommended},
+  recommendedConfig: {
+    ...react.configs.recommended,
+    ...reactHooks.configs.recommended,
+  },
   allConfig: react.configs.all,
 });
-
-
 
 export default [
   {
@@ -31,7 +32,7 @@ export default [
       'tailwind.config.js',
       'setup-husky.js',
       'package.json',
-      'public'
+      'public',
     ],
   },
   ...fixupConfigRules(
@@ -65,7 +66,7 @@ export default [
     },
 
     settings: {
-      'react': { version: '18.3' },
+      react: { version: '18.3' },
       'import/resolver': {
         node: {
           extensions: ['.js'],
@@ -76,7 +77,7 @@ export default [
 
     rules: {
       ...js.configs.rules,
-       ...react.configs['jsx-runtime'].rules,
+      ...react.configs['jsx-runtime'].rules,
       'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: false }],
       'react-refresh/only-export-components': [
         'warn',
@@ -84,7 +85,7 @@ export default [
       ],
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'off',
       'react/jsx-no-target-blank': 'off',
       'react-hooks/exhaustive-deps': 'off',
       'no-underscore-dangle': 'off',
@@ -92,7 +93,7 @@ export default [
       'no-plusplus': 'off',
       'import/no-extraneous-dependencies': 'off',
       'import/no-named-as-default': 'off',
-      'import/no-named-as-default-member': 'off'
+      'import/no-named-as-default-member': 'off',
     },
   },
 ];

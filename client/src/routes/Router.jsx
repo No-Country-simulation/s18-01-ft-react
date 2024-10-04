@@ -1,12 +1,16 @@
 import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Home, NotFound } from '../views';
+import { Home, NotFound, Room } from '../views';
 
 const AppRouter = () => {
   const routes = useRoutes([
     {
       path: '/',
       element: <Home />,
+    },
+    {
+      path: '/room',
+      element: <Room />,
     },
     {
       path: '*',
