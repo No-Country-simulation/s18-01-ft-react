@@ -7,12 +7,12 @@ const swaggerOptions = {
         openapi: '3.0.0', // Define que usas OpenAPI 3.0
         info: {
             title: 'Server', // Título del proyecto
-            version: '0.0.0', // Versión de la API
-            description: 'API para manejar todas las rutas de mi proyecto',
+            version: '1.0.0', // Versión de la API
+            description: 'Documentacion de la API',
         },
         servers: [
             {
-                url: `http://${process.env.HOST}:${process.env.PORT}`, // URL del servidor
+                url: `${process.env.AUTH0_BASE_URL}`, // URL del servidor
             },
         ],
     },

@@ -6,13 +6,13 @@ const logger = require('morgan');
 const { auth, requiresAuth } = require('express-openid-connect');
 const authConfig = require('./src/config/authConfig');
 const router = express.Router();
-const myMiddleware = require('./src/middlewares/middleware');
+// const myMiddleware = require('./src/middlewares/middleware');
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = require('./src/docs/swaggerOptions');
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-const authRouter = require ('./src/router/auth');
+const authRoutes = require ('./src/router/auth.routes');
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(myMiddleware);
+// app.use(myMiddleware);
 app.use(auth(authConfig)); 
 
 // Ruta principal (índice)
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 
 // Routers
-app.use('/auth', authRouter);
+app.use('/auth', authRoutes);
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
