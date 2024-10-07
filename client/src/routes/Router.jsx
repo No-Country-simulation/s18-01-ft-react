@@ -9,7 +9,7 @@ const AppRouter = () => {
       element: <Home />,
     },
     {
-      path: '/room',
+      path: '/office',
       element: <Room />,
     },
     {
@@ -18,7 +18,7 @@ const AppRouter = () => {
     },
   ]);
 
-  return <Suspense>{routes}</Suspense>;
+  return <Suspense fallback={<div>Loading...</div>}>{routes}</Suspense>;
 };
 
 export default AppRouter;

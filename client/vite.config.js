@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,7 +8,6 @@ export default defineConfig({
   root: './',
   plugins: [react()],
   build: {
-    cssMinify: 'lightningcss',
     lightningcss: {
       targets: { chrome: 115, firefox: 115, safari: 16 },
     },
@@ -17,6 +16,5 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: false,
-    host: true,
-  }
-})
+  },
+});

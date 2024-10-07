@@ -1,14 +1,16 @@
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import StartGame from '../../utils/phaser';
 
-const PageRoom = () => {
+const Room = () => {
   const gameRef = useRef(null);
 
   useEffect(() => {
     if (!gameRef.current) {
       gameRef.current = StartGame('room');
     }
+    return () => {
+      if (gameRef.current) gameRef.current.destroy(true);
+    };
   }, []);
 
   return (
@@ -18,4 +20,4 @@ const PageRoom = () => {
   );
 };
 
-export default PageRoom;
+export default Room;
