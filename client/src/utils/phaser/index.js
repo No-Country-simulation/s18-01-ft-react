@@ -1,12 +1,12 @@
-import { AUTO, Game } from 'phaser';
+import { AUTO, Game, Scale } from 'phaser';
 import { SCENE_MAX_HEIGHT, SCENE_MAX_WIDTH } from './consts';
 import { PreloaderScene } from './scenes/PreloaderScene';
-import { GameScene } from './scenes/GameScene';
+import { OfficeScene } from './scenes/OfficeScene';
 
 const config = {
   type: AUTO,
-  width: Math.min(window.innerWidth, SCENE_MAX_WIDTH),
-  height: Math.min(window.innerHeight, SCENE_MAX_HEIGHT),
+  width: SCENE_MAX_WIDTH,
+  height: SCENE_MAX_HEIGHT,
   backgroundColor: '#049cd8',
   parent: 'room',
   physics: {
@@ -21,11 +21,11 @@ const config = {
     touch: true,
   },
   scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Scale.FIT,
+    autoCenter: Scale.CENTER_BOTH,
   },
   pixelArt: true,
-  scene: [PreloaderScene, GameScene],
+  scene: [PreloaderScene, OfficeScene],
 };
 
 /**

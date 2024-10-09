@@ -1,23 +1,26 @@
-import { Scene, Input } from 'phaser';
+import { Scene, Input, Math } from 'phaser';
 import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
 import { SOCKET_URL } from '../../functions/socket';
 import { io } from 'socket.io-client';
 import { Joystick } from '../utils/joystick';
 
-export class GameScene extends Scene {
+export class OfficeScene extends Scene {
   player;
   keys;
   map;
   background;
   idleFrame;
   otherPlayers;
-  groundHouse;
+  groundHouseLayer;
   grassLayer;
   socket;
   joystick;
+  playerName;
+  otherPlayerNames;
 
   constructor() {
     super(SCENE_KEYS.GAME);
+    // El idleFrame son los frames del sprite que tiene que usar cuando esta quieto segun la direccion que mira
     this.idleFrame = {
       down: 23,
       left: 10,
@@ -27,34 +30,19 @@ export class GameScene extends Scene {
   }
 
   init() {
-    /*this.background = this.add.tileSprite(
-      0,
-      0,
-      this.scale.width,
-      this.scale.height,
-      ASSETS_KEYS.BACKGROUND
-    );
-    this.background.setOrigin(0, 0).setScale(1);
-    */
     this.scale.parentIsWindow = false;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
     this.scale.scaleMode = 3;
     this.scale.refresh();
     this.otherPlayers = this.physics.add.group();
+    this.otherPlayerNames = new Map();
     this.socket = io(SOCKET_URL, { autoConnect: true });
   }
 
   create() {
-    /*const render = this.textures.get(ASSETS_KEYS.BACKGROUND).getSourceImage();
-    const backgroundScale = calcBackgroundScale({
-      bgWidth: render.width,
-      bgHeight: render.height,
-      scaleWidth: this.scale.width,
-      scaleHeight: this.scale.height,
-    });
-    this.background.setScale(backgroundScale).setScrollFactor(0);*/
-
+    console.log('HolA');
+    this.joystick = new Joystick(this, 50);
     const map = this.make.tilemap({ key: ASSETS_KEYS.MAP });
     const grassTs = map.addTilesetImage(
       ASSETS_KEYS.GRASS_TILE,
@@ -74,45 +62,26 @@ export class GameScene extends Scene {
     );
 
     this.grassLayer = map.createLayer(ASSETS_KEYS.GRASS_LAYER, grassTs, 0, 0);
-    this.groundHouse = map.createLayer(
+    this.groundHouseLayer = map.createLayer(
       ASSETS_KEYS.GROUND_HOUSE_LAYER,
       [stairTs, terrainSet3Ts, houseTs],
       0,
       0
     );
+    this.grassLayer.setScale(1);
+    this.groundHouseLayer.setScale(1);
     this.grassLayer.setCollisionByProperty({ collides: true });
-    this.groundHouse.setCollisionByProperty({ collides: true });
-    this.groundHouse.setCollisionFromCollisionGroup(true, false, terrainSet3Ts);
-    this.groundHouse.setCollisionFromCollisionGroup(true, false, houseTs);
-    if (this.game.device.input.touch) {
-      this.joystick = new Joystick(this, 100, this.scale.height - 100, 50);
-    }
+    this.groundHouseLayer.setCollisionByProperty({ collides: true });
+    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, terrainSet3Ts);
+    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, houseTs);
     this.setupSocketListeners();
 
     // Create Grass Layer
     this.physics.enableUpdate();
     this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
     this.cameras.main.setBounds(0, 0, this.scale.width, this.scale.height);
-
-    /* 
-    this.player = this.physics.add
-      .sprite(350, 500, ASSETS_KEYS.PLAYER)
-      .setOrigin(0, 1)
-      .setCollideWorldBounds(true)
-      .setGravityY(0)
-      .setSize(15.5, 16)
-      .setOffset(32.25, 32)
-      .setScale(1.8, 1.8);
-    // TINTE: Con este se "tinta" el sprite para cambiarlo de color
-    //this.player.setTint(0xff0000);
-    this.cameras.main.startFollow(this.player, true, 0.8, 0.8);
-    this.player.setFrame(this.idleFrame.down);
-        this.physics.add.collider(this.player, this.grassLayer);
-    this.physics.add.collider(this.player, this.groundHouse);
-    //this.physics.add.collider(this.player, this.background);
-    */
-
-    this.startAnim();
+    this.cameras.main.zoom = 1;
+    this.createAnimations();
     const { LEFT, RIGHT, UP, DOWN, W, A, S, D } = Input.Keyboard.KeyCodes;
     this.keys = this.input.keyboard.addKeys({
       left: LEFT,
@@ -124,6 +93,22 @@ export class GameScene extends Scene {
       s: S,
       d: D,
     });
+    // Actualiza la escala de la camara al redimensionar, ademas verifica el joystick
+    this.scale.on('resize', this.resize, this);
+
+    // Los eventos wheel y pinch, se utilizan para manejar el "zoom"
+    this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+      this.handleZoom(deltaY);
+    });
+    this.input.on('pinch', pinch => {
+      // El factor de escala del pinch
+      let scaleFactor = pinch.scaleFactor;
+      // Convertir el factor de escala a un valor delta similar al de la rueda
+      let delta = (1 - scaleFactor) * 200;
+      this.handleZoom(delta);
+    });
+    //this.input.on('mousemove', this.onMouseMove.bind(this));
+
     // Modd DEBUG
     /* 
     // Habilitar debug para el mundo
@@ -149,46 +134,41 @@ export class GameScene extends Scene {
     // EventBus.emit(SCENE_KEYS.SCENE_READY, this);
   }
 
-  startAnim() {
-    this.anims.create({
-      key: PLAYER_KEYS.WALK_TO_LEFT,
-      frames: this.anims.generateFrameNumbers(ASSETS_KEYS.PLAYER, {
-        frames: [10, 11, 12, 13, 14, 15, 8, 9],
-      }),
-      frameRate: 16,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: PLAYER_KEYS.WALK_TO_RIGHT,
-      frames: this.anims.generateFrameNumbers(ASSETS_KEYS.PLAYER, {
-        frames: [2, 3, 4, 5, 6, 7, 0, 1],
-      }),
-      frameRate: 16,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: PLAYER_KEYS.WALK_TO_DOWN,
-      frames: this.anims.generateFrameNumbers(ASSETS_KEYS.PLAYER, {
-        frames: [23, 16, 17, 18, 19, 20, 21, 22],
-      }),
-      frameRate: 16,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: PLAYER_KEYS.WALK_TO_UP,
-      frames: this.anims.generateFrameNumbers(ASSETS_KEYS.PLAYER, {
-        frames: [31, 24, 25, 26, 27, 28, 29, 30],
-      }),
-      frameRate: 16,
-      repeat: -1,
-    });
+  handleZoom(delta) {
+    let zoom = this.cameras.main.zoom;
+    // Zoom in (acercar)
+    if (delta > 0 && zoom < 1.75) {
+      console.log('Acercando', zoom);
+      this.cameras.main.zoom = Math.RoundTo(zoom + 0.05, -2);
+    }
+    // Zoom out (alejar)
+    else if (delta < 0 && zoom > 1) {
+      console.log('Alejando', zoom);
+      this.cameras.main.zoom = Math.RoundTo(zoom - 0.05, -2);
+    }
+  }
+
+  createAnimations() {
+    const createAnim = (key, frames) => {
+      this.anims.create({
+        key,
+        frames: this.anims.generateFrameNumbers(ASSETS_KEYS.PLAYER, { frames }),
+        frameRate: 16,
+        repeat: -1,
+      });
+    };
+
+    createAnim(PLAYER_KEYS.WALK_TO_LEFT, [10, 11, 12, 13, 14, 15, 8, 9]);
+    createAnim(PLAYER_KEYS.WALK_TO_RIGHT, [2, 3, 4, 5, 6, 7, 0, 1]);
+    createAnim(PLAYER_KEYS.WALK_TO_DOWN, [23, 16, 17, 18, 19, 20, 21, 22]);
+    createAnim(PLAYER_KEYS.WALK_TO_UP, [31, 24, 25, 26, 27, 28, 29, 30]);
   }
 
   setupSocketListeners() {
     this.socket.on('currentPlayers', players => {
       Object.keys(players).forEach(id => {
         if (players[id].playerId === this.socket.id) {
-          this.addPlayer(players[id]);
+          this.createPlayer(players[id]);
         } else {
           this.addOtherPlayers(players[id]);
         }
@@ -203,6 +183,8 @@ export class GameScene extends Scene {
       this.otherPlayers.getChildren().forEach(otherPlayer => {
         if (playerId === otherPlayer.playerId) {
           otherPlayer.destroy();
+          this.otherPlayerNames.get(playerId).destroy();
+          this.otherPlayerNames.delete(playerId);
         }
       });
     });
@@ -227,22 +209,27 @@ export class GameScene extends Scene {
             default:
               otherPlayer.anims.stop();
               if (playerInfo.prevMoveTo === 'left') {
-                this.player.setFrame(this.idleFrame.left);
+                otherPlayer.setFrame(this.idleFrame.left);
               } else if (playerInfo.prevMoveTo === 'right') {
-                this.player.setFrame(this.idleFrame.right);
+                otherPlayer.setFrame(this.idleFrame.right);
               } else if (playerInfo.prevMoveTo === 'up') {
-                this.player.setFrame(this.idleFrame.up);
+                otherPlayer.setFrame(this.idleFrame.up);
               } else if (playerInfo.prevMoveTo === 'down') {
-                this.player.setFrame(this.idleFrame.down);
+                otherPlayer.setFrame(this.idleFrame.down);
               }
+              break;
+          }
+          if (this.otherPlayerNames.has(playerInfo.playerId)) {
+            this.otherPlayerNames
+              .get(playerInfo.playerId)
+              .setPosition(playerInfo.x, playerInfo.y);
           }
         }
       });
     });
   }
 
-  addPlayer(playerInfo) {
-    console.log('Añado el player');
+  createPlayer(playerInfo) {
     this.player = this.physics.add
       .sprite(playerInfo.x, playerInfo.y, ASSETS_KEYS.PLAYER)
       .setOrigin(0, 1)
@@ -251,9 +238,18 @@ export class GameScene extends Scene {
       .setSize(15.5, 16)
       .setOffset(32.25, 32)
       .setScale(1.8, 1.8);
+    this.player.playerId = playerInfo.playerId;
+    this.playerName = this.add
+      .text(playerInfo.x, playerInfo.y, playerInfo.username, {
+        font: '16px Arial',
+        fill: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 4,
+      })
+      .setOrigin(-1.13, 2.5);
 
     this.physics.add.collider(this.player, this.grassLayer);
-    this.physics.add.collider(this.player, this.groundHouse);
+    this.physics.add.collider(this.player, this.groundHouseLayer);
     this.cameras.main.startFollow(this.player, true, 0.8, 0.8);
     this.player.setFrame(this.idleFrame.down);
   }
@@ -267,11 +263,53 @@ export class GameScene extends Scene {
       .setSize(15.5, 16)
       .setOffset(32.25, 32)
       .setScale(1.8, 1.8);
+    otherPlayer.setTint(playerInfo.color);
+    const otherPlayerName = this.add
+      .text(playerInfo.x, playerInfo.y, playerInfo.username, {
+        font: '16px Arial',
+        fill: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 4,
+      })
+      .setOrigin(-1.13, 2.5);
+    otherPlayerName.playerId = playerInfo.playerId;
     otherPlayer.playerId = playerInfo.playerId;
     otherPlayer.setFrame(this.idleFrame.down);
     this.physics.add.collider(otherPlayer, this.grassLayer);
-    this.physics.add.collider(otherPlayer, this.groundHouse);
+    this.physics.add.collider(otherPlayer, this.groundHouseLayer);
+    this.otherPlayerNames.set(playerInfo.playerId, otherPlayerName);
     this.otherPlayers.add(otherPlayer);
+  }
+
+  onMouseMove() {
+    if (
+      this.touchAvailable &&
+      !('ontouchstart' in window) &&
+      navigator.maxTouchPoints === 0
+    ) {
+      this.joystick.destroy();
+    } else {
+      this.joystick.create(100, this.scale.height - 100);
+    }
+  }
+
+  resize(gameSize) {
+    if (this.cameras.main) {
+      this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
+    }
+    if (this.player) {
+      this.cameras.main.startFollow(this.player, true);
+    }
+    if (
+      !!this.joystick &&
+      (this.game.device.input.touch ||
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0)
+    ) {
+      this.joystick.create(100, this.scale.height - 100);
+    } else {
+      this.joystick.destroy();
+    }
   }
 
   update(time, delta) {
@@ -320,6 +358,9 @@ export class GameScene extends Scene {
       this.player.body.velocity.normalize().scale(speed);
       if (!moved) {
         this.player.anims.stop();
+      } else {
+        this.playerName.x = this.player.x;
+        this.playerName.y = this.player.y;
       }
 
       // Emitir el movimiento del jugador
@@ -358,5 +399,49 @@ export class GameScene extends Scene {
         }
       }
     }
+  }
+  shutdown() {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+
+    if (this.joystick) {
+      this.joystick.destroy();
+      this.joystick = null;
+    }
+
+    if (this.player) {
+      this.player.destroy();
+      this.player = null;
+    }
+
+    if (this.player) {
+      this.player.destroy();
+      this.player = null;
+    }
+
+    if (this.playerName) {
+      this.playerName.destroy();
+      this.playerName = null;
+    }
+
+    if (this.otherPlayers) {
+      this.otherPlayers.clear(true, true);
+      this.otherPlayers.destroy();
+      this.otherPlayers = null;
+    }
+
+    if (this.otherPlayerNames) {
+      this.otherPlayerNames.forEach((value, key) => {
+        if (value && typeof value.destroy === 'function') {
+          value.destroy();
+        }
+      });
+      this.otherPlayerNames.clear();
+      this.otherPlayerNames = null;
+    }
+    // Eliminar todos los eventos de escena
+    this.events.removeAllListeners();
   }
 }

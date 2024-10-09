@@ -8,13 +8,16 @@ export class Joystick {
   pointerId;
   direction;
 
-  constructor(main, x, y, radius) {
+  constructor(main, radius) {
     this.scene = main;
+    //*Anoto*: El radio es el la distancia entre el centro de una circunferencia y cualquiera de sus bordes
     this.radius = radius;
+  }
 
+  create(x, y) {
     // Crear el fondo del joystick
     this.base = this.scene.add
-      .circle(x, y, radius, 0x888888, 0.5)
+      .circle(x, y, this.radius, 0x888888, 0.5)
       .setInteractive()
       .setScrollFactor(0);
 
@@ -22,7 +25,7 @@ export class Joystick {
 
     // Crear la palanca del joystick
     this.stick = this.scene.add
-      .circle(x, y, radius / 2, 0xffffff, 0.5)
+      .circle(x, y, this.radius / 2, 0xffffff, 0.5)
       .setInteractive()
       .setScrollFactor(0);
 
@@ -69,10 +72,10 @@ export class Joystick {
 
       //Usando el teorema de pitagoras se calcula,
       //la distancia entre el puntero y el centro del joystick
+      // a^2 + b^2 = c^2
       let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      //*Anoto*: El radio es el la distancia entre el centro de una circunferencia y cualquiera de sus bordes
 
-      //Si la distancia es del puntero es mayor al radio, se limita para evitar que el stick se salga
+      //Si la distancia del puntero es mayor al radio, se limita para evitar que el stick se salga
       if (distance > this.radius) {
         deltaX *= this.radius / distance;
         deltaY *= this.radius / distance;
@@ -86,7 +89,7 @@ export class Joystick {
       //Direccion del movimiento entre X(-1, 1) e Y(-1, 1)
       //"0" == Quieto // >0 = Derecha // <0 = Izquierda
       this.direction.x = deltaX / this.radius;
-      //"0" == Quieto // >0 = Agachandose // <0 = Saltando
+      //"0" == Quieto // >0 = Abajo // <0 = Arriba
       this.direction.y = deltaY / this.radius;
     }
   }
@@ -105,21 +108,30 @@ export class Joystick {
     }
   }
 
+  destroy() {
+    // Destruir los elementos y eliminar los eventos (Ayuda a limpiar la cache cuando no se use el joystick)
+    if (this.base) this.base.destroy();
+    if (this.stick) this.stick.destroy();
+    this.scene.input.off('pointerdown', this.onPointerDown, this);
+    this.scene.input.off('pointermove', this.onPointerMove, this);
+    this.scene.input.off('pointerup', this.onPointerUp, this);
+  }
+
   getDirection() {
     return this.direction;
   }
 
   isMovingUp() {
-    return this.direction.y < -0.5;
+    return this.direction?.y < -0.5;
   }
 
   isMovingDown() {
-    return this.direction.y > 0.5;
+    return this.direction?.y > 0.5;
   }
   isMovingRight() {
-    return this.direction.x > 0.5;
+    return this.direction?.x > 0.5;
   }
   isMovingLeft() {
-    return this.direction.x < -0.5;
+    return this.direction?.x < -0.5;
   }
 }

@@ -17,13 +17,30 @@ app.use(cors());
 app.use(express.static('public'));
 
 const players = {};
+const colores = [
+  0xff0000, // Rojo
+  0x00ff00, // Verde
+  0x0000ff, // Azul
+  0x808080, // Gris
+  0xffff00, // Dorado (amarillo)
+  0x00ffff, // Celeste (cian)
+  0x800080, // Morado
+  0xff69b4  // Rosado (Hot Pink)
+];
+
+function getPlayerColor() {
+  const indiceAleatorio = Math.floor(Math.random() * colores.length);
+  return colores[indiceAleatorio];
+}
 
 io.on('connection', (socket) => {
   // Crear un nuevo jugador
   players[socket.id] = {
     x: 350,
     y: 500,
-    playerId: socket.id
+    playerId: socket.id,
+    username: "Guest",
+    color: getPlayerColor()
   };
 
   console.log(`⚡: Un jugador se ha conectado. Jugadores en sala: ${Object.keys(players).length}`);

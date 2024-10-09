@@ -1,6 +1,7 @@
-import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Home, NotFound, Room } from '../views';
+import Office from '../views/Office/Office';
+import Home from '../views/Home/Home';
+import NotFound from '../views/NotFound/NotFound';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -10,7 +11,7 @@ const AppRouter = () => {
     },
     {
       path: '/office',
-      element: <Room />,
+      element: <Office />,
     },
     {
       path: '*',
@@ -18,7 +19,7 @@ const AppRouter = () => {
     },
   ]);
 
-  return <Suspense fallback={<div>Loading...</div>}>{routes}</Suspense>;
+  return routes;
 };
 
 export default AppRouter;

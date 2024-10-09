@@ -27,12 +27,6 @@ export class PreloaderScene extends Scene {
       frameHeight: 80,
       startFrame: 0,
     });
-    /* 
-    this.load.image(
-      ASSETS_KEYS.BACKGROUND,
-      'images/room.png'
-    );
-    */
   }
 
   create() {
