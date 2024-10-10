@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth } from '../../context/authContext.jsx';
 import LoginButton from '../../components/loginButton/loginButon.jsx';
 import LogoutButton from '../../components/logoutButton/logoutButton.jsx';
 
 const Home = () => {
-  const { isAuthenticated, user } = useAuth0();
+  const { authUser } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      console.log('Usuario autenticado:', user);
-    }
-  }, [isAuthenticated, user]);
+    console.log('Session Storage:', sessionStorage);
+  }, []);
 
   return (
     <main className="flex max-w-3xl flex-col items-center justify-center">
       <div className="w-full text-center">Esta es la home</div>
-      {!isAuthenticated ? (
+      {!authUser ? (
         <LoginButton />
       ) : (
         <div>

@@ -4,6 +4,7 @@ import App from './App.jsx';
 import './styles/index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { AuthProvider } from './context/authContext.jsx';
 
 const domain = 'pabloelleproso.us.auth0.com';
 const clientId = 'rXwlmefeCxHxBnwu0mAijg6AKtmRpyjn';
@@ -14,9 +15,11 @@ createRoot(document.getElementById('root')).render(
       domain={domain}
       clientId={clientId}
       redirectUri={window.location.origin}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </Auth0Provider>
   </StrictMode>
 );
