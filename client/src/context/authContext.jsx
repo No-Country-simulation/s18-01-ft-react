@@ -10,10 +10,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       setAuthUser(user);
-      sessionStorage.setItem('authUser', JSON.stringify(user)); // Store user in session storage
+      sessionStorage.setItem('authUser', JSON.stringify(user));
     } else {
       setAuthUser(null);
-      sessionStorage.removeItem('authUser'); // Clear session storage if not authenticated
+      sessionStorage.removeItem('authUser');
     }
   }, [isAuthenticated, user]);
 
