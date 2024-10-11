@@ -12,24 +12,22 @@ for (const x in raw) {
   );
 }
 
-// https://vitejs.dev/config/
 export default defineConfig({
   base: './',
   publicDir: 'public',
   root: './',
   plugins: [react()],
   clearScreen: false,
-  resolve: { alias },
+  resolve: {
+    alias,
+  },
   build: {
-    cssMinify: 'lightningcss',
     lightningcss: {
       targets: { chrome: 115, firefox: 115, safari: 16 },
     },
   },
-
   server: {
     port: 3000,
     strictPort: false,
-    host: true,
   },
 });
