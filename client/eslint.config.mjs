@@ -16,6 +16,7 @@ const compat = new FlatCompat({
   recommendedConfig: {
     ...react.configs.recommended,
     ...reactHooks.configs.recommended,
+    ...prettier.recommended,
   },
   allConfig: react.configs.all,
 });
@@ -85,7 +86,26 @@ export default [
       ],
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
-      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+      'prettier/prettier': [
+        'warn',
+        {
+          singleQuote: true,
+          printWidth: 85,
+          tabWidth: 2,
+          trailingComma: 'es5',
+          arrowParens: 'avoid',
+          proseWrap: 'preserve',
+          htmlWhitespaceSensitivity: 'css',
+          bracketSpacing: true,
+          bracketSameLine: true,
+          useTabs: false,
+          endOfLine: 'lf',
+          semi: true,
+        },
+        {
+          usePrettierrc: true,
+        },
+      ],
       'react/jsx-no-target-blank': 'off',
       'react-hooks/exhaustive-deps': 'off',
       'no-underscore-dangle': 'off',
