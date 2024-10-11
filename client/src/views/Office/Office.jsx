@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import StartGame from '../../utils/phaser';
+import StartGame from '@/utils/phaser';
 
 const Office = () => {
   const gameRef = useRef(null);

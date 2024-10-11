@@ -1,6 +1,6 @@
 import { Scene, Input, Math } from 'phaser';
 import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
-import { SOCKET_URL } from '../../functions/socket';
+import { SOCKET_URL } from '@/utils/functions/socket';
 import { io } from 'socket.io-client';
 import { Joystick } from '../utils/joystick';
 
@@ -41,47 +41,12 @@ export class OfficeScene extends Scene {
   }
 
   create() {
-    console.log('HolA');
     this.joystick = new Joystick(this, 50);
-    const map = this.make.tilemap({ key: ASSETS_KEYS.MAP });
-    const grassTs = map.addTilesetImage(
-      ASSETS_KEYS.GRASS_TILE,
-      ASSETS_KEYS.GRASS_IMG
-    );
-    const stairTs = map.addTilesetImage(
-      ASSETS_KEYS.STAIR_TILE,
-      ASSETS_KEYS.STAIR_IMG
-    );
-    const terrainSet3Ts = map.addTilesetImage(
-      ASSETS_KEYS.TERRAIN_SET3_TILE,
-      ASSETS_KEYS.TERRAIN_SET3_IMG
-    );
-    const houseTs = map.addTilesetImage(
-      ASSETS_KEYS.HOUSE_TILE,
-      ASSETS_KEYS.HOUSE_IMG
-    );
-
-    this.grassLayer = map.createLayer(ASSETS_KEYS.GRASS_LAYER, grassTs, 0, 0);
-    this.groundHouseLayer = map.createLayer(
-      ASSETS_KEYS.GROUND_HOUSE_LAYER,
-      [stairTs, terrainSet3Ts, houseTs],
-      0,
-      0
-    );
-    this.grassLayer.setScale(1);
-    this.groundHouseLayer.setScale(1);
-    this.grassLayer.setCollisionByProperty({ collides: true });
-    this.groundHouseLayer.setCollisionByProperty({ collides: true });
-    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, terrainSet3Ts);
-    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, houseTs);
+    this.createMap();
     this.setupSocketListeners();
-
-    // Create Grass Layer
-    this.physics.enableUpdate();
-    this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
-    this.cameras.main.setBounds(0, 0, this.scale.width, this.scale.height);
-    this.cameras.main.zoom = 1;
     this.createAnimations();
+    // Eventos
+    // Eventos de teclado
     const { LEFT, RIGHT, UP, DOWN, W, A, S, D } = Input.Keyboard.KeyCodes;
     this.keys = this.input.keyboard.addKeys({
       left: LEFT,
@@ -97,7 +62,7 @@ export class OfficeScene extends Scene {
     this.scale.on('resize', this.resize, this);
 
     // Los eventos wheel y pinch, se utilizan para manejar el "zoom"
-    this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+    this.input.on('wheel', (_p, _g, _x, deltaY, _z) => {
       this.handleZoom(deltaY);
     });
     this.input.on('pinch', pinch => {
@@ -148,7 +113,39 @@ export class OfficeScene extends Scene {
     }
   }
 
+  createMap() {
+    const map = this.make.tilemap({ key: ASSETS_KEYS.MAP });
+    const createTileset = (key, img) => map.addTilesetImage(key, img);
+    const grassTs = createTileset(ASSETS_KEYS.GRASS_TILE, ASSETS_KEYS.GRASS_IMG);
+    const stairTs = createTileset(ASSETS_KEYS.STAIR_TILE, ASSETS_KEYS.STAIR_IMG);
+    const terrainSet3Ts = createTileset(
+      ASSETS_KEYS.TERRAIN_SET3_TILE,
+      ASSETS_KEYS.TERRAIN_SET3_IMG
+    );
+    const houseTs = createTileset(ASSETS_KEYS.HOUSE_TILE, ASSETS_KEYS.HOUSE_IMG);
+
+    this.grassLayer = map.createLayer(ASSETS_KEYS.GRASS_LAYER, grassTs, 0, 0);
+    this.groundHouseLayer = map.createLayer(
+      ASSETS_KEYS.GROUND_HOUSE_LAYER,
+      [stairTs, terrainSet3Ts, houseTs],
+      0,
+      0
+    );
+
+    this.grassLayer.setScale(1);
+    this.groundHouseLayer.setScale(1);
+    this.grassLayer.setCollisionByProperty({ collides: true });
+    this.groundHouseLayer.setCollisionByProperty({ collides: true });
+    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, terrainSet3Ts);
+    this.groundHouseLayer.setCollisionFromCollisionGroup(true, false, houseTs);
+  }
+
   createAnimations() {
+    this.physics.enableUpdate();
+    this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
+    this.cameras.main.setBounds(0, 0, this.scale.width, this.scale.height);
+    this.cameras.main.zoom = 1;
+
     const createAnim = (key, frames) => {
       this.anims.create({
         key,
