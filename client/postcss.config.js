@@ -6,4 +6,4 @@ export default {
     'tailwindcss/nesting': {},
     ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
   },
-}
+};

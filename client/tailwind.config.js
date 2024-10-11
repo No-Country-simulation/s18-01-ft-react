@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "./src/**/*.css"],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './src/**/*.css'],
   theme: {
     extend: {},
   },
@@ -10,4 +10,4 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     standardFontWeights: true,
   },
-}
+};
