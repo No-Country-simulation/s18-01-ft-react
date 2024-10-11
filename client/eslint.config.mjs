@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
