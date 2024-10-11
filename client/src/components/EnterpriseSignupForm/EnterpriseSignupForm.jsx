@@ -1,5 +1,5 @@
 import FormComponent from '../FormComponent/FormComponent';
-import { onSubmit } from './onSubmit';
+import { useSubmitEnterpriseSignup } from './useSubmitEnterpriseSignup';
 
 /**
  * Array que corresponde a los inputs del formulario de registro de empresa.
@@ -46,6 +46,6 @@ export const EnterpriseSignupForm = () => (
     id="enterprise-signup"
     btnText="Registrarme"
     fields={enterpriseSignupFields}
-    onSubmit={onSubmit}
+    onSubmit={useSubmitEnterpriseSignup}
   />
 );

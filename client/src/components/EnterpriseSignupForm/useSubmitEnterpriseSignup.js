@@ -1,6 +1,8 @@
 import { signupEnterpriseSchema } from '@/schemas/userSchemas';
+import { useNavigate } from 'react-router-dom';
 
-export const onSubmit = async form => {
+export const useSubmitEnterpriseSignup = async form => {
+  const navigate = useNavigate();
   const signupVerified = signupEnterpriseSchema.safeParse({
     password: form.get('passwordField'),
     email: form.get('emailField'),
@@ -33,4 +35,6 @@ export const onSubmit = async form => {
     };
   }
   //Logica caso de exito (No se que ocurriria)
+
+  navigate('/enterprise-signin');
 };

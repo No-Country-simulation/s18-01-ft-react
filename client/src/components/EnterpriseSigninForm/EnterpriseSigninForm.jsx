@@ -1,5 +1,5 @@
 import FormComponent from '../FormComponent/FormComponent';
-import { onSubmit } from './onSubmit';
+import { useSubmitEnterpriseSignin } from './useSubmitEnterpriseSignin';
 
 /**
  * Array que corresponde a los inputs del formulario de registro de empresa.
@@ -39,6 +39,6 @@ export const EnterpriseSigninForm = () => (
     btnText="Iniciar sesion"
     fields={enterpriseSigninFields}
     className="mt-10"
-    onSubmit={onSubmit}
+    onSubmit={useSubmitEnterpriseSignin}
   />
 );

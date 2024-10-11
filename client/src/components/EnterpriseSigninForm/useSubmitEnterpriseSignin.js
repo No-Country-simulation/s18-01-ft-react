@@ -1,6 +1,8 @@
 import { loginShcema } from '@/schemas/userSchemas';
+import { useNavigate } from 'react-router-dom';
 
-export const onSubmit = async form => {
+export const useSubmitEnterpriseSignin = async form => {
+  const navigate = useNavigate();
   const signupVerified = loginShcema.safeParse({
     password: form.get('passwordField'),
     email: form.get('emailField'),
@@ -31,4 +33,6 @@ export const onSubmit = async form => {
     };
   }
   //Logica caso de exito (No se que ocurriria)
+
+  navigate('/');
 };
