@@ -1,5 +1,4 @@
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -8,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +16,6 @@ const compat = new FlatCompat({
   recommendedConfig: {
     ...react.configs.recommended,
     ...reactHooks.configs.recommended,
-    ...prettier.recommended,
   },
   allConfig: react.configs.all,
 });
@@ -37,16 +36,10 @@ export default [
     ],
   },
   ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:prettier/recommended',
-      'eslint-config-prettier',
-      'plugin:tailwindcss/recommended'
-    )
+    compat.extends('eslint:recommended', 'plugin:tailwindcss/recommended')
   ),
   {
     plugins: {
-      prettier: fixupPluginRules(prettier),
       react: fixupPluginRules(react),
       'react-hooks': fixupPluginRules(reactHooks),
       'react-refresh': fixupPluginRules(reactRefresh),
@@ -116,4 +109,5 @@ export default [
       'import/no-named-as-default-member': 'off',
     },
   },
+  eslintPluginPrettierRecommended,
 ];
