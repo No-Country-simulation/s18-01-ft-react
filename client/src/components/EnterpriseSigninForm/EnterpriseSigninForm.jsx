@@ -9,8 +9,14 @@ import FormComponent from '../FormComponent/FormComponent';
  * @property {string} id - ID del elemento
  */
 const enterpriseSigninFields = [
-  { label: 'Email', type: 'email', tabindex: 1, id: 'nameField' },
-  { label: 'Contraseña', type: 'password', tabindex: 2, id: 'passwordField' },
+  { label: 'Email', type: 'email', tabindex: 1, id: 'nameField', name: 'nameField' },
+  {
+    label: 'Contraseña',
+    type: 'password',
+    tabindex: 2,
+    id: 'passwordField',
+    name: 'passwordField',
+  },
 ];
 
 /**

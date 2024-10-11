@@ -7,9 +7,10 @@ export const useForm = onSubmit => {
   const submit = async event => {
     event.preventDefault();
     setIsPending(true);
-    const formData = new FormData(event.currentTarget);
+    const form = new FormData(event.currentTarget);
+
     try {
-      const result = await onSubmit(formData);
+      const result = await onSubmit(form);
       if (result && result.errors) {
         setErrors(result.errors);
       } else {
@@ -22,5 +23,5 @@ export const useForm = onSubmit => {
     }
   };
 
-  return [errors, isPending, submit];
+  return { errors, isPending, submit };
 };

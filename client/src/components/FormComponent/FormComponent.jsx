@@ -15,7 +15,7 @@ const RenderFields = ({ field, error }) => {
     autoComplete: field.autoComplete || 'off',
     error: error,
     icon: field.icon,
-    tabindex: field.tabindex,
+    tabIndex: field.tabindex,
   };
   if (field.type === 'password') {
     return <PasswordFormField {...commonProps} />;
@@ -31,21 +31,25 @@ export default function FormComponent({
   btnClassName = '',
   id,
 }) {
-  const [errors, isPending, submit] = useForm(onSubmit);
-
+  const { errors, isPending, submit } = useForm(onSubmit);
   return (
     <form
       id={id}
       data-testid={id}
       onSubmit={submit}
-      className={cn(className, 'flex w-full max-w-3xl flex-col gap-y-7')}>
+      className={cn(className, 'relative flex w-full max-w-3xl flex-col gap-y-7')}>
       {fields.map(field => (
-        <RenderFields key={field.name} field={field} error={errors?.[field.name]} />
+        <RenderFields
+          key={field.name}
+          field={field}
+          error={errors?.[field.name.replace(/Field$/, '')]}
+        />
       ))}
+
       <Button
         type="submit"
         size="full"
-        key={`${id}-${isPending}`}
+        key={`${id}`}
         disabled={isPending}
         className={cn(
           btnClassName,
@@ -54,6 +58,11 @@ export default function FormComponent({
         tabIndex={Number(fields.at(-1)?.tabindex || 0) + 1}>
         {btnText}
       </Button>
+      {errors && errors?.GLOBAL ? (
+        <span className="absolute -bottom-6 left-0 text-sm text-red-400">
+          {errors?.GLOBAL}
+        </span>
+      ) : null}
     </form>
   );
 }

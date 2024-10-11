@@ -8,7 +8,7 @@ const formFieldCVA = cva(
   {
     variants: {
       error: {
-        true: 'border-red-400 focus:border-error-400  placeholder:text-red-950 sr',
+        true: 'border-red-400 focus:border-red-400',
         false: '',
       },
       password: {
@@ -22,7 +22,7 @@ const formFieldCVA = cva(
 const labelCVA = cva('text-base font-normal leading-4 text-white', {
   variants: {
     error: {
-      true: 'text-error-60 peer-focus:text-error-60 peer-[:not(:placeholder-shown)]:text-error-60',
+      true: 'text-red-500',
       false: '',
     },
     defaultVariants: { error: false },
@@ -62,7 +62,7 @@ const FormField = forwardRef(function FormField(
         {onTypeChange ? <EyeButton onTypeChange={onTypeChange} /> : null}
       </div>
       {error ? (
-        <span className="text-error-60 absolute -bottom-5 left-0 text-xs">
+        <span className="absolute -bottom-5 left-0 text-xs text-red-400">
           {error}
         </span>
       ) : null}
