@@ -14,6 +14,21 @@
     -webkit-box-direction: normal;
   }
 }
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .no-outline {
+    @apply no-underline outline-none focus:outline-none focus-visible:outline-none active:outline-none;
+  }
+}
 
-.home {
+body {
+  background-color: #111010;
+  max-width: 100dvw;
+  overflow-x: hidden;
+  touch-action: manipulation;
 }

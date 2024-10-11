@@ -85,7 +85,7 @@ export default [
       ],
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
-      'prettier/prettier': 'off',
+      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
       'react/jsx-no-target-blank': 'off',
       'react-hooks/exhaustive-deps': 'off',
       'no-underscore-dangle': 'off',

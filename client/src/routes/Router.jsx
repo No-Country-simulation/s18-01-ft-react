@@ -14,6 +14,14 @@ const AppRouter = () => {
       element: <Office />,
     },
     {
+      path: '/enterprise-signup',
+      element: <EnterpriseSignup />,
+    },
+    {
+      path: '/enterprise-signin',
+      element: <EnterpriseSignin />,
+    },
+    {
       path: '*',
       element: <NotFound />,
     },
