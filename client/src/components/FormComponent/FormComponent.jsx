@@ -31,7 +31,7 @@ export default function FormComponent({
   btnClassName = '',
   id,
 }) {
-  const [errors, isPending, submit] = useForm();
+  const [errors, isPending, submit] = useForm(onSubmit);
 
   return (
     <form
@@ -49,7 +49,7 @@ export default function FormComponent({
         disabled={isPending}
         className={cn(
           btnClassName,
-          'focus-visible:outline-accent-50 mt-8 max-w-lg focus-visible:outline-1'
+          'mt-8 max-w-lg focus-visible:outline-1 focus-visible:outline-sky-200'
         )}
         tabIndex={Number(fields.at(-1)?.tabindex || 0) + 1}>
         {btnText}

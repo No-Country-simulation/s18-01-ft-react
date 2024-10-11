@@ -4,11 +4,11 @@ import { cn } from '@/utils/functions/cn';
 import EyeButton from '../EyeButton/EyeButton';
 
 const formFieldCVA = cva(
-  'w-full bg-transparent relative z-10 no-outline rounded-md transition-all duration-300 ease-in-out text-sm  h-12 px-3 py-2 border-none',
+  'w-full bg-transparent text-white border border-solid border-sky-800 focus:border-sky-600 relative z-10 no-outline rounded-md transition-all duration-300 ease-in-out text-sm  h-12 px-3 py-2',
   {
     variants: {
       error: {
-        true: 'border-error-60 focus:border -error-60 placeholder:text-error-60 sr',
+        true: 'border-red-400 focus:border-error-400  placeholder:text-red-950 sr',
         false: '',
       },
       password: {
@@ -50,8 +50,6 @@ const FormField = forwardRef(function FormField(
         {label}
       </label>
       <div className="relative mt-4">
-        <div className="to-primary-50 from-accent-400 absolute inset-0 rounded-md bg-gradient-to-r"></div>
-        <div className="bg-gradient-field absolute inset-px rounded-md"></div>
         <input
           {...props}
           id={defaultID}

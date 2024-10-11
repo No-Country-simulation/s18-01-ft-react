@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { Home, NotFound, Room } from '../views';
+import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -11,6 +12,10 @@ const AppRouter = () => {
     {
       path: '/room',
       element: <Room />,
+    },
+    {
+      path: '/enterprise-signup',
+      element: <EnterpriseSignup />,
     },
     {
       path: '*',

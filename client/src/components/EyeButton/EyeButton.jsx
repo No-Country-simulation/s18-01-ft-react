@@ -7,7 +7,6 @@ const EyeButton = ({ onTypeChange }) => {
     onTypeChange?.(!showPassword ? 'text' : 'password');
     setShowPassword(prev => !prev);
   };
-
   return (
     <button
       type="button"
