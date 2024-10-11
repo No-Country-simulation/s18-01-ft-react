@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/functions/cn';
 
 const btnCVA = cva(
   `inline-flex items-center justify-center  rounded-lg no-outline truncate disabled:opacity-60 disabled:cursor-default disabled:bg-neutral-500 disable:text-neutral-800 transition-all ease-in-out duration-300`,
