@@ -1,11 +1,9 @@
-import { signupEnterpriseSchema } from '@/schemas/userSchemas';
+import { loginShcema } from '@/schemas/userSchemas';
 
 export const onSubmit = async form => {
-  const signupVerified = signupEnterpriseSchema.safeParse({
+  const signupVerified = loginShcema.safeParse({
     password: form.get('passwordField'),
     email: form.get('emailField'),
-    name: form.get('nameField'),
-    domain: form.get('domainField'),
   });
   if (!signupVerified.success) {
     const errors = Object.fromEntries(
@@ -20,7 +18,7 @@ export const onSubmit = async form => {
     };
   }
 
-  const res = await fetch('/api/signup', {
+  const res = await fetch('/api/signin', {
     method: 'POST',
     body: JSON.stringify(signupVerified.data),
   });

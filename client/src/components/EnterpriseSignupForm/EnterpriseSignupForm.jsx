@@ -12,7 +12,7 @@ import { onSubmit } from './onSubmit';
 const enterpriseSignupFields = [
   { label: 'Nombre', type: 'text', tabindex: 1, id: 'nameField', name: 'nameField' },
   {
-    label: 'Email',
+    label: 'Correo Electronico empresarial',
     type: 'email',
     tabindex: 2,
     id: 'emailField',

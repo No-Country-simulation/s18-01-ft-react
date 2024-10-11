@@ -1,4 +1,5 @@
 import FormComponent from '../FormComponent/FormComponent';
+import { onSubmit } from './onSubmit';
 
 /**
  * Array que corresponde a los inputs del formulario de registro de empresa.
@@ -9,7 +10,13 @@ import FormComponent from '../FormComponent/FormComponent';
  * @property {string} id - ID del elemento
  */
 const enterpriseSigninFields = [
-  { label: 'Email', type: 'email', tabindex: 1, id: 'nameField', name: 'nameField' },
+  {
+    label: 'Correo electronico',
+    type: 'email',
+    tabindex: 1,
+    id: 'nameField',
+    name: 'nameField',
+  },
   {
     label: 'Contraseña',
     type: 'password',
@@ -32,5 +39,6 @@ export const EnterpriseSigninForm = () => (
     btnText="Iniciar sesion"
     fields={enterpriseSigninFields}
     className="mt-10"
+    onSubmit={onSubmit}
   />
 );
