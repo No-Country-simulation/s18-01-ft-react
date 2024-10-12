@@ -7,31 +7,22 @@ const userSchema = new mongoose.Schema({
     },
     socketId: {
         type: String,
-        required: true
+        default :""
     },
     email: {
         type: String,
         required: true
     },
-    pasword: {
-        type: String,
-        required: true
-    },
     id_emp: {
         type: String,
-        required: true
+        default: ""
     },
     rol: {
         type: String,
-        required: true
-    },
-    rol: {
-        type: String,
-        required: true
+        default: ""
     },
     status: { 
         type: String,
-        required: true, 
         enum: ['active', 'disconnected'] }
 },
     { timestamps: true }

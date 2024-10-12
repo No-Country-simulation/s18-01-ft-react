@@ -3,7 +3,6 @@ const crip = require("bcryptjs")
 const {createAccess}= require("../utils/createAcesstoken.js")
 
 const registerEmp = async (req, res) => {
-    console.log("aa");
     const { domain, name, email, password } = req.body;
     try {
         const empex = await Emp.findOne({ name });
@@ -34,10 +33,8 @@ const registerEmp = async (req, res) => {
         });
         console.log("aaa", newEmp);
         const rEmp = await newEmp.save();
-        console.log("guardo", rEmp);
         
         const token = await createAccess({ id: rEmp.id });
-        console.log("token creado");
         
         res.cookie("token", token, {
             httpOnly: true,
