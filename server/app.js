@@ -3,8 +3,8 @@ const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const { auth, requiresAuth } = require('express-openid-connect');
-const authConfig = require('./src/config/authConfig');
+const { auth } = require('express-openid-connect');
+const authConfig = require('./src/config/authConfig.js');
 const router = express.Router();
 const roomRoutes = require('./src/router/rooms.routes.js');
 const vsRoutes = require('./src/router/vsactivity.routes.js');
@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(myMiddleware);
-app.use(auth(authConfig)); 
+app.use(authConfig); 
 connectDB();
 
 // Ruta principal (índice)

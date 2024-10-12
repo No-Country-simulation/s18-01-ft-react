@@ -19,7 +19,7 @@ const { login, logout, profile, status } = require('../controller/auth.controlle
  *       401:
  *         description: Si no se puede redirigir correctamente o no hay un proveedor configurado.
  */
-router.get('/login', login);
+router.get('/login', requiresAuth(),login);
 
 /**
  * @swagger

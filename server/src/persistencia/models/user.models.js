@@ -1,29 +1,31 @@
 const mongoose = require('mongoose');
+const providerSchema = require('./provider.models');
 
 const userSchema = new mongoose.Schema({
+    sid: {
+        type: mongoose.Schema.Types.ObjectId,
+        default:() => new mongoose.Types.ObjectId()
+    },
     username: {
         type: String,
         required: true
     },
     socketId: {
         type: String,
-        required: true
+        required: false
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    pasword: {
+    password: {
         type: String,
-        required: true
+        required: false
     },
     id_emp: {
         type: String,
-        required: true
-    },
-    rol: {
-        type: String,
-        required: true
+        required: false
     },
     rol: {
         type: String,
@@ -32,7 +34,12 @@ const userSchema = new mongoose.Schema({
     status: { 
         type: String,
         required: true, 
-        enum: ['active', 'disconnected'] }
+        enum: ['active', 'disconnected'] },
+    picture :{
+        type:String,
+    },
+    providers:[providerSchema]
+
 },
     { timestamps: true }
 )
