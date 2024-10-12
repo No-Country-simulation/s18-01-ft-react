@@ -7,6 +7,8 @@ const { auth, requiresAuth } = require('express-openid-connect');
 const authConfig = require('./src/config/authConfig');
 const router = express.Router();
 const roomRoutes = require('./src/router/rooms.routes.js');
+const vsRoutes = require('./src/router/vsactivity.routes.js');
+const empRoutes = require('./src/router/emp.routes.js');
 // const myMiddleware = require('./src/middlewares/middleware');
 
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -40,6 +42,8 @@ app.get('/', (req, res) => {
 // Routers
 app.use('/auth', authRoutes);
 app.use('/rooms', roomRoutes);
+app.use('/vs', vsRoutes);
+app.use('/emp', empRoutes)
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
