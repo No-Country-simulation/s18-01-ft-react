@@ -92,7 +92,7 @@ export default [
           bracketSpacing: true,
           bracketSameLine: true,
           useTabs: false,
-          endOfLine: 'lf',
+          endOfLine: 'auto',
           semi: true,
         },
         {
