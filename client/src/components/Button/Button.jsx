@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import { forwardRef } from 'react';

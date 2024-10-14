@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './styles/index.css';
 import { BrowserRouter } from 'react-router-dom';
+import AppSider from './components/Appsider/AppSider.jsx';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { AuthProvider } from './context/authContext.jsx';
 
@@ -17,6 +19,7 @@ createRoot(document.getElementById('root')).render(
       redirectUri={window.location.origin}>
       <AuthProvider>
         <BrowserRouter>
+          <AppSider />
           <App />
         </BrowserRouter>
       </AuthProvider>
