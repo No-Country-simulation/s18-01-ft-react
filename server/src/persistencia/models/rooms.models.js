@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const roomsSchema = new mongoose.Schema({
-    id_propety: {
+    id_emp: {
         type: String,
         required: true
     },
@@ -15,7 +15,7 @@ const roomsSchema = new mongoose.Schema({
             username: String,
             status: {
                 type: String,
-                enum: ['active', 'disconnected'],
+                enum: ['active',"absent", 'disconnected'],
                 default: 'active',
             },
         },

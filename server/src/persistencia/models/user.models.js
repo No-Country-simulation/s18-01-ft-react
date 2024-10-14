@@ -1,47 +1,32 @@
-// const mongoose = require('mongoose');
-// const providerSchema = require('./provider.models');
+const mongoose = require('mongoose');
+const providerSchema = require('./provider.models');
 
-// const userSchema = new mongoose.Schema({
-//     sid: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         default:() => new mongoose.Types.ObjectId()
-//     },
-//     username: {
-//         type: String,
-//         required: true
-//     },
-//     socketId: {
-//         type: String,
-//         required: false
-//     },
-//     email: {
-//         type: String,
-//         required: true,
-//         unique: true
-//     },
-//     password: {
-//         type: String,
-//         required: false
-//     },
-//     id_emp: {
-//         type: String,
-//         required: false
-//     },
-//     rol: {
-//         type: String,
-//         required: true
-//     },
-//     status: { 
-//         type: String,
-//         required: true, 
-//         enum: ['active', 'disconnected'] },
-//     picture :{
-//         type:String,
-//     },
-//     providers:[providerSchema]
-
-// },
-//     { timestamps: true }
-// )
-// const User = mongoose.model('User', userSchema);
-// module.exports = User;
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    socketId: {
+        type: String,
+        default :""
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    id_emp: {
+        type: String,
+        default: ""
+    },
+    rol: {
+        type: String,
+        default: ""
+    },
+    status: { 
+        type: String,
+        enum: ['active', 'disconnected'] }
+},
+    { timestamps: true }
+)
+const User = mongoose.model('User', userSchema);
+module.exports = User;
