@@ -1,8 +1,14 @@
 const mongoose = require ("mongoose")
+const dotenv = require('dotenv')
+
+dotenv.config({
+    path:'../.env'
+})
+
 const connectDB = async () => {
     try {
         console.log("as")
-        await mongoose.connect("mongodb+srv://DevBackend-thomas:HTTQy.4_9GL$gc-@cluster0.977ls.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+        await mongoose.connect(process.env.MONGO_URI)
         console.log("conect dbs")
     } catch (error) {
         console.log(error)
