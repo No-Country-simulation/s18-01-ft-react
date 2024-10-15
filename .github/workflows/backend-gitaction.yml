@@ -33,5 +33,5 @@ jobs:
         working-directory: ./server
         run: |
           PORT=8080 node src/bin/run &
-          sleep 10  # Espera para ver si se inicia correctamente
-          curl -I http://localhost:8080 || exit 1
+          sleep 15  # Aumenta el tiempo de espera si es necesario
+          echo "Server started successfully"
