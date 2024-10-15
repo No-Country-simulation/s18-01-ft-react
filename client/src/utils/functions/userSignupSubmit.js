@@ -1,7 +1,7 @@
-import { signupEnterpriseSchema } from '@/schemas/userSchemas';
+import { signupEnterpriseSchema } from '@/utils/schemas/userSchemas';
 import { useNavigate } from 'react-router-dom';
 
-export const useSubmitEnterpriseSignup = async form => {
+export const useUserSignupSubmit = async form => {
   const navigate = useNavigate();
   const signupVerified = signupEnterpriseSchema.safeParse({
     password: form.get('passwordField'),

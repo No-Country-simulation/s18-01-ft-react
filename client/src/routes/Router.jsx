@@ -2,8 +2,8 @@ import { useRoutes } from 'react-router-dom';
 import Office from '../views/Office/Office';
 import Home from '@/views/Home/Home';
 import NotFound from '@/views/NotFound/NotFound';
-import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
-import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
+import { UserSignupPage } from '@/views/UserSignup/UserSignupPage';
+import { UserSigninPage } from '@/views/UserSignin/UserSigninPage';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -16,12 +16,12 @@ const AppRouter = () => {
       element: <Office />,
     },
     {
-      path: '/enterprise-signup',
-      element: <EnterpriseSignup />,
+      path: '/signup',
+      element: <UserSignupPage />,
     },
     {
-      path: '/enterprise-signin',
-      element: <EnterpriseSignin />,
+      path: '/signin',
+      element: <UserSigninPage />,
     },
     {
       path: '*',
