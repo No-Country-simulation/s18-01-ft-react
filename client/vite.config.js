@@ -26,8 +26,4 @@ export default defineConfig({
       targets: { chrome: 115, firefox: 115, safari: 16 },
     },
   },
-  server: {
-    port: 3000,
-    strictPort: false,
-  },
 });

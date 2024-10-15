@@ -1,63 +1,49 @@
+import ButtonBox from '@/components/ButtonBox/ButtonBox';
 import FormComponent from '@/components/FormComponent/FormComponent';
+import AuthLayout from '@/layouts/AuthLayout';
 import { useUserSignupSubmit } from '@/utils/functions/userSignupSubmit';
+import { Link } from 'react-router-dom';
 
 const userSignupFields = [
   {
-    label: 'Nombre',
-    type: 'text',
+    label: 'Correo electronico',
+    type: 'email',
     tabindex: 1,
     id: 'nameField',
-    name: 'nameField',
-    icon: '/images/sms.png',
-    placeholder: 'Ingresa tu nombre',
-    iconColor: 'secondary',
-  },
-  {
-    label: 'Correo Electronico empresarial',
-    type: 'email',
-    tabindex: 2,
-    id: 'emailField',
-    name: 'emailField',
+    name: 'email',
     icon: '/images/sms.png',
     placeholder: 'Ingresa tu Correo',
     iconColor: 'secondary',
-  },
-  {
-    label: 'Dominio',
-    type: 'text',
-    tabindex: 3,
-    id: 'domainField',
-    name: 'domainField',
-    icon: '/images/sms.png',
-    placeholder: 'Ingresa tu Dominio',
-    iconColor: 'secondary',
+    autoComplete: 'email',
   },
   {
     label: 'Contraseña',
     type: 'password',
-    tabindex: 4,
+    tabindex: 2,
     id: 'passwordField',
-    name: 'passwordField',
-    icon: '/images/sms.png',
+    autoComplete: 'new-password',
+    name: 'password',
+    icon: '/svg/key.svg',
     placeholder: 'Ingresa tu Contraseña',
     iconColor: 'accent',
   },
 ];
-
-export const UserSignupPage = () => {
-  return (
+export const UserSignupPage = () => (
+  <AuthLayout h1="Hola Bienvenido a Escape Co" h2="Registrarse">
     <div className="flex w-full flex-col items-center justify-center">
-      <header className="sr-only">
-        <h1>Registra tu empresa</h1>
-      </header>
-      <main className="mx-auto w-full max-w-3xl">
-        <FormComponent
-          id="enterprise-signup"
-          btnText="Registrarme"
-          fields={userSignupFields}
-          onSubmit={useUserSignupSubmit}
-        />
-      </main>
+      <FormComponent
+        id="enterprise-signup"
+        btnText="Registrarme"
+        fields={userSignupFields}
+        onSubmit={useUserSignupSubmit}
+      />
+      <ButtonBox boxText="¿Ya tienes una cuenta?" className="!p-0">
+        <Link
+          to="/signin"
+          className="no-outline flex size-full items-center justify-center bg-transparent">
+          Iniciar sesion
+        </Link>
+      </ButtonBox>
     </div>
-  );
-};
+  </AuthLayout>
+);
