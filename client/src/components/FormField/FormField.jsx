@@ -2,33 +2,21 @@ import { cva } from 'class-variance-authority';
 import { forwardRef } from 'react';
 import { cn } from '@/utils/functions/cn';
 import EyeButton from '../EyeButton/EyeButton';
+import IconBox from '../IconBox/IconBox';
 
 const formFieldCVA = cva(
-  'w-full bg-transparent text-white border border-solid border-sky-800 focus:border-sky-600 relative z-10 no-outline rounded-md transition-all duration-300 ease-in-out text-sm  h-12 px-3 py-2',
+  'no-outline shadow-inset-small border-neutral-1000 relative mt-px h-11 w-full rounded-4xl border-2 border-solid bg-transparent px-4 text-sm text-black transition-all duration-300 ease-in-out placeholder:text-neutral-800 focus:border-neutral-700',
   {
     variants: {
-      error: {
-        true: 'border-red-400 focus:border-red-400',
-        false: '',
-      },
       password: {
         true: 'pr-10',
         false: '',
       },
-      defaultVariants: { error: false, password: false },
+      defaultVariants: { password: false },
     },
   }
 );
-const labelCVA = cva('text-base font-normal leading-4 text-white', {
-  variants: {
-    error: {
-      true: 'text-red-500',
-      false: '',
-    },
-    defaultVariants: { error: false },
-  },
-});
-// Icons: EyeOff, Github, Linkedin, Unlock, User, Whatsapp (Actualmente)
+
 const FormField = forwardRef(function FormField(
   {
     className = '',
@@ -38,35 +26,37 @@ const FormField = forwardRef(function FormField(
     error,
     icon,
     onTypeChange,
+    iconColor = '',
     ...props
   },
   ref
 ) {
-  const defaultID = id ? id : crypto.randomUUID();
+  const defaultID = id ? id : 'field-id';
 
   return (
-    <div className="group relative w-full max-w-lg text-sm">
-      <label className={cn(labelCVA({ error: !!error }))} htmlFor={defaultID}>
-        {label}
-      </label>
-      <div className="relative mt-4">
-        <input
-          {...props}
-          id={defaultID}
-          ref={ref}
-          type={type}
-          className={cn(
-            formFieldCVA({ error: !!error, className, password: !!onTypeChange })
-          )}
-        />
-        {onTypeChange ? <EyeButton onTypeChange={onTypeChange} /> : null}
+    <label
+      htmlFor={defaultID}
+      className='brutalism-box before:bg-field-img-size relative z-10 w-full max-w-md rounded-2xl !border-black px-6 pb-9 pt-4 text-sm font-normal leading-4 text-neutral-1000 before:absolute before:inset-0 before:-z-10 before:rounded-2xl before:bg-field-img before:opacity-10 before:content-[""]'>
+      <div className="font-semibold">{label}</div>
+      <div className="relative mt-2 flex items-center space-x-4">
+        {icon ? <IconBox icon={icon} color={iconColor} /> : ''}
+        <div className="relative grow">
+          <input
+            {...props}
+            id={defaultID}
+            ref={ref}
+            type={type}
+            className={cn(
+              formFieldCVA({
+                className,
+                password: !!onTypeChange,
+              })
+            )}
+          />
+          {onTypeChange ? <EyeButton onTypeChange={onTypeChange} /> : null}
+        </div>
       </div>
-      {error ? (
-        <span className="absolute -bottom-5 left-0 text-xs text-red-400">
-          {error}
-        </span>
-      ) : null}
-    </div>
+    </label>
   );
 });
 

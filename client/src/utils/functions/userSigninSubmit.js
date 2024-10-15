@@ -1,7 +1,7 @@
-import { loginShcema } from '@/schemas/userSchemas';
+import { loginShcema } from '@/utils/schemas/userSchemas';
 import { useNavigate } from 'react-router-dom';
 
-export const useSubmitEnterpriseSignin = async form => {
+export const useUserSigninSubmit = async form => {
   const navigate = useNavigate();
   const signupVerified = loginShcema.safeParse({
     password: form.get('passwordField'),

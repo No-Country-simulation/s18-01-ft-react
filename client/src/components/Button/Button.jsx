@@ -5,15 +5,17 @@ import { forwardRef } from 'react';
 import { cn } from '@/utils/functions/cn';
 
 const btnCVA = cva(
-  `inline-flex items-center justify-center  rounded-lg no-outline truncate disabled:opacity-60 disabled:cursor-default disabled:bg-neutral-500 disable:text-neutral-800 transition-all ease-in-out duration-300`,
+  `inline-flex items-center justify-center rounded-4xl no-outline truncate disabled:opacity-60 disabled:cursor-default disabled:bg-neutral-500 disable:text-neutral-800 transition-all ease-in-out duration-300 border-2 border-solid border-accent-1000`,
   {
     variants: {
       variant: {
         primary:
-          'bg-sky-400 text-sky-950 font-medium [&:not(:disabled)]:hover:bg-sky-500 [&:not(:disabled)]:hover:scale-105 [&:not(:disabled)]:active:scale-100 [&:not(:disabled)]:active:bg-sky-500/80',
+          'bg-primary-400 text-accent-1000 font-medium [&:not(:disabled)]:hover:bg-primary-500 [&:not(:disabled)]:active:bg-primary-600',
         secondary:
-          'bg-slate-500 text-slate-950 font-medium [&:not(:disabled)]:hover:bg-slate-600 [&:not(:disabled)]:hover:scale-105 [&:not(:disabled)]:active:scale-100 [&:not(:disabled)]:active:bg-slate-600/80',
-        disabled: 'bg-neutral-500 text-neutral-800 cursor-not-allowed',
+          'bg-secondary-400 text-accent-1000 font-medium [&:not(:disabled)]:hover:bg-secondary-500 [&:not(:disabled)]:active:bg-secondary-600',
+        'secondary-light':
+          'bg-secondary-100 text-accent-1000 font-medium [&:not(:disabled)]:hover:bg-secondary-200 [&:not(:disabled)]:active:bg-secondary-300',
+        disabled: 'bg-neutral-500 text-neutral-800 cursor-not-allowed opacity-90',
         transparent: 'bg-transparent text-white border-transparent',
       },
       size: {

@@ -11,7 +11,7 @@ const EyeButton = ({ onTypeChange }) => {
     <button
       type="button"
       onClick={onReset}
-      className="absolute right-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer transition-all duration-300 ease-in-out"
+      className="absolute right-3 top-1/2 z-20 -translate-y-1/2 cursor-pointer transition-all duration-300 ease-in-out"
       data-testid="eye-button">
       <span className="sr-only">
         {showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
