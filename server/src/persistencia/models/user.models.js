@@ -4,11 +4,32 @@ const providerSchema = require('./provider.models');
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
+        required: false
+    },
+    authId: { 
+        type: String, 
+        required: false
+    },
+    firstName: { 
+        type: String,
+        required: false 
+    },
+    lastName: { 
+        type: String, 
+        required: false 
+    },
+    password: {
+        type: String,
         required: true
     },
     socketId: {
         type: String,
-        default :""
+        default : "",
+        required: false
+    },
+    profilePicture: {
+    type: String,
+    default: 'https://res.cloudinary.com/ddvbwaedm/image/upload/v1729026786/hxerl0iycrhtxbk8vak9.jpg' // Imagen por defecto
     },
     email: {
         type: String,
@@ -16,11 +37,12 @@ const userSchema = new mongoose.Schema({
     },
     id_emp: {
         type: String,
-        default: ""
+        default: "",
+        required: false
     },
     rol: {
         type: String,
-        default: ""
+        required: false
     },
     status: { 
         type: String,
