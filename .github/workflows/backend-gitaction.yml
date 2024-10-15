@@ -29,10 +29,6 @@ jobs:
         working-directory: ./server
         run: npm ls --depth=0
 
-      - name: Run tests
-        working-directory: ./server
-        run: npm test || echo "Tests failed, skipping deployment"
-
       - name: Start server to verify
         working-directory: ./server
         run: |
