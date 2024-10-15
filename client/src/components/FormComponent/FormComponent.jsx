@@ -28,7 +28,7 @@ export default function FormComponent({
           error={errors?.[field.name.replace(/Field$/, '')]}
         />
       ))}
-      <div className="brutalism-box w-full max-w-md rounded-4xl px-8 py-4">
+      <div className="brutalism-box w-full max-w-md -rotate-2 rounded-4xl px-8 py-4">
         <Button
           type="submit"
           size="full"
