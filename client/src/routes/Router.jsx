@@ -4,6 +4,7 @@ import Home from '@/views/Home/Home';
 import NotFound from '@/views/NotFound/NotFound';
 import { UserSignupPage } from '@/views/UserSignup/UserSignupPage';
 import { UserSigninPage } from '@/views/UserSignin/UserSigninPage';
+import { UserWelcomePage } from '@/views/welcome/UserWelcomePage';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -22,6 +23,10 @@ const AppRouter = () => {
     {
       path: '/signin',
       element: <UserSigninPage />,
+    },
+    {
+      path: '/welcome',
+      element: <UserWelcomePage />,
     },
     {
       path: '*',
