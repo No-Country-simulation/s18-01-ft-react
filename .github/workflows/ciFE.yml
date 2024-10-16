@@ -2,7 +2,7 @@ name: ciFE
 
 on:
   push:
-    branches: [develop]
+    branches: [develop-fe]
 
 concurrency:
   group: gcife-${{ github.head_ref }}
