@@ -1,0 +1,37 @@
+name: Backend CI Check
+
+on:
+  push:
+    branches: [test-deploy]
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  
+
+      - name: Change to backend directory
+        working-directory: ./server
+        run: echo "Switched to the server directory"
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm install --legacy-peer-deps
+
+      - name: Check npm installation
+        working-directory: ./server
+        run: npm ls --depth=0
+
+      - name: Start server to verify
+        working-directory: ./server
+        run: |
+          PORT=8080 node src/bin/run &
+          sleep 15  # Aumenta el tiempo de espera si es necesario
+          echo "Server started successfully"

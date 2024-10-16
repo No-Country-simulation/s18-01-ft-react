@@ -42,7 +42,7 @@ exports.register = async (req, res) => {
 }
 
 // Inicio de sesión (Login)
-exports.login = async (req, res) => {
+exports.loginn = async (req, res) => {
 	const { email, password } = req.body
 
 	try {
@@ -100,7 +100,7 @@ exports.forgotPassword = async (req, res) => {
 		})
 
 		// Enlace para restablecer la contraseña
-		const resetLink = `http://localhost:8080/reset-password/${resetToken}` // Cambia la URL al front-end de tu aplicación
+		const resetLink = `${process.env.FRONTEND}/reset-password/${resetToken}` // Cambia la URL al front-end de tu aplicación
 
 		// Configuración del correo
 		const mailOptions = {
