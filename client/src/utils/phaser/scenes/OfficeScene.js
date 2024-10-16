@@ -1,6 +1,6 @@
 import { Scene, Input, Math, Geom } from 'phaser';
 import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
-import { SOCKET_URL } from '@/utils/functions/socket';
+import { SOCKET_URL } from '@/utils/api/socket';
 import { io } from 'socket.io-client';
 import { Joystick } from '../utils/joystick';
 import { EventBus } from '../EventBus';
