@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ERROR_MESSAGES } from './errors';
-
-const API_URL = process.env.VIVTE_API_URL || 'https://localhost:3000';
+import { API_URL } from './config';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -31,7 +30,7 @@ api.interceptors.response.use(
     if (response.data?.token) {
       Cookies.set('token', response.data.token, {
         expires: 7, // Token expires in 7 days
-        secure: process.env.NODE_ENV === 'production',
+        secure: import.meta.env['NODE_ENV'] === 'production',
         sameSite: 'strict',
       });
     }
@@ -42,9 +41,9 @@ api.interceptors.response.use(
 
     // Handle 401 Unauthorized errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      Cookies.remove('token');
-      window.location.href = '/signin';
+      //originalRequest._retry = true;
+      //Cookies.remove('token');
+      //window.location.href = '/signin';
       console.error(ERROR_MESSAGES.UNAUTHORIZED);
       console.info(ERROR_MESSAGES.REDIRECT_SIGNIN);
 
