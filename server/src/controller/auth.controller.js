@@ -32,6 +32,7 @@ const login = async (req, res) => {
 	}
 };
 
+
 const logout = (req, res) => {
 	res.oidc.logout();
 };

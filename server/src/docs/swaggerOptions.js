@@ -6,9 +6,9 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0', // Define que usas OpenAPI 3.0
         info: {
-            title: 'Server', // Título del proyecto
+            title: 'Escape Co', // Título del proyecto
             version: '1.0.0', // Versión de la API
-            description: 'Documentacion de la API',
+            description: 'Documentacion de Escape Co : https://github.com/No-Country-simulation/s18-01-ft-react'
         },
         servers: [
             {
