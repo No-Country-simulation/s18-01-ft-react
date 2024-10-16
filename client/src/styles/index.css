@@ -108,6 +108,7 @@ html {
     /* Others variables */
     --drop-shadow: 8px 8px 2px 0px var(--color-neutral-1000);
     --drop-shadow-small: 4px 4px 2px 0px var(--color-neutral-1000);
+    --pointer-events-control: auto;
   }
 }
 @layer components {
@@ -129,6 +130,12 @@ html {
   .no-outline {
     @apply no-underline outline-none focus:outline-none focus-visible:outline-none active:outline-none;
   }
+  .pointer-events-control {
+    pointer-events: var(--pointer-events-control);
+    user-select: var(--pointer-events-control);
+    -moz-user-select: var(--pointer-events-control);
+    -ms-user-select: var(--pointer-events-control);
+  }
 }
 
 body {
@@ -136,4 +143,10 @@ body {
   max-width: 100dvw;
   overflow-x: hidden;
   touch-action: manipulation;
+
+  height: 100%;
+}
+
+#root {
+  @apply pointer-events-control;
 }
