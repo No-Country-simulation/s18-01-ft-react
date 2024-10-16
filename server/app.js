@@ -31,7 +31,8 @@ app.use(authMiddleware);
 // Configura CORS abierto
 // Configuración de CORS para permitir Swagger UI acceder a tu API
 const corsOptions = {
-	origin: ['http://localhost:8080', 'https://s18-01-ft-react.onrender.com', 'http://localhost:3000', 'http://localhost:5173'], // URLs permitidas
+	origin: ['http://localhost:8080', 'https://s18-01-ft-react.onrender.com', 
+		'http://localhost:3000', 'http://localhost:5173', 'https://no-countrys18.up.railway.app/'], // URLs permitidas
 	credentials: true, // Permite enviar cookies y encabezados de autenticación
   };
   
