@@ -115,6 +115,9 @@ module.exports = {
         inset: 'inset var(--drop-shadow)',
         'inset-small': 'inset var(--drop-shadow-small)',
       },
+      pointerEvents: {
+        control: 'var(--pointer-events-control)',
+      },
     },
   },
   plugins: [],
