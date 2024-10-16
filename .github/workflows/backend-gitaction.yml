@@ -2,7 +2,9 @@ name: Backend CI Check
 
 on:
   push:
-    branches: [test-deploy]
+    branches: ['*']
+  pull_request:
+    branches: ['*']
 
 jobs:
   install-and-test:
