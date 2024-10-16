@@ -10,9 +10,15 @@ const authConfig = {
 	baseURL: process.env.AUTH0_BASE_URL,
 	clientID: process.env.AUTH0_CLIENT_ID,
 	issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+};
+
+const entorno = {
 	JWT_SECRET: process.env.JWT_SECRET,
 	MAIL_USER: process.env.MAIL_USER,
 	MAIL_PASS: process.env.MAIL_PASS,
 };
 
-module.exports = auth(authConfig);
+module.exports = {
+	authMiddleware: auth(authConfig),
+	entorno,
+};
