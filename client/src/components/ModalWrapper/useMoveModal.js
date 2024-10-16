@@ -1,45 +1,78 @@
+import { modalAtom } from '@/store/useModal';
+import { useAtom } from 'jotai';
+import { useLayoutEffect } from 'react';
+import { useCallback } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
 
 export const useMoveModal = () => {
-  const [isMoving, setMoving] = useState(false);
+  const [modalA, _] = useAtom(modalAtom);
+  const [shiftPosition, setShiftPosition] = useState([0, 0]);
   const [position, setPosition] = useState([0, 0]);
+  const [isMoving, setMoving] = useState(false);
   const modal = useRef();
 
-  const onPointerDown = e => {
-    e.preventDefault();
-    if (!modal.current) return;
-    const shiftX = e.clientX - modal.current.getBoundingClientRect().left;
-    const shiftY = e.clientY - modal.current.getBoundingClientRect().top;
-    setPosition([shiftX, shiftY]);
-    setMoving(true);
-    modal.current.style.cursor = 'grab';
-    document.documentElement.style.setProperty('--pointer-events-control', 'none');
-  };
-  const onPointerMove = e => {
-    e.preventDefault();
-    if (!modal.current || !isMoving || !e.isPrimary) return;
-    let newX = e.pageX - position[0];
-    let newY = e.pageY - position[1];
-    if (newX < 0) newX = 0;
-    if (newY < 0) newY = 0;
-    const modalWidth = modal.current.offsetWidth;
-    const modalHeight = modal.current.offsetHeight;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    if (newX + modalWidth > viewportWidth) newX = viewportWidth - modalWidth;
-    if (newY + modalHeight > viewportHeight) newY = viewportHeight - modalHeight;
-    modal.current.style.left = newX + 'px';
-    modal.current.style.top = newY + 'px';
-    modal.current.style.cursor = 'grabbing';
-  };
+  const onPointerDown = useCallback(
+    e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!modal.current || !modalA.open || e.target.closest('.ignore-drag')) return;
+      const shiftX = e.clientX - modal.current.getBoundingClientRect().left;
+      const shiftY = e.clientY - modal.current.getBoundingClientRect().top;
+      setShiftPosition([shiftX, shiftY]);
+      setMoving(true);
+      document.documentElement.style.setProperty('--pointer-events-control', 'none');
+    },
+    [isMoving, modalA.open]
+  );
+
+  const onPointerMove = useCallback(
+    e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!modal.current || !isMoving || !e.isPrimary) return;
+      let newX = e.pageX - shiftPosition[0];
+      let newY = e.pageY - shiftPosition[1];
+      if (newX < 0) newX = 0;
+      if (newY < 0) newY = 0;
+      const modalWidth = modal.current.offsetWidth;
+      const modalHeight = modal.current.offsetHeight;
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      if (newX + modalWidth > viewportWidth) newX = viewportWidth - modalWidth;
+      if (newY + modalHeight > viewportHeight) newY = viewportHeight - modalHeight;
+      setPosition([newX, newY]);
+    },
+    [shiftPosition, isMoving]
+  );
+
   const onPointerStop = e => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isMoving) return;
     setMoving(false);
-    modal.current.style.cursor = 'default';
     document.documentElement.style.setProperty('--pointer-events-control', 'auto');
   };
 
-  return { onPointerDown, onPointerMove, onPointerStop, modal };
+  useLayoutEffect(() => {
+    if (isMoving) {
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerStop);
+      window.addEventListener('pointerleave', onPointerStop);
+      window.addEventListener('pointercancel', onPointerStop);
+    }
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerStop);
+      window.removeEventListener('pointerleave', onPointerStop);
+      window.removeEventListener('pointercancel', onPointerStop);
+    };
+  }, [isMoving, onPointerMove, onPointerStop]);
+
+  return {
+    modal,
+    isOpen: modalA.open,
+    onPointerDown,
+    position,
+  };
 };
