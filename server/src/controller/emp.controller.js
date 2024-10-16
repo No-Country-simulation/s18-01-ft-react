@@ -47,7 +47,7 @@ const registerEmp = async (req, res) => {
         });
 
         // Envío del correo de confirmación
-        const verifyLink = `${process.env.FRONTEND_URL}/verify-email?token=${verifyToken}`;
+        const verifyLink = `${process.env.FRONTEND}/verify-email?token=${verifyToken}`;
         await transporter.sendMail({
             from: process.env.MAIL_USER,
             to: email,
@@ -159,7 +159,7 @@ const sendResetPasswordEmail = async (req, res) => {
         });
 
         // Envío del correo de recuperación
-        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+        const resetLink = `${process.env.FRONTEND}/reset-password?token=${resetToken}`;
         await transporter.sendMail({
             from: process.env.MAIL_USER,
             to: email,
