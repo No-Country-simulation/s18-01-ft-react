@@ -2,12 +2,21 @@ const { registerEmp, loginEmp, confirmEmail, sendResetPasswordEmail, resetPasswo
 const express = require('express');
 const router = express.Router();
 
+
 /**
  * @swagger
- * /registeremp:
+ * tags:
+ *   - name: Empresa
+ *     description: Operaciones relacionadas con los empresas, incluyendo registro, inicio de sesión, y restablecimiento de contraseña.
+ */
+
+/**
+ * @swagger
+ * /emp/register:
  *   post:
- *     summary: Registra un nuevo empleado
- *     description: Registra un nuevo empleado, enviando un correo de confirmación de cuenta.
+ *     tags: [Empresa]
+ *     summary: Registra un nuevo empresa
+ *     description: Registra un nuevo empresa, enviando un correo de confirmación de cuenta.
  *     requestBody:
  *       required: true
  *       content:
@@ -17,13 +26,13 @@ const router = express.Router();
  *             properties:
  *               domain:
  *                 type: string
- *                 description: Dominio de la empresa del empleado.
+ *                 description: Dominio de la empresa del empresa.
  *               name:
  *                 type: string
- *                 description: Nombre del empleado.
+ *                 description: Nombre del empresa.
  *               email:
  *                 type: string
- *                 description: Correo electrónico del empleado.
+ *                 description: Correo electrónico del empresa.
  *               password:
  *                 type: string
  *                 description: Contraseña para la cuenta.
@@ -39,10 +48,11 @@ router.post('/register', registerEmp);
 
 /**
  * @swagger
- * /loginemp:
+ * /emp/login:
  *   post:
- *     summary: Inicia sesión como empleado
- *     description: Esta ruta permite que un empleado inicie sesión con su email y contraseña.
+ *     tags: [Empresa]
+ *     summary: Inicia sesión como empresa
+ *     description: Esta ruta permite que un empresa inicie sesión con su email y contraseña.
  *     requestBody:
  *       required: true
  *       content:
@@ -68,8 +78,9 @@ router.post('/login', loginEmp);
 
 /**
  * @swagger
- * /confirmemailemp:
+ * /emp/confirmemail:
  *   post:
+ *     tags: [Empresa]
  *     summary: Confirma el correo electrónico
  *     description: Verifica el token de confirmación de correo y activa la cuenta.
  *     requestBody:
@@ -93,8 +104,9 @@ router.post('/confirmemail', confirmEmail);
 
 /**
  * @swagger
- * /sendresetpasswordemailemp:
+ * /emp/sendresetpasswordemail:
  *   post:
+ *     tags: [Empresa]
  *     summary: Envía un enlace para restablecer la contraseña
  *     description: Envía un correo electrónico con un enlace para que el usuario restablezca su contraseña.
  *     requestBody:
@@ -118,8 +130,9 @@ router.post('/sendresetpasswordemail', sendResetPasswordEmail);
 
 /**
  * @swagger
- * /resetpasswordemp:
+ * /emp/resetpassword:
  *   post:
+ *     tags: [Empresa]
  *     summary: Restablece la contraseña
  *     description: Permite al usuario restablecer su contraseña usando el token proporcionado.
  *     requestBody:
