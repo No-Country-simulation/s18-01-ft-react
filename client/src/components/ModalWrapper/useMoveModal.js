@@ -1,4 +1,4 @@
-import { modalAtom } from '@/store/useModal';
+import { modalAtom } from '@/store/modalAtom';
 import { useAtom } from 'jotai';
 import { useLayoutEffect } from 'react';
 import { useCallback } from 'react';

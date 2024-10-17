@@ -1,4 +1,4 @@
-import { modalAtom } from '@/store/useModal';
+import { modalAtom } from '@/store/modalAtom';
 import { EventBus } from '@/utils/phaser/EventBus';
 import { useAtom } from 'jotai';
 import { useState } from 'react';

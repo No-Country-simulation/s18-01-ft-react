@@ -33,12 +33,12 @@ const ModalWrapper = ({ children, className }) => {
           role="dialog"
           aria-modal="true"
           className={cn(
-            className,
-            'absolute inset-0 z-10 size-full max-h-96 max-w-md cursor-grab touch-none rounded-4xl border border-solid border-black bg-accent-100 pt-8 shadow-drop will-change-transform active:cursor-grabbing'
+            'absolute inset-0 z-10 size-full max-w-md cursor-grab touch-none rounded-4xl border border-solid border-black bg-accent-100 pt-8 shadow-drop will-change-transform active:cursor-grabbing',
+            className
           )}>
           <motion.div
             onPointerDown={e => e.stopPropagation()}
-            className="ignore-drag relative z-20 flex size-full grow cursor-default px-4 pb-8 active:cursor-default">
+            className="ignore-drag relative z-20 flex size-full grow cursor-default rounded-b-4xl active:cursor-default">
             {children}
           </motion.div>
         </motion.article>
