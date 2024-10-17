@@ -8,7 +8,6 @@ export const signupSubmit = async form => {
     email: form.get('email'),
   });
   if (schemaErrors) return schemaErrors;
-
   const [error, _] = await apiService.post('/user/register', data);
 
   if (error) {

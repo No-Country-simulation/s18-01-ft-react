@@ -1,6 +1,6 @@
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
-import { userWelcomeSubmit } from '@/utils/functions/UserWelcomeSubmit';
+import { userWelcomeSubmit } from '@/utils/functions/userWelcomeSubmit';
 import { useNavigate } from 'react-router-dom';
 
 const welcomeFields = [
