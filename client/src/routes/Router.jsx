@@ -15,7 +15,7 @@ const AppRouter = () => {
       element: <Home />,
     },
     {
-      path: '/office',
+      path: '/office/:roomName',
       element: <Office />,
     },
     {
