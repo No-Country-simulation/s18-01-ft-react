@@ -1,6 +1,7 @@
 import PhaserContainer from '@/components/PhaserContainer/PhaserContainer';
 import RoomName from '@/components/RoomName/RoomName';
 import AppSearchBar from '@/components/Search/AppSearchBar';
+import UserToolbar from '@/components/UserToolbar/UserToolbar';
 import OfficeLayouts from '@/layouts/OfficeLayouts';
 
 const Office = () => {
@@ -11,6 +12,7 @@ const Office = () => {
         <RoomName />
         <PhaserContainer />
       </div>
+      <UserToolbar />
     </OfficeLayouts>
   );
 };
