@@ -8,6 +8,7 @@ const roomRoutes = require("./src/router/rooms.routes.js");
 const vsRoutes = require("./src/router/vsactivity.routes.js");
 const empRoutes = require("./src/router/emp.routes.js");
 const userRoutes = require("./src/router/user.routes.js");
+const postmanRoutes = require("./src/router/postman.routes.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerOptions = require("./src/docs/swaggerOptions.js");
@@ -32,7 +33,7 @@ app.use(authMiddleware);
 // Configuración de CORS para permitir Swagger UI acceder a tu API
 const corsOptions = {
 	origin: ['http://localhost:8080', 'https://s18-01-ft-react.onrender.com', 
-		'http://localhost:3000', 'http://localhost:5173', 'https://no-countrys18.up.railway.app/'], // URLs permitidas
+		'http://localhost:3000', 'http://localhost:5173', 'https://no-countrys18.up.railway.app'], // URLs permitidas
 	credentials: true, // Permite enviar cookies y encabezados de autenticación
   };
   
@@ -50,6 +51,7 @@ app.use("/rooms", roomRoutes);
 app.use("/vs", vsRoutes);
 app.use("/emp", empRoutes);
 app.use("/user", userRoutes);
+app.use("/", postmanRoutes);
 
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
