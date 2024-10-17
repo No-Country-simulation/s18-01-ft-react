@@ -39,7 +39,7 @@ export class OfficeScene extends Scene {
     this.createMap();
     this.createAnimations();
     // Eventos
-    this.setupSocketListeners();
+    //this.setupSocketListeners();
     this.createInputs();
     this.setupEventListeners();
 
