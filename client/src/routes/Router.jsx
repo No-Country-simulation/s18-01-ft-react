@@ -4,7 +4,9 @@ import Home from '@/views/Home/Home';
 import NotFound from '@/views/NotFound/NotFound';
 import { UserSignupPage } from '@/views/UserSignup/UserSignupPage';
 import { UserSigninPage } from '@/views/UserSignin/UserSigninPage';
-import { UserWelcomePage } from '@/views/welcome/UserWelcomePage';
+import { UserWelcomePage } from '@/views/UserWelcome/UserWelcomePage';
+import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
+import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -23,6 +25,14 @@ const AppRouter = () => {
     {
       path: '/signin',
       element: <UserSigninPage />,
+    },
+    {
+      path: '/enterprise-signup',
+      element: <EnterpriseSignup />,
+    },
+    {
+      path: '/enterprise-signin',
+      element: <EnterpriseSignin />,
     },
     {
       path: '/welcome',

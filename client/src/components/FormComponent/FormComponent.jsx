@@ -22,11 +22,7 @@ export default function FormComponent({
         'relative mx-auto mb-8 flex w-full max-w-3xl flex-col items-center justify-center gap-y-7'
       )}>
       {fields.map(field => (
-        <RenderFields
-          key={field.name}
-          field={field}
-          error={errors?.[field.name.replace(/Field$/, '')]}
-        />
+        <RenderFields key={field.name} field={field} error={errors?.[field.name]} />
       ))}
       <div className="brutalism-box w-full max-w-md -rotate-2 rounded-4xl px-8 py-4">
         <Button

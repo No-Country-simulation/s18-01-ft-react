@@ -1,16 +1,16 @@
 import ButtonBox from '@/components/ButtonBox/ButtonBox';
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
-import { signupSubmit } from '@/utils/functions/signupSubmit';
+import { enterpriseSignup } from '@/utils/functions/enterpriseSignup';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const userSignupFields = [
+const enterpriseSignupFields = [
   {
-    label: 'Correo electronico',
+    label: 'Correo electronico Empresarial',
     type: 'email',
     tabindex: 1,
-    id: 'nameField',
+    id: 'emailField',
     name: 'email',
     icon: '/images/sms.png',
     placeholder: 'Ingresa tu Correo',
@@ -18,37 +18,61 @@ const userSignupFields = [
     autoComplete: 'email',
   },
   {
+    label: 'Nombre de la empresa',
+    type: 'text',
+    tabindex: 2,
+    id: 'nameField',
+    name: 'name',
+    icon: '/images/user-square.png',
+    placeholder: 'Ingresa el nombre',
+    iconColor: 'secondary',
+  },
+  {
+    label: 'Ingrese el dominio',
+    type: 'text',
+    tabindex: 3,
+    id: 'domainField',
+    name: 'domain',
+    icon: '/images/user-square.png',
+    placeholder: 'Ingresa el dominio',
+    iconColor: 'secondary',
+  },
+  {
     label: 'Contraseña',
     type: 'password',
-    tabindex: 2,
+    tabindex: 4,
     id: 'passwordField',
-    autoComplete: 'new-password',
     name: 'password',
     icon: '/svg/key.svg',
     placeholder: 'Ingresa tu Contraseña',
     iconColor: 'accent',
+    autoComplete: 'password',
   },
 ];
-export const UserSignupPage = () => {
+
+export const EnterpriseSignup = () => {
   const navigate = useNavigate();
   const handleSuccess = async form => {
-    const result = await signupSubmit(form);
-    if (result && result.status === 'SUCCESS') navigate('/welcome');
+    const result = await enterpriseSignup(form);
+    if (result && result.status === 'SUCCESS') navigate('/');
     return result;
   };
 
   return (
-    <AuthLayout h1="Hola Bienvenido a Escape Co" h2="Registrarse">
+    <AuthLayout
+      h1="Pagina para registrar una empresa"
+      h2="Hola Bienvenido a Escape Co"
+      h1Hide>
       <div className="flex w-full flex-col items-center justify-center">
         <FormComponent
-          id="user-signup"
-          btnText="Registrarme"
-          fields={userSignupFields}
+          id="enterprise-signup"
+          btnText="Entrar"
+          fields={enterpriseSignupFields}
           onSubmit={handleSuccess}
         />
         <ButtonBox boxText="¿Ya tienes una cuenta?" className="!p-0">
           <Link
-            to="/signin"
+            to="/enterprise-signin"
             className="no-outline flex size-full items-center justify-center bg-transparent">
             Iniciar sesion
           </Link>
