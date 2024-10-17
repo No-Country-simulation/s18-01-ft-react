@@ -44,7 +44,7 @@ const corsOptions = {
 	preflightContinue: false, // Maneja automáticamente la solicitud OPTIONS
 	optionsSuccessStatus: 204, // Estado para solicitudes preflight exitosas
   };
-  
+  console.log('cors activados...')
   app.use(cors(corsOptions));
 connectDB();
 
