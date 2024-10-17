@@ -10,7 +10,6 @@ export const enterpriseSignup = async form => {
     domain: form.get('domain'),
   });
   if (schemaErrors) return schemaErrors;
-  console.log({ data });
 
   const [error, _] = await apiService.post('/emp/register', data);
 

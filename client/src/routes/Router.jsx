@@ -7,6 +7,7 @@ import { UserSigninPage } from '@/views/UserSignin/UserSigninPage';
 import { UserWelcomePage } from '@/views/UserWelcome/UserWelcomePage';
 import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
 import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -15,8 +16,18 @@ const AppRouter = () => {
       element: <Home />,
     },
     {
-      path: '/office/:roomName',
-      element: <Office />,
+      path: '/office',
+      element: <Outlet />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to="/" />,
+        },
+        {
+          path: ':roomName',
+          element: <Office />,
+        },
+      ],
     },
     {
       path: '/signup',

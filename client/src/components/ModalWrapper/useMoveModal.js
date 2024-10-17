@@ -69,7 +69,6 @@ export const useMoveModal = id => {
     };
   }, [isMoving, onPointerMove, onPointerStop]);
 
-  console.log({ modalSeted: modalA.modalId, id });
   return {
     modal,
     isOpen: modalA.open && modalA.modalId === id,
