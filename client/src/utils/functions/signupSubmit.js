@@ -1,5 +1,6 @@
 import { userAuthSchema } from '@/utils/schemas/userSchemas';
 import { apiService } from '../api/axios';
+import { validateSchema } from './validateSchema';
 
 export const signupSubmit = async form => {
   const [schemaErrors, data] = validateSchema(userAuthSchema, {

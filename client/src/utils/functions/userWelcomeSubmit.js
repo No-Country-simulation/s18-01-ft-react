@@ -1,6 +1,7 @@
 import { welcomeSchema } from '@/utils/schemas/userSchemas';
 import { apiService } from '../api/axios';
 import { welcomeAPIMapper } from './mappers';
+import { validateSchema } from './validateSchema';
 
 export const userWelcomeSubmit = async form => {
   const [schemaErrors, data] = validateSchema(welcomeSchema, {
