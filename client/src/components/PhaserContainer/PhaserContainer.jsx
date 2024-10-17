@@ -23,11 +23,11 @@ const PhaserContainer = () => {
   }, []);
 
   return (
-    <div className="mx-auto mt-9 flex size-full max-w-4xl flex-col">
+    <div className="mx-auto mt-2 flex size-full max-w-4xl flex-col">
       <div
         ref={gameRef}
         id="office"
-        className="size-full max-h-[657px] max-w-[845px] rounded-lg border border-neutral-1000"></div>
+        className="size-full max-h-[657px] w-[845px] rounded-lg border border-neutral-1000"></div>
     </div>
   );
 };
