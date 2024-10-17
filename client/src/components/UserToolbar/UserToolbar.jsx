@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Box1, Profile2User, Video, Message, Book } from 'iconsax-react';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import { toolbarOptions } from '../../utils/functions/toolbarOptions';
 import { RoomModal } from '../RoomModal/RoomModal';
@@ -21,7 +20,9 @@ const UserToolbar = () => {
         {toolbarOptions.slice(0, 4).map(option => (
           <ToolbarButton
             key={option.value}
-            icon={option.icon}
+            icon={
+              <img src={option.icon} alt={option.label} width="24px" height="24px" />
+            }
             label={option.label}
             isSelected={selectedOption === option.value}
             onClick={() => handleOptionClick(option.value)}
@@ -31,7 +32,14 @@ const UserToolbar = () => {
       <hr className="ml-1 mr-5 h-[65px] border border-neutral-500" />
       <div>
         <ToolbarButton
-          icon={toolbarOptions[4].icon}
+          icon={
+            <img
+              src={toolbarOptions[4].icon}
+              alt={toolbarOptions[4].label}
+              width="24px"
+              height="24px"
+            />
+          }
           label={toolbarOptions[4].label}
           isSelected={selectedOption === toolbarOptions[4].value}
           onClick={() => handleOptionClick(toolbarOptions[4].value)}
