@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register, loginn, forgotPassword, updateProfile, resetPassword } =
-	require("../controller/userController.js");
+const { register, login, forgotPassword, updateProfile, resetPassword } = require("../controller/userController.js");
 const { tokenMiddleware } = require("../middlewares/middleware.js");
 const dotenv = require("dotenv")
 
@@ -131,7 +130,7 @@ router.post("/register", register);
  *                   type: object
  *                   additionalProperties: true
  */
-router.post("/login", loginn);
+router.post("/login", login);
 
 /**
  * @openapi
