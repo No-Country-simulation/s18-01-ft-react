@@ -3,6 +3,7 @@ const crip = require("bcryptjs");
 const { createAccess } = require("../utils/createAcesstoken.js");
 const nodemailer = require('nodemailer');
 const verifyAccessToken = require("../utils/verifyAccessToken.js")
+
 const registerEmp = async (req, res) => {
     const { domain, name, email, password } = req.body;
     try {
@@ -131,7 +132,8 @@ const loginEmp = async (req, res) => {
             id: exEmp.id,
             email: exEmp.email,
             name: exEmp.name,
-            domain: exEmp.domain
+            domain: exEmp.domain,
+            token: token
         })
     } catch (err) {
         res.status(500).json({ message: error.message })

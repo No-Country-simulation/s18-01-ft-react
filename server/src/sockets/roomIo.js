@@ -1,47 +1,78 @@
-const Rooms = require('../persistencia/models/rooms.models.js');
+const Rooms = require('../persistencia/models/rooms.models');
+const User = require('../persistencia/models/user.models');
+const socketAuth = require("../middlewares/socketAuth.js")
 
 const handleSocketEvents = (io) => {
-    io.on('connection', (socket) => {
-        console.log(`Usuario conectado: ${socket.id}`);
+io.use(socketAuth);
+io.on('connection', (socket) => {
+    const user = socket.user; 
 
-        socket.on('joinRoom', async ({ username, name }) => {
-            try {
-                const room = await Rooms.findOne({ name: name });
-                if (!room) {
-                    socket.emit('error', { message: `La sala ${name} no existe.` });
-                    return;
-                }
+    User.findByIdAndUpdate(user._id, { status: 'online', socketId: socket.id });
 
-                room.users.push({ socketId: socket.id, username, status: 'active' });
-                await room.save();
+    io.emit('userStatusUpdate', { userId: user._id, status: 'online' });
 
-                socket.join(name);
-                io.to(name).emit('userJoined', { username, status: 'active' });
-                io.to(name).emit('roomData', room.users);
-            } catch (err) {
-                console.error('Error al unirse a la sala:', err);
+    socket.on('joinRoom', async ({ roomId }) => {
+        const room = await Rooms.findById(roomId);
+        if (!room) return;
+
+        const previousRooms = [...socket.rooms];
+        previousRooms.forEach((room) => {
+            if (room !== socket.id) {
+                socket.leave(room);
+                io.to(room).emit('userLeft', { username: user.username, userId: user._id });
             }
         });
 
-        socket.on('disconnect', async () => {
-            console.log(`Usuario desconectado: ${socket.id}`);
-            try {
-                const room = await Rooms.findOne({ 'users.socketId': socket.id });
-                if (room) {
-                    const user = room.users.find((user) => user.socketId === socket.id);
-                    if (user) {
-                        user.status = 'disconnected';
-                        await room.save();
+        socket.join(roomId);
+        console.log(`${user.username} se ha unido a la sala ${roomId}.`);
 
-                        io.to(room.name).emit('userLeft', { username: user.username, status: 'disconnected' });
-                        io.to(room.name).emit('roomData', room.users);
-                    }
-                }
-            } catch (err) {
-                console.error('Error al manejar la desconexión:', err);
-            }
-        });
+        const previousRoom = await Rooms.findOneAndUpdate(
+            { "users.socketId": socket.id },
+            { $pull: { users: { socketId: socket.id } } },
+            { new: true }
+        );
+
+        if (previousRoom) {
+            io.to(previousRoom._id).emit('userList', previousRoom.users);
+        }
+
+        room.users.push({ socketId: socket.id, username: user.username, status: 'online' });
+        await room.save();
+
+        io.to(roomId).emit('userList', room.users);
     });
-};
 
+    socket.on('updatePosition', ({ x, y , prevDirection,direction}) => {
+        const roomId = [...socket.rooms][1]; 
+
+        if (roomId) {
+            io.to(roomId).emit('userMoved', {
+                userId: user._id,
+                x: x,
+                y: y,
+                prevDirection: prevDirection, 
+                direction: direction,
+            });
+        }
+    });
+
+    socket.on('disconnect', async () => {
+        console.log(`${user.username} desconectado.`);
+
+        await User.findByIdAndUpdate(user._id, { status: 'disconnected' });
+
+        io.emit('userStatusUpdate', { userId: user._id, status: 'disconnected' });
+
+        const room = await Rooms.findOneAndUpdate(
+            { "users.socketId": socket.id },
+            { $pull: { users: { socketId: socket.id } } },
+            { new: true }
+        );
+
+        if (room) {
+            io.to(room._id).emit('userList', room.users);
+        }
+    });
+});
+}
 module.exports = { handleSocketEvents };
