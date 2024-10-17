@@ -24,7 +24,7 @@ const AppRouter = () => {
     },
     {
       path: '/signin',
-      element: <EnterpriseSignup />,
+      element: <UserSigninPage />,
     },
     {
       path: '/enterprise-signup',
