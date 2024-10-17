@@ -1,5 +1,7 @@
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
+import { userWelcomeSubmit } from '@/utils/functions/userWelcomeSubmit';
+import { useNavigate } from 'react-router-dom';
 
 const welcomeFields = [
   {
@@ -48,6 +50,12 @@ const welcomeFields = [
 ];
 
 export const UserWelcomePage = () => {
+  const navigate = useNavigate();
+  const handleSuccess = async form => {
+    const result = await userWelcomeSubmit(form);
+    if (result && result.status === 'SUCCESS') navigate('/office');
+    return result;
+  };
   return (
     <AuthLayout
       h1="Ingra tus datos de perfil"
@@ -57,6 +65,7 @@ export const UserWelcomePage = () => {
         id="welcome-profile"
         btnText="Continuar"
         fields={welcomeFields}
+        onSubmit={handleSuccess}
       />
     </AuthLayout>
   );

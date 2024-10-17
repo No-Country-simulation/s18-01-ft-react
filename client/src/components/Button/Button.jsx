@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/utils/functions/cn';
 
 const btnCVA = cva(
-  `inline-flex items-center rounded-4xl no-outline truncate disabled:opacity-60 disabled:cursor-default disabled:bg-neutral-500 disable:text-neutral-800 transition-all ease-in-out duration-300 border-2 border-solid border-accent-1000`,
+  `inline-flex items-center rounded-4xl no-outline truncate disabled:opacity-60 disabled:cursor-default disabled:bg-neutral-500 disable:text-neutral-800 transition-all ease-in-out duration-300 border-2 border-solid border-accent-1000 pointer-events-control`,
   {
     variants: {
       style: {

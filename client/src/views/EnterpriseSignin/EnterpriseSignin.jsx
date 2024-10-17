@@ -1,7 +1,7 @@
 import ButtonBox from '@/components/ButtonBox/ButtonBox';
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
-import { signinSubmit } from '@/utils/functions/signinSubmit';
+import { enterpriseSignin } from '@/utils/functions/enterpriseSignin';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -30,10 +30,10 @@ const userSigninFields = [
   },
 ];
 
-export const UserSigninPage = () => {
+export const EnterpriseSignin = () => {
   const navigate = useNavigate();
   const handleSuccess = async form => {
-    const result = await signinSubmit(form);
+    const result = await enterpriseSignin(form);
     if (result && result.status === 'SUCCESS') navigate('/');
     return result;
   };
@@ -42,23 +42,18 @@ export const UserSigninPage = () => {
     <AuthLayout h1="Hola Bienvenido a Escape Co" h2="Login">
       <div className="flex w-full flex-col items-center justify-center">
         <FormComponent
-          id="user-signin"
+          id="enterprise-signin"
           btnText="Entrar"
           fields={userSigninFields}
           onSubmit={handleSuccess}
         />
-        <div className="flex w-full flex-col items-center justify-center gap-y-5">
-          <ButtonBox boxText="¿Deseas entrar con tu cuenta de Google?">
-            Iniciar sesion Google
-          </ButtonBox>
-          <ButtonBox boxText="¿Todabia no tienes cuenta?" className="!p-0">
-            <Link
-              to="/signup"
-              className="no-outline flex size-full items-center justify-center bg-transparent">
-              Registrate
-            </Link>
-          </ButtonBox>
-        </div>
+        <ButtonBox boxText="¿Todabia no tienes cuenta?" className="!p-0">
+          <Link
+            to="/enterprise-signup"
+            className="no-outline flex size-full items-center justify-center bg-transparent">
+            Registrate
+          </Link>
+        </ButtonBox>
       </div>
     </AuthLayout>
   );
