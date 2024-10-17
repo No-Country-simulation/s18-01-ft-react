@@ -34,7 +34,8 @@ const corsOptions = {
 	origin: ['http://localhost:8080', 'https://s18-01-ft-react.onrender.com', 
 		'http://localhost:3000', 'http://localhost:5173', 'https://no-countrys18.up.railway.app/'], // URLs permitidas
 	credentials: true, // Permite enviar cookies y encabezados de autenticación
-	method: [GET, POST, PUT, DELETE, PATCH],
+	methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+	allowedHeaders: ["Content-Type", "Authorization"],
   };
   
   app.use(cors(corsOptions));
