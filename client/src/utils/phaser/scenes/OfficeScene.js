@@ -1,8 +1,9 @@
-import { Scene, Input, Math } from 'phaser';
+import { Scene, Input, Math, Geom } from 'phaser';
 import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
-import { SOCKET_URL } from '@/utils/functions/socket';
+import { SOCKET_URL } from '@/utils/api/socket';
 import { io } from 'socket.io-client';
 import { Joystick } from '../utils/joystick';
+import { EventBus } from '../EventBus';
 
 export class OfficeScene extends Scene {
   player;
@@ -31,21 +32,22 @@ export class OfficeScene extends Scene {
   init() {
     this.initializeScale();
     this.otherPlayers = this.physics.add.group();
-    this.socket = io(SOCKET_URL, { autoConnect: true });
+    this.socket = io(SOCKET_URL, { autoConnect: false });
   }
 
   create() {
     this.createMap();
     this.createAnimations();
     // Eventos
-    this.setupSocketListeners();
+    //this.setupSocketListeners();
     this.createInputs();
     this.setupEventListeners();
+
     /* 
     // Modd DEBUG
     this.physics.world.createDebugGraphic();
     const debugGraphics = this.add.graphics().setAlpha(0.7);
-     groundHouse.renderDebug(debugGraphics, {
+     this.groundHouseLayer.renderDebug(debugGraphics, {
       tileColor: null,
       collidingTileColor: new Display.Color(243, 134, 48, 255),
       faceColor: new Display.Color(40, 39, 37, 255),
@@ -249,7 +251,22 @@ export class OfficeScene extends Scene {
       .setGravityY(0)
       .setSize(15.5, 16)
       .setOffset(32.25, 32)
-      .setScale(1.8, 1.8);
+      .setScale(1.8, 1.8)
+      .setInteractive(
+        new Geom.Rectangle(32.25, 32, 15.5 * 1.8, 16 * 1.8),
+        Geom.Rectangle.Contains
+      );
+    player.open = false;
+    player.on('pointerdown', _ => {
+      this.players.forEach((otherPlayer, key) => {
+        if (key !== playerInfo.playerId && otherPlayer.sprite.open) {
+          otherPlayer.sprite.open = false;
+        }
+      });
+      let playerD = !player.open;
+      player.open = playerD;
+      EventBus.emit('playerCLICKED', { ...playerInfo, open: playerD });
+    });
 
     player.playerId = playerInfo.playerId;
     this.physics.add.collider(player, [this.grassLayer, this.groundHouseLayer]);

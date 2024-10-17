@@ -1,14 +1,60 @@
-import { EnterpriseSigninForm } from '@/components/EnterpriseSigninForm/EnterpriseSigninForm';
+import ButtonBox from '@/components/ButtonBox/ButtonBox';
+import FormComponent from '@/components/FormComponent/FormComponent';
+import AuthLayout from '@/layouts/AuthLayout';
+import { enterpriseSignin } from '@/utils/functions/enterpriseSignin';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+const userSigninFields = [
+  {
+    label: 'Correo electronico',
+    type: 'email',
+    tabindex: 1,
+    id: 'nameField',
+    name: 'email',
+    icon: '/images/sms.png',
+    placeholder: 'Ingresa tu Correo',
+    iconColor: 'secondary',
+    autoComplete: 'email',
+  },
+  {
+    label: 'Contraseña',
+    type: 'password',
+    tabindex: 2,
+    id: 'passwordField',
+    name: 'password',
+    icon: '/svg/key.svg',
+    placeholder: 'Ingresa tu Contraseña',
+    iconColor: 'accent',
+    autoComplete: 'password',
+  },
+];
 
 export const EnterpriseSignin = () => {
+  const navigate = useNavigate();
+  const handleSuccess = async form => {
+    const result = await enterpriseSignin(form);
+    if (result && result.status === 'SUCCESS') navigate('/');
+    return result;
+  };
+
   return (
-    <div className="flex w-full flex-col items-center justify-center">
-      <header className="sr-only">
-        <h1>Inicia sesion como empresa</h1>
-      </header>
-      <main className="mx-auto w-full max-w-3xl">
-        <EnterpriseSigninForm />
-      </main>
-    </div>
+    <AuthLayout h1="Hola Bienvenido a Escape Co" h2="Login">
+      <div className="flex w-full flex-col items-center justify-center">
+        <FormComponent
+          id="enterprise-signin"
+          btnText="Entrar"
+          fields={userSigninFields}
+          onSubmit={handleSuccess}
+        />
+        <ButtonBox boxText="¿Todabia no tienes cuenta?" className="!p-0">
+          <Link
+            to="/enterprise-signup"
+            className="no-outline flex size-full items-center justify-center bg-transparent">
+            Registrate
+          </Link>
+        </ButtonBox>
+      </div>
+    </AuthLayout>
   );
 };
