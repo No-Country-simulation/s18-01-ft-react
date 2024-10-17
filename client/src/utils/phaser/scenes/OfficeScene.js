@@ -32,7 +32,7 @@ export class OfficeScene extends Scene {
   init() {
     this.initializeScale();
     this.otherPlayers = this.physics.add.group();
-    this.socket = io(SOCKET_URL, { autoConnect: true });
+    this.socket = io(SOCKET_URL, { autoConnect: false });
   }
 
   create() {
