@@ -2,12 +2,17 @@ import { useState } from 'react';
 import { Box1, Profile2User, Video, Message, Book } from 'iconsax-react';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import { toolbarOptions } from '../../utils/functions/toolbarOptions';
+import { RoomModal } from '../RoomModal/RoomModal';
+import { useAtom } from 'jotai';
+import { modalAtom } from '@/store/modalAtom';
 
 const UserToolbar = () => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [_, setModal] = useAtom(modalAtom);
 
   const handleOptionClick = value => {
     setSelectedOption(selectedOption === value ? null : value);
+    setModal(val => ({ ...val, open: !val.open, modalId: value }));
   };
 
   return (
@@ -32,6 +37,7 @@ const UserToolbar = () => {
           onClick={() => handleOptionClick(toolbarOptions[4].value)}
         />
       </div>
+      <RoomModal />
     </div>
   );
 };

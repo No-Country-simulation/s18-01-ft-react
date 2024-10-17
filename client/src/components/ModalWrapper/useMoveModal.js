@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
 
-export const useMoveModal = () => {
+export const useMoveModal = id => {
   const [modalA, _] = useAtom(modalAtom);
   const [shiftPosition, setShiftPosition] = useState([0, 0]);
   const [position, setPosition] = useState([0, 0]);
@@ -31,8 +31,8 @@ export const useMoveModal = () => {
       e.preventDefault();
       e.stopPropagation();
       if (!modal.current || !isMoving || !e.isPrimary) return;
-      let newX = e.pageX - shiftPosition[0];
-      let newY = e.pageY - shiftPosition[1];
+      let newX = e.pageX - shiftPosition[0] - window.scrollX;
+      let newY = e.pageY - shiftPosition[1] - window.scrollY;
       if (newX < 0) newX = 0;
       if (newY < 0) newY = 0;
       const modalWidth = modal.current.offsetWidth;
@@ -69,9 +69,10 @@ export const useMoveModal = () => {
     };
   }, [isMoving, onPointerMove, onPointerStop]);
 
+  console.log({ modalSeted: modalA.modalId, id });
   return {
     modal,
-    isOpen: modalA.open,
+    isOpen: modalA.open && modalA.modalId === id,
     onPointerDown,
     position,
   };

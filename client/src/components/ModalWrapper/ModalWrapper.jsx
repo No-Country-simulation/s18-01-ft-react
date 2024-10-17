@@ -5,8 +5,8 @@ import { cn } from '@/utils/functions/cn';
 
 const root = document.getElementById('root-modal');
 
-const ModalWrapper = ({ children, className }) => {
-  const { modal, isOpen, onPointerDown, position } = useMoveModal();
+const ModalWrapper = ({ children, className, id }) => {
+  const { modal, isOpen, onPointerDown, position } = useMoveModal(id);
 
   if (!root) {
     return null;
@@ -33,7 +33,7 @@ const ModalWrapper = ({ children, className }) => {
           role="dialog"
           aria-modal="true"
           className={cn(
-            'absolute inset-0 z-10 size-full max-w-md cursor-grab touch-none rounded-4xl border border-solid border-black bg-accent-100 pt-8 shadow-drop will-change-transform active:cursor-grabbing',
+            'fixed inset-0 z-10 size-full max-w-md cursor-grab touch-none rounded-4xl border border-solid border-black bg-accent-100 pt-8 shadow-drop will-change-transform active:cursor-grabbing',
             className
           )}>
           <motion.div

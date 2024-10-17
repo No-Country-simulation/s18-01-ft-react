@@ -12,7 +12,9 @@ const roomsData = [
 ];
 export const RoomModal = () => {
   return (
-    <ModalWrapper className="max-h-[512px] w-full max-w-96 bg-primary-400 pt-16">
+    <ModalWrapper
+      className="max-h-[512px] w-full max-w-96 bg-primary-400 pt-16"
+      id="Salas">
       <div className="relative flex w-full flex-col">
         <h3 className="pointer-events-none absolute -top-12 left-1/2 -z-10 inline-flex w-fit -translate-x-1/2 touch-none gap-x-2 text-center text-lg font-semibold text-accent-100">
           <img
