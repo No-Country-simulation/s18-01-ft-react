@@ -6,115 +6,127 @@ const { login, logout, profile, status } = require('../controller/auth.controlle
 
 /**
  * @swagger
+ * tags:
+ *   - name: AuthGoogle
+ *     description: Rutas relacionadas con autenticación y autorización usando Google
+ */
+/**
+ * @openapi
  * /login:
  *   get:
- *     summary: Iniciar sesión con Google o GitHub
- *     description: Redirige a Google o GitHub para que el usuario inicie sesión usando OAuth. Este proceso utiliza Auth0 como intermediario para la autenticación.
- *     security:
- *       - oauth2:
- *           - openid  # Esto depende de tu configuración específica de OAuth
+ *     summary: Iniciar sesión con Google
+ *     description: |
+ *       Este endpoint permite autenticar al usuario mediante Google OAuth 2.0.  
+ *       Una vez que el usuario inicia sesión, el servidor establece una **cookie** llamada **appSession** 
+ *       que contiene el token de sesión. Esta cookie es utilizada para gestionar la sesión del usuario en el cliente.  
+ *       **Nota para el frontend:**  
+ *       La cookie `appSession` incluye el **token JWT** que será necesario para acceder a rutas protegidas como `/profile`.
+ *     tags:
+ *       - AuthGoogle
  *     responses:
- *       302:
- *         description: Redirección a la página de inicio de sesión de Auth0, Google o GitHub.
+ *       200:
+ *         headers:
+ *           Set-Cookie:
+ *             description: La cookie **appSession** contiene el token de sesión.
+ *             schema:
+ *               type: string
+ *               example: "appSession=11112222333344445555"
  *       401:
- *         description: Si no se puede redirigir correctamente o no hay un proveedor configurado.
+ *         description: No autorizado. Falló la autenticación con Google.
  */
-router.get('/login', requiresAuth(),login);
+router.get('/login', requiresAuth(), login);
 
 /**
- * @swagger
+ * @openapi
  * /logout:
  *   get:
- *     summary: Cerrar sesión
- *     description: Cierra la sesión del usuario y redirige a la página de inicio.
+ *     summary: Cerrar sesión de Google
+ *     description: |
+ *       Este endpoint permite al usuario cerrar sesión solo si está autenticado con Google OAuth 2.0.  
+ *       Al cerrar la sesión, el servidor elimina la cookie **appSession** del cliente para finalizar la sesión.
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *       - AuthGoogle
  *     responses:
- *       302:
- *         description: Redirige a la página de inicio después de cerrar sesión.
+ *       200:
+ *         description: Sesión cerrada correctamente. La cookie appSession ha sido eliminada.
+ *         headers:
+ *           Set-Cookie:
+ *             description: La cookie **appSession** se borra al establecerse con un valor vacío y fecha expirada.
+ *             schema:
+ *               type: string
+ *               example: "appSession=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+ *       401:
+ *         description: No autorizado. El usuario no tiene una sesión activa.
  */
 router.get('/logout', logout);
 
 /**
- * @swagger
+ * @openapi
  * /auth:
  *   get:
  *     summary: Verifica el estado de autenticación
- *     description: Devuelve el estado de autenticación del usuario. Indica si el usuario está autenticado o no.
+ *     description: |
+ *       Este endpoint devuelve el estado de autenticación del usuario.  
+ *       Si la cookie **appSession** es válida, indica que el usuario está autenticado.  
+ *       De lo contrario, responde que el usuario no está autenticado.
+ *     tags:
+ *       - AuthGoogle
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Estado de autenticación del usuario
+ *         description: Estado de autenticación del usuario.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Logged in
+ *               example: "Logged in"
  *       401:
- *         description: Usuario no autenticado
+ *         description: Usuario no autenticado o sesión expirada.
  *         content:
  *           text/plain:
  *             schema:
  *               type: string
- *               example: Logged out
+ *               example: "Logged out"
  */
 router.get('/', status);
 
 /**
- * @swagger
+ * @openapi
  * /auth/profile:
  *   get:
  *     summary: Obtiene el perfil del usuario
  *     description: Devuelve la información del usuario autenticado. Este endpoint requiere que el usuario esté autenticado para acceder a su perfil.
+ *     tags:
+ *       - AuthGoogle
  *     security:
  *       - bearerAuth: []  # Si usas autenticación con token (Bearer Token)
  *     responses:
  *       200:
- *         description: Perfil del usuario autenticado
+ *         description: Perfil del usuario autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 sid:
+ *                 firstName:
  *                   type: string
- *                   description: ID de la sesión
- *                   example: "123456789"
- *                 given_name:
+ *                   example: "Orlando"
+ *                 lastName:
  *                   type: string
- *                   description: Nombre de pila
- *                   example: "Nombre"
- *                 family_name:
- *                   type: string
- *                   description: Apellido(s)
- *                   example: "Apellidos"
- *                 nickname:
- *                   type: string
- *                   description: Apodo del usuario
- *                   example: "Apodo"
- *                 name:
- *                   type: string
- *                   description: Nombre completo del usuario
- *                   example: "Nombre Completo"
- *                 picture:
- *                   type: string
- *                   description: URL de la imagen de perfil del usuario
- *                   example: "https://lh3.googleusercontent.com/a/11111"
- *                 updated_at:
- *                   type: string
- *                   description: Fecha y hora de la última actualización del perfil
- *                   example: "2024-10-05T03:23:04.979Z"
+ *                   example: "Cardenas Villegas"
  *                 email:
  *                   type: string
- *                   description: Correo electrónico del usuario
- *                   example: "example@gmail.com"
- *                 email_verified:
- *                   type: boolean
- *                   description: Indica si el correo electrónico ha sido verificado
- *                   example: true
- *                 sub:
- *                   type: string
- *                   description: Identificador único del usuario en el sistema de autenticación
- *                   example: "google-oauth2|11111111111111"
+ *                   example: "orlandocardenas0107@gmail.com"
  *       401:
- *         description: No autenticado - El usuario no está autenticado o el token es inválido
+ *         description: Usuario no autenticado o sesión expirada.
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: "Unauthorized"
  */
 router.get('/profile', profile);
 

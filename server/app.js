@@ -1,16 +1,14 @@
 const express = require("express");
-const createError = require("http-errors");
 const path = require("node:path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const { auth } = require("express-openid-connect");
+const cors = require("cors");
 const { authMiddleware } = require("./src/config/authConfig.js");
-const router = express.Router();
 const roomRoutes = require("./src/router/rooms.routes.js");
 const vsRoutes = require("./src/router/vsactivity.routes.js");
 const empRoutes = require("./src/router/emp.routes.js");
 const userRoutes = require("./src/router/user.routes.js");
-
+const postmanRoutes = require("./src/router/postman.routes.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerOptions = require("./src/docs/swaggerOptions.js");
@@ -30,6 +28,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(authMiddleware);
+
+// Configura CORS abierto
+// Configuración de CORS para permitir Swagger UI acceder a tu API
+const corsOptions = {
+	origin: [
+	  'http://localhost:8080',
+	  'https://s18-01-ft-react.onrender.com',
+	  'http://localhost:3000',
+	  'http://localhost:5173',
+	  'https://no-countrys18.up.railway.app',
+	],
+	credentials: true, // Permite cookies y autenticación
+	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+	allowedHeaders: ["Content-Type", "Authorization"],
+	preflightContinue: false, // Maneja automáticamente la solicitud OPTIONS
+	optionsSuccessStatus: 204, // Estado para solicitudes preflight exitosas
+  };
+  console.log('cors activados...')
+  app.use(cors(corsOptions));
 connectDB();
 
 // Ruta principal (índice)
@@ -43,13 +60,11 @@ app.use("/rooms", roomRoutes);
 app.use("/vs", vsRoutes);
 app.use("/emp", empRoutes);
 app.use("/user", userRoutes);
+app.use("/", postmanRoutes);
+
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Captura de 404 y redirección al manejador de errores
-// app.use((req, res, next) => {
-// 	next(createError(404));
-// });
 app.use((req, res, next) => {
 	res.status(404).json({ message: "Ruta no encontrada" });
 });
