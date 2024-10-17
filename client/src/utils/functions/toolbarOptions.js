@@ -1,33 +1,31 @@
-import { Box1, Profile2User, Video, Message, Book } from 'iconsax-react';
-
 export const toolbarOptions = [
   {
     label: 'Salas',
-    icon: <Box1 size="24" variant="Broken" />,
+    icon: '/svg/icon-toolbar/box.svg',
     value: 'Salas',
     component: '',
   },
   {
     label: 'Usuarios',
-    icon: <Profile2User size="24" variant="Broken" />,
+    icon: '/svg/icon-toolbar/profile-2user.svg',
     value: 'Usuarios',
     component: '',
   },
   {
     label: 'Videollamada',
-    icon: <Video size="24" variant="Broken" />,
+    icon: '/svg/icon-toolbar/video.svg',
     value: 'Videollamada',
     component: '',
   },
   {
     label: 'Chat',
-    icon: <Message size="24" variant="Broken" />,
+    icon: '/svg/icon-toolbar/message.svg',
     value: 'Chat',
     component: '',
   },
   {
     label: 'Guía',
-    icon: <Book size="24" variant="Broken" />,
+    icon: '/svg/icon-toolbar/book.svg',
     value: 'Guía',
     component: '',
   },
