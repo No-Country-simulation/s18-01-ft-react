@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
 		},
 		status: {
 			type: String,
-			enum: ["active", "disconnected"],
+			enum: ["online","busy","disconnected"],
 		},
 	},
 	{ timestamps: true },
