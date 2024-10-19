@@ -1,22 +1,27 @@
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
-const RoomName = () => {
-  const { roomName } = useParams();
+const firstLetterToUpper = str => {
+  const letter = str.split(' ');
+  if (letter.length === 0) return '';
+  return (
+    letter[0].charAt(0).toUpperCase() +
+    letter[0].slice(1) +
+    ' ' +
+    letter.slice(1).join(' ').toLowerCase()
+  );
+};
 
-  const firstLetterToUpper = str => {
-    const letter = str.split(' ');
-    if (letter.length === 0) return '';
-    return (
-      letter[0].charAt(0).toUpperCase() +
-      letter[0].slice(1) +
-      ' ' +
-      letter.slice(1).join(' ').toLowerCase()
-    );
-  };
+const RoomName = ({ roomId }) => {
+  const [searchParams] = useSearchParams();
+  const name = searchParams.get('roomName');
 
-  const formattedRoomName = firstLetterToUpper(roomName.replace(/-/g, ' '));
+  const formattedRoomName = firstLetterToUpper(name.replace(/-/g, ' '));
 
-  return <h1 className="text-xl font-semibold">Sala: {formattedRoomName}</h1>;
+  return (
+    <h1 className="text-xl font-semibold">
+      {roomId ? `Sala: ${formattedRoomName}` : 'Lobby'}
+    </h1>
+  );
 };
 
 export default RoomName;

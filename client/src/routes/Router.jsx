@@ -24,7 +24,7 @@ const AppRouter = () => {
           element: <Navigate to="/" />,
         },
         {
-          path: ':roomName',
+          path: ':roomId',
           element: <Office />,
         },
       ],
