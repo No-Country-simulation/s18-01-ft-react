@@ -1,6 +1,7 @@
 const Rooms = require('../persistencia/models/rooms.models.js');
 const Emp = require('../persistencia/models/emp.models.js')
 
+// Crear Room
 exports.createRoom = async (req, res) => {
     try {
         const { name } = req.body;
@@ -39,6 +40,7 @@ exports.createRoom = async (req, res) => {
     }
 };
 
+// ver Rooms
 exports.getRooms = async (req, res) => {
     try {
         // Obtener todas las rooms de la base de datos
@@ -59,5 +61,49 @@ exports.getRooms = async (req, res) => {
             message: 'Error interno del servidor al obtener las salas.',
             error: error.message,
         });
+    }
+};
+
+// ver Room por Id
+exports.getRoomsByEmpId = async (req, res) => {
+    try {
+        const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
+        if (!empId) {
+            return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
+        }
+
+        const rooms = await Rooms.find({ id_emp: empId });
+        
+        if (rooms.length === 0) {
+            return res.status(404).json({ message: "No se encontraron salas para esta empresa" });
+        }
+
+        res.status(200).json(rooms);
+    } catch (error) {
+        console.error("Error al obtener las salas:", error);
+        res.status(500).json({ message: "Error al obtener las salas", error });
+    }
+};
+
+
+// Obtener detalles de una sala por su ID
+exports.getRoomById = async (req, res) => {
+    try {
+        const room = await Rooms.findById(req.params.id);
+        if (!room) return res.status(404).json({ message: "Sala no encontrada" });
+        res.status(200).json(room);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener la sala", error });
+    }
+};
+
+// Eliminar una sala por su ID
+exports.deleteRoomById = async (req, res) => {
+    try {
+        const room = await Rooms.findByIdAndDelete(req.params.id);
+        if (!room) return res.status(404).json({ message: "Sala no encontrada" });
+        res.status(200).json({ message: "Sala eliminada con éxito" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar la sala", error });
     }
 };

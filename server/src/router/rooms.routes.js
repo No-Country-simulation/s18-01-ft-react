@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createRoom, getRooms } = require('../controller/rooms.controller.js');
+const { createRoom, getRooms, deleteRoomById, getRoomById, getRoomsByEmpId } = require('../controller/rooms.controller.js');
 const { tokenMiddleware } = require('../middlewares/middleware.js');
 
 /**
@@ -86,7 +86,7 @@ router.post('/create', tokenMiddleware, createRoom);
  *     summary: Obtener todas las salas.
  *     description: Devuelve una lista de todas las salas disponibles.
  *     tags:
- *       - Admin
+ *       - Public
  *     responses:
  *       200:
  *         description: Lista de salas devuelta exitosamente.
@@ -107,5 +107,167 @@ router.post('/create', tokenMiddleware, createRoom);
  *         description: Error interno del servidor.
  */
 router.get('/allrooms', getRooms);
+
+/**
+ * @swagger
+ * /rooms/roomsByEmpId:
+ *   get:
+ *     summary: Obtener todas las salas por empresa.
+ *     description: Devuelve una lista de todas las salas asociadas a la empresa autenticada.
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de salas devuelta exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: ID de la sala.
+ *                   id_emp:
+ *                     type: string
+ *                     description: ID de la empresa a la que pertenece la sala.
+ *                   name:
+ *                     type: string
+ *                     description: Nombre de la sala.
+ *                   users:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         socketId:
+ *                           type: string
+ *                           description: ID del socket del usuario.
+ *                         username:
+ *                           type: string
+ *                           description: Nombre de usuario.
+ *                         status:
+ *                           type: string
+ *                           enum: [active, absent, disconnected]
+ *                           description: Estado del usuario en la sala.
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Fecha de creación de la sala.
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Última actualización de la sala.
+ *       401:
+ *         description: No autorizado. El token es requerido o no es válido.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.get('/roomsByEmpId', tokenMiddleware, getRoomsByEmpId);
+
+/**
+ * @swagger
+ * /rooms/{id}:
+ *   get:
+ *     summary: Obtener una sala por ID.
+ *     description: Devuelve los detalles de una sala específica usando su ID.
+ *     tags:
+ *       - Public
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la sala a obtener.
+ *     responses:
+ *       200:
+ *         description: Detalles de la sala obtenidos exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: ID de la sala.
+ *                 id_emp:
+ *                   type: string
+ *                   description: ID de la empresa a la que pertenece la sala.
+ *                 name:
+ *                   type: string
+ *                   description: Nombre de la sala.
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       socketId:
+ *                         type: string
+ *                         description: ID del socket del usuario.
+ *                       username:
+ *                         type: string
+ *                         description: Nombre de usuario.
+ *                       status:
+ *                         type: string
+ *                         enum: [active, absent, disconnected]
+ *                         description: Estado del usuario en la sala.
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Fecha de creación de la sala.
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Última actualización de la sala.
+ *       401:
+ *         description: No autorizado. El token es requerido o no es válido.
+ *       404:
+ *         description: Sala no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.get('/:id', getRoomById);
+
+/**
+ * @swagger
+ * /rooms/{id}:
+ *   delete:
+ *     summary: Eliminar una sala por ID.
+ *     description: Elimina una sala específica utilizando su ID.
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la sala a eliminar.
+ *     responses:
+ *       200:
+ *         description: Sala eliminada exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Sala eliminada correctamente.
+ *       401:
+ *         description: No autorizado. El token es requerido o no es válido.
+ *       404:
+ *         description: Sala no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
+router.delete('/:id', tokenMiddleware, deleteRoomById);
+
 
 module.exports = router;
