@@ -1,13 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const { createRoom, getRooms } = require('../controller/rooms.controller.js');
+const { tokenMiddleware } = require('../middlewares/middleware.js');
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Admin
+ *     description: Operaciones relacionadas con la administración en general.
+ */
 
 /**
  * @swagger
  * /rooms/create:
  *   post:
- *     summary: Crear una nueva sala
- *     description: Crea una nueva sala con el nombre especificado y la información del creador. 
+ *     summary: Crear una nueva sala.
+ *     description: Crea una nueva sala con el nombre especificado y la información del creador.
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -19,10 +31,6 @@ const { createRoom, getRooms } = require('../controller/rooms.controller.js');
  *                 type: string
  *                 description: Nombre de la sala que se va a crear.
  *                 example: "Sala de Chat"
- *               creator:
- *                 type: string
- *                 description: Nombre del creador de la sala.
- *                 example: "Usuario123"
  *     responses:
  *       201:
  *         description: Sala creada exitosamente.
@@ -48,15 +56,37 @@ const { createRoom, getRooms } = require('../controller/rooms.controller.js');
  *                 message:
  *                   type: string
  *                   example: "El nombre de la sala es requerido."
+ *       403:
+ *         description: Acceso denegado. La empresa no está verificada.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Acceso denegado. La empresa no está verificada."
+ *       500:
+ *         description: Error interno del servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error creando la room"
  */
-router.post('/create', createRoom);
+router.post('/create', tokenMiddleware, createRoom);
 
 /**
  * @swagger
  * /rooms/allrooms:
  *   get:
- *     summary: Obtener todas las salas
+ *     summary: Obtener todas las salas.
  *     description: Devuelve una lista de todas las salas disponibles.
+ *     tags:
+ *       - Admin
  *     responses:
  *       200:
  *         description: Lista de salas devuelta exitosamente.
@@ -70,25 +100,11 @@ router.post('/create', createRoom);
  *                   id:
  *                     type: string
  *                     description: ID de la sala.
- *                     example: "60c72b2f9b1d5f1a4c0f8e2e"
  *                   name:
  *                     type: string
  *                     description: Nombre de la sala.
- *                     example: "Sala de Chat"
- *                   creator:
- *                     type: string
- *                     description: Nombre del creador de la sala.
- *                     example: "Usuario123"
  *       500:
  *         description: Error interno del servidor.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Error al obtener las salas."
  */
 router.get('/allrooms', getRooms);
 

@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const roomsSchema = new mongoose.Schema({
     id_emp: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Emp',
         required: true
     },
     name: {

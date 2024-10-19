@@ -1,4 +1,5 @@
 const express = require("express");
+const http = require("http");
 const path = require("node:path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -16,7 +17,13 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 const authRoutes = require("./src/router/auth.routes.js");
 const connectDB = require("./src/config/dbConfig.js");
 
+const {Server} = require("socket.io"); 
+const socketAuth = require("./src/middlewares/socketAuth.js");
+const { handleSocketEvents } = require("./src/sockets/roomIo.js");
+
 const app = express();
+
+
 
 app.set("views", path.join(__dirname, "./src/views"));
 app.set("view engine", "ejs");
@@ -29,8 +36,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(authMiddleware);
 
+const server = http.createServer(app);
 // Configura CORS abierto
 // Configuración de CORS para permitir Swagger UI acceder a tu API
+
 const corsOptions = {
 	origin: [
 	  'http://localhost:8080',
@@ -47,7 +56,15 @@ const corsOptions = {
   };
   console.log('cors activados...')
   app.use(cors(corsOptions));
+  const io = new Server(server, {
+	cors:corsOptions,
+  })
 connectDB();
+
+// Middleware de autenticación de Socket.IO
+io.use(socketAuth);
+// Manejo de eventos de Socket.IO
+handleSocketEvents(io);
 
 // Ruta principal (índice)
 app.get("/", (req, res) => {
