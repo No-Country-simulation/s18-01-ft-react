@@ -1,13 +1,23 @@
 import AppSearchBar from '@/components/Search/AppSearchBar';
+import UserToolbar from '@/components/UserToolbar/UserToolbar';
+import ZoomControls from '@/components/ZoomControls/ZoomControls';
 
-const OfficeLayouts = ({ header, children }) => {
+const OfficeLayouts = ({ children }) => {
   return (
-    <div>
+    <>
       <header className="bg-white p-4 shadow">
         <AppSearchBar />
       </header>
-      <main className="mt-5 flex flex-col items-center">{children}</main>
-    </div>
+      <div className="mt-5 flex flex-col items-center justify-center">
+        <div className="flex w-full justify-between px-20">
+          {children}
+          <aside className="my-auto ml-6">
+            <ZoomControls />
+          </aside>
+        </div>
+        <UserToolbar />
+      </div>
+    </>
   );
 };
 

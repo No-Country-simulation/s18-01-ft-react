@@ -13,7 +13,7 @@ const firstLetterToUpper = str => {
 
 const RoomName = ({ roomId }) => {
   const [searchParams] = useSearchParams();
-  const name = searchParams.get('roomName');
+  const name = searchParams.get('roomName') || '';
 
   const formattedRoomName = firstLetterToUpper(name.replace(/-/g, ' '));
 
