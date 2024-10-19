@@ -9,7 +9,7 @@ export const signinSubmit = async form => {
   });
   if (schemaErrors) return schemaErrors;
 
-  const [error, _] = await apiService.userLogin(data);
+  const [error, success] = await apiService.userLogin(data);
 
   if (error) {
     return {
@@ -21,5 +21,6 @@ export const signinSubmit = async form => {
   return {
     id: crypto.randomUUID(),
     status: 'SUCCESS',
+    data: success,
   };
 };

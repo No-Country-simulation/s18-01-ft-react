@@ -1,7 +1,9 @@
 import ButtonBox from '@/components/ButtonBox/ButtonBox';
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
+import { authAtom } from '@/store/authAtom';
 import { signinSubmit } from '@/utils/functions/signinSubmit';
+import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -32,10 +34,14 @@ const userSigninFields = [
 
 export const UserSigninPage = () => {
   const navigate = useNavigate();
+  const setAuth = useSetAtom(authAtom);
   const handleSuccess = async form => {
     const result = await signinSubmit(form);
-    if (result && result.status === 'SUCCESS') navigate('/');
-    return result;
+    if (!result || result.status !== 'SUCCESS') {
+      return result;
+    }
+    setAuth({ isAuth: true, user: result.data });
+    navigate('/');
   };
 
   return (
