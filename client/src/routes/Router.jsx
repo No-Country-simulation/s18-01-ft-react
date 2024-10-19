@@ -21,7 +21,7 @@ const AppRouter = () => {
       children: [
         {
           index: true,
-          element: <Navigate to="/" />,
+          element: <Office />,
         },
         {
           path: ':roomId',
