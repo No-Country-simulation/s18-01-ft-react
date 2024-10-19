@@ -27,7 +27,7 @@ const PhaserContainer = () => {
       <div
         ref={gameRef}
         id="office"
-        className="size-full max-h-[657px] w-[845px] rounded-lg border border-neutral-1000"></div>
+        className="size-full max-h-[657px] w-[845px] rounded-lg border border-neutral-1000 shadow-drop"></div>
     </div>
   );
 };
