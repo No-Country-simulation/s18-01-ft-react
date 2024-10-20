@@ -1,31 +1,39 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import { toolbarOptions } from '../../utils/functions/toolbarOptions';
 import { RoomModal } from '../RoomModal/RoomModal';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { modalAtom } from '@/store/modalAtom';
+import { UsersModal } from '../UsersModal/UsersModal';
 
 const UserToolbar = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [_, setModal] = useAtom(modalAtom);
-
-  const handleOptionClick = value => {
+  const setModal = useSetAtom(modalAtom);
+  const buttonRefs = useRef([]);
+  const handleOptionClick = (value, index) => {
+    const btnRect = buttonRefs.current[index].getBoundingClientRect();
     setSelectedOption(selectedOption === value ? null : value);
-    setModal(val => ({ ...val, open: !val.open, modalId: value }));
+    setModal(val => ({
+      open: selectedOption !== value,
+      modalId: value,
+      coords: [btnRect.top - 20, btnRect.left],
+      firstOpen: true,
+    }));
   };
 
   return (
     <div className="mx-auto mb-12 mt-6 flex h-[82px] w-[559px] flex-wrap items-center justify-center rounded-4xl border border-black bg-white shadow-drop">
       <div className="flex space-x-2">
-        {toolbarOptions.slice(0, 4).map(option => (
+        {toolbarOptions.slice(0, 4).map((option, index) => (
           <ToolbarButton
             key={option.value}
-            icon={
-              <img src={option.icon} alt={option.label} width="24px" height="24px" />
-            }
+            ref={el => (buttonRefs.current[index] = el)}
+            icon={option.icon}
+            alt={option.label}
             label={option.label}
+            id={option.id}
             isSelected={selectedOption === option.value}
-            onClick={() => handleOptionClick(option.value)}
+            onClick={() => handleOptionClick(option.value, index)}
           />
         ))}
       </div>
@@ -46,6 +54,7 @@ const UserToolbar = () => {
         />
       </div>
       <RoomModal />
+      <UsersModal />
     </div>
   );
 };

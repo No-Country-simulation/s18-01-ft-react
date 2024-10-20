@@ -9,6 +9,7 @@ import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
 import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
 import { Outlet } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
+import { OnlyNoAuth } from './OnlyNoAuth';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -36,19 +37,35 @@ const AppRouter = () => {
     },
     {
       path: '/signup',
-      element: <UserSignupPage />,
+      element: (
+        <OnlyNoAuth>
+          <UserSignupPage />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/signin',
-      element: <UserSigninPage />,
+      element: (
+        <OnlyNoAuth>
+          <UserSigninPage />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/enterprise-signup',
-      element: <EnterpriseSignup />,
+      element: (
+        <OnlyNoAuth>
+          <EnterpriseSignup />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/enterprise-signin',
-      element: <EnterpriseSignin />,
+      element: (
+        <OnlyNoAuth>
+          <EnterpriseSignin />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/welcome',

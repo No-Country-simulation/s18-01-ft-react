@@ -1,21 +1,21 @@
 import { TabListItem, Tabs, TabsContent, TabsList, TabsTrigger } from '../Tabs';
 
-export const RoomModalTabs = ({ rooms }) => {
+export const UserModalTabs = ({ users }) => {
   return (
     <Tabs defaultValue="all" className="max-h-full overflow-hidden px-4">
       <TabsList className="mb-3 mt-4">
         <TabsTrigger value="all">Todas</TabsTrigger>
-        <TabsTrigger value="active">Activas</TabsTrigger>
-        <TabsTrigger value="inactive">Inactivas</TabsTrigger>
+        <TabsTrigger value="online">En linea</TabsTrigger>
+        <TabsTrigger value="offline">Desconectados</TabsTrigger>
       </TabsList>
       <TabsContent value="all">
-        <TabListItem items={rooms} isRoom={true} />
+        <TabListItem items={users} />
       </TabsContent>
-      <TabsContent value="active">
-        <TabListItem items={rooms} isRoom={true} />
+      <TabsContent value="online">
+        <TabListItem items={users} />
       </TabsContent>
-      <TabsContent value="inactive">
-        <TabListItem items={[]} isRoom={true} />
+      <TabsContent value="offline">
+        <TabListItem items={[]} />
       </TabsContent>
     </Tabs>
   );
