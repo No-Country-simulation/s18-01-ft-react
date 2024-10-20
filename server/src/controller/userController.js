@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../persistencia/models/user.models.js");
 const nodemailer = require("nodemailer");
 const entorno = require("../config/authConfig.js");
+const {createAccess} = require('../utils/createAcesstoken.js')
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRATION = "1h"; // Expiración del token
@@ -60,11 +61,17 @@ exports.login = async (req, res) => {
 		}
 
 		// Genera el token JWT
-		const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-			expiresIn: JWT_EXPIRATION,
-		});
+		const token = createAccess({ userId: user._id });
 
-		return res.status(200).json({ token });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000, // 1 día
+            path: '/'
+        });
+
+		return res.status(200).json({ token }, {user});
 	} catch (error) {
 		return res.status(500).json({ message: "Error en el servidor", error });
 	}
@@ -191,3 +198,19 @@ exports.updateProfile = async (req, res) => {
 			.json({ message: "Error actualizando el perfil", error });
 	}
 };
+
+
+exports.getProfile = async(req, res)=> {
+	try{
+		const user = await User.findById(req.user.id).select(
+			"-password -__v"
+		);
+		//
+		if(!user){
+			return res.status(404).json({message:"Usuario no encontrado"})
+		}
+		res.status(200).json(user)
+	} catch(error){
+		return res.status(500).json({message:" Error en el servidor", error});
+	}
+}

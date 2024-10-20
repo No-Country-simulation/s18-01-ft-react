@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, forgotPassword, updateProfile, resetPassword } = require("../controller/userController.js");
+const { register, login, forgotPassword, updateProfile, resetPassword, getProfile } = require("../controller/userController.js");
 const { tokenMiddleware } = require("../middlewares/middleware.js");
 const dotenv = require("dotenv")
 
@@ -246,7 +246,7 @@ router.post("/reset-password", resetPassword);
  *     summary: Actualizar perfil del usuario
  *     description: Este endpoint permite a los usuarios autenticados actualizar su perfil. Es necesario enviar el token de autenticación para validar la solicitud.
  *     tags:
- *       - AuthCredentials
+ *       - Users
  *     security:
  *       - bearerAuth: []  # Define que se requiere autenticación mediante Bearer token.
  *     requestBody:
@@ -319,5 +319,73 @@ router.post("/reset-password", resetPassword);
  *                   additionalProperties: true
  */
 router.put("/profile", tokenMiddleware, updateProfile);
+/**
+ * @openapi
+ * /user/profile:
+ *   get:
+ *     summary: Obtener perfil del usuario
+ *     description: Este endpoint permite obtener los datos del perfil del usuario autenticado utilizando un token Bearer en el encabezado de autorización.
+ *     tags:
+ *       - Users
+ *     security:
+ *       - bearerAuth: []  # Autenticación requerida mediante Bearer token
+ *     responses:
+ *       200:
+ *         description: Perfil del usuario obtenido exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "64f18c2e77f4f9723d1f5678"
+ *                 username:
+ *                   type: string
+ *                   example: "juanp"
+ *                 firstName:
+ *                   type: string
+ *                   example: "Juan"
+ *                 lastName:
+ *                   type: string
+ *                   example: "Pérez"
+ *                 email:
+ *                   type: string
+ *                   example: "juanp@example.com"
+ *                 profilePicture:
+ *                   type: string
+ *                   example: "https://example.com/images/profile.jpg"
+ *                 rol:
+ *                   type: string
+ *                   example: "admin"
+ *                 status:
+ *                   type: string
+ *                   enum: ["online", "busy", "disconnected"]
+ *                   example: "online"
+ *       401:
+ *         description: No autorizado. Token inválido o no proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No autorizado. Token inválido o no proporcionado."
+ *       500:
+ *         description: Error en el servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error en el servidor"
+ *                 error:
+ *                   type: object
+ *                   additionalProperties: true
+ */
+router.get("/profile", tokenMiddleware, getProfile);
 
 module.exports = router;

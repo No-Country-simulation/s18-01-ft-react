@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema(
 		email: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		id_emp: {
 			type: String,

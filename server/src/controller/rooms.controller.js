@@ -1,30 +1,109 @@
 const Rooms = require('../persistencia/models/rooms.models.js');
+const Emp = require('../persistencia/models/emp.models.js')
 
-const createRoom = async (req, res) => {
-    const { name, id_propety } = req.body;
+// Crear Room
+exports.createRoom = async (req, res) => {
     try {
-        let room = await Rooms.findOne({ name });
-        if (room) {
-            return res.status(400).json({ message: 'La sala ya existe' });
+        const { name } = req.body;
+        const empresa = req.empresa; // La empresa ya está disponible desde el middleware
+
+        // Validación: Verificar si la empresa está disponible y verificada
+        // if (!empresa || !empresa.isVerified) {
+		if (!empresa) {
+            return res.status(403).json({
+                message: 'Acceso denegado. La empresa no está verificada.',
+            });
         }
-        room = new Rooms({ name, id_propety });
-        await room.save();
-        res.status(201).json({ message: 'Sala creada correctamente', room });
-    } catch (err) {
-        res.status(500).json({ message: 'Error al crear la sala', error: err.message });
+
+        // Validación: Verificar si se proporcionó el nombre de la room
+        if (!name || name.trim() === '') {
+            return res.status(400).json({
+                message: 'El nombre de la room es obligatorio.',
+            });
+        }
+
+        // Crear la nueva room
+        const newRoom = new Rooms({
+            id_emp: empresa._id,
+            name: name.trim(),
+        });
+
+        // Guardar la room en la base de datos
+        const savedRoom = await newRoom.save();
+        return res.status(201).json(savedRoom);
+    } catch (error) {
+        console.error('Error creando la room:', error);
+        return res.status(500).json({
+            message: 'Error creando la room',
+            error: error.message,
+        });
     }
 };
 
-const getRooms = async (req, res) => {
+// ver Rooms
+exports.getRooms = async (req, res) => {
     try {
+        // Obtener todas las rooms de la base de datos
         const rooms = await Rooms.find();
-        res.json(rooms);
-    } catch (err) {
-        res.status(500).json({ message: 'Error al obtener las salas', error: err.message });
+
+        // Verificar si hay salas disponibles
+        if (!rooms || rooms.length === 0) {
+            return res.status(404).json({
+                message: 'No se encontraron salas.',
+            });
+        }
+
+        // Enviar las salas encontradas
+        return res.status(200).json(rooms);
+    } catch (error) {
+        console.error('Error obteniendo las salas:', error);
+        return res.status(500).json({
+            message: 'Error interno del servidor al obtener las salas.',
+            error: error.message,
+        });
     }
 };
 
-module.exports = {
-    createRoom, 
-    getRooms 
+// ver Room por Id
+exports.getRoomsByEmpId = async (req, res) => {
+    try {
+        const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
+        if (!empId) {
+            return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
+        }
+
+        const rooms = await Rooms.find({ id_emp: empId });
+        
+        if (rooms.length === 0) {
+            return res.status(404).json({ message: "No se encontraron salas para esta empresa" });
+        }
+
+        res.status(200).json(rooms);
+    } catch (error) {
+        console.error("Error al obtener las salas:", error);
+        res.status(500).json({ message: "Error al obtener las salas", error });
+    }
+};
+
+
+// Obtener detalles de una sala por su ID
+exports.getRoomById = async (req, res) => {
+    try {
+        const room = await Rooms.findById(req.params.id);
+        if (!room) return res.status(404).json({ message: "Sala no encontrada" });
+        res.status(200).json(room);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener la sala", error });
+    }
+};
+
+// Eliminar una sala por su ID
+exports.deleteRoomById = async (req, res) => {
+    try {
+        const room = await Rooms.findByIdAndDelete(req.params.id);
+        if (!room) return res.status(404).json({ message: "Sala no encontrada" });
+        res.status(200).json({ message: "Sala eliminada con éxito" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar la sala", error });
+    }
 };

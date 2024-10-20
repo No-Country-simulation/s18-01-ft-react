@@ -119,7 +119,9 @@ const loginEmp = async (req, res) => {
         if (!compareHash) {
             return res.status(401).json({ message: "Invalid credentials" })
         };
-        const token = await createAccess({ id: exEmp.id })
+        // const token = await createAccess({ id: exEmp.id })
+        const token = createAccess({ empId: exEmp._id });
+
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
