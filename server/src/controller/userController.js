@@ -71,7 +71,16 @@ exports.login = async (req, res) => {
             path: '/'
         });
 
-		return res.status(200).json({ token }, {user});
+		res.json({
+			id: user.id,
+			email: user.email,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			profilePicture: user.profilePicture,
+			id_emp: user.id_emp,
+			rol: user.rol,
+			username: user.username,
+		})
 	} catch (error) {
 		return res.status(500).json({ message: "Error en el servidor", error });
 	}
