@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../persistencia/models/user.models.js');
 const parseCookie = require('cookie-parser');
+const dotenv = require('dotenv').config();
 
 const socketAuth = (socket, next) => {
     const cookie = socket.handshake.headers.cookie;
@@ -8,8 +9,8 @@ const socketAuth = (socket, next) => {
     if (cookie) {
         const token = parseCookie(cookie).authToken; 
 
-        
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+        // crear token con id 
+        jwt.verify(cookie, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) return next(new Error('Autenticación fallida'));
 
             const user = await User.findById(decoded.id);
