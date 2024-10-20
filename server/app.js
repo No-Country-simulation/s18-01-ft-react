@@ -18,8 +18,8 @@ const authRoutes = require("./src/router/auth.routes.js");
 const connectDB = require("./src/config/dbConfig.js");
 
 const {Server} = require("socket.io"); 
-const socketAuth = require("./src/middlewares/socketAuth.js");
-const { handleSocketEvents } = require("./src/sockets/roomIo.js");
+//const socketAuth = require("./src/middlewares/socketAuth.js");
+//const { handleSocketEvents } = require("./src/sockets/roomIo.js");
 
 const app = express();
 
@@ -60,11 +60,6 @@ const corsOptions = {
 	cors:corsOptions,
   })
 connectDB();
-
-// Middleware de autenticación de Socket.IO
-io.use(socketAuth);
-// Manejo de eventos de Socket.IO
-handleSocketEvents(io);
 
 // Ruta principal (índice)
 app.get("/", (req, res) => {
