@@ -109,7 +109,6 @@ module.exports = {
         '5xl': '3rem',
       },
       boxShadow: {
-        brutalism: 'var(--brutalism-shadow)',
         drop: 'var(--drop-shadow)',
         'drop-small': 'var(--drop-shadow-small)',
         inset: 'inset var(--drop-shadow)',

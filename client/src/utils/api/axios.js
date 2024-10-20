@@ -5,7 +5,7 @@ import { API_URL } from './config';
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 100000,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -14,10 +14,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
   config => {
-    const token = Cookies.get('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   error => {
@@ -41,9 +37,9 @@ api.interceptors.response.use(
 
     // Handle 401 Unauthorized errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      //originalRequest._retry = true;
-      //Cookies.remove('token');
-      //window.location.href = '/signin';
+      originalRequest._retry = true;
+      Cookies.remove('token');
+      window.location.href = '/signin';
       console.error(ERROR_MESSAGES.UNAUTHORIZED);
       console.info(ERROR_MESSAGES.REDIRECT_SIGNIN);
 

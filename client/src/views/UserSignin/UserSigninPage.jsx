@@ -41,7 +41,7 @@ export const UserSigninPage = () => {
       return result;
     }
     setAuth({ isAuth: true, user: result.data });
-    navigate('/');
+    navigate('/office');
   };
 
   return (

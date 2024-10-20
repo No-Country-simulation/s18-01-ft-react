@@ -15,7 +15,7 @@ const UserToolbar = () => {
   };
 
   return (
-    <div className="mt-6 flex h-[82px] w-[559px] flex-wrap items-center justify-center rounded-4xl border border-black bg-white shadow-drop">
+    <div className="mx-auto mb-12 mt-6 flex h-[82px] w-[559px] flex-wrap items-center justify-center rounded-4xl border border-black bg-white shadow-drop">
       <div className="flex space-x-2">
         {toolbarOptions.slice(0, 4).map(option => (
           <ToolbarButton

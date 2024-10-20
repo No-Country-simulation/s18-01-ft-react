@@ -154,4 +154,6 @@ body {
 
 #root {
   @apply pointer-events-control;
+  max-width: 1900px;
+  margin-inline: auto;
 }

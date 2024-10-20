@@ -18,8 +18,8 @@ const RoomName = ({ roomId }) => {
   const formattedRoomName = firstLetterToUpper(name.replace(/-/g, ' '));
 
   return (
-    <h1 className="text-xl font-semibold">
-      {roomId ? `Sala: ${formattedRoomName}` : 'Lobby'}
+    <h1 className="mb-3 text-xl font-semibold">
+      {roomId ? `${formattedRoomName}` : 'Lobby'}
     </h1>
   );
 };
