@@ -1,4 +1,11 @@
-const { registerEmp, loginEmp, confirmEmail, sendResetPasswordEmail, resetPassword } = require('../controller/emp.controller.js');
+const { registerEmp, 
+        loginEmp, 
+        confirmEmail,
+        sendResetPasswordEmail, 
+        resetPassword, 
+        createPermissions, 
+        assignUPermissions,
+        assignRPermissions } = require('../controller/emp.controller.js');
 const express = require('express');
 const router = express.Router();
 
@@ -155,5 +162,218 @@ router.post('/sendresetpasswordemail', sendResetPasswordEmail);
  *         description: Error en el servidor.
  */
 router.post('/resetpassword', resetPassword);
+/**
+ * @swagger
+ * /emp/createPermissions:
+ *   post:
+ *     tags: [Empresa]
+ *     summary: Crear o agregar permisos al empleado
+ *     description: Este endpoint permite a un empleado autenticado agregar permisos a su perfil. Si el permiso ya existe, se devuelve un error.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               permissions:
+ *                 type: string
+ *                 description: El permiso que deseas agregar al empleado.
+ *                 example: "edit_documents"
+ *     responses:
+ *       200:
+ *         description: Permiso agregado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Permissions created"
+ *                 user:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: Lista de permisos del empleado después de la actualización.
+ *                   example: ["edit_documents", "view_reports"]
+ *       400:
+ *         description: El permiso ya existe.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Permission already exists"
+ *       404:
+ *         description: Token inválido o empleado inexistente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "token invalid o nonexistent emp"
+ *       500:
+ *         description: Error en el servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error en el servidor"
+ */
+router.post('/createPermissions', createPermissions);
+/**
+ * @swagger
+ * /emp/assignRPermissions:
+ *   post:
+ *     tags: [Empresa]
+ *     summary: Asignar permisos a una sala
+ *     description: Permite a un empleado autenticado asignar permisos a una sala específica.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: Token JWT del empleado autenticado.
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               id_room:
+ *                 type: string
+ *                 description: ID de la sala a la que se le asignarán los permisos.
+ *                 example: "615c1b2f23e4f1a1d2e5c892"
+ *               permissions:
+ *                 type: string
+ *                 description: Permiso que se asignará a la sala.
+ *                 example: "edit_room"
+ *     responses:
+ *       200:
+ *         description: Permiso agregado exitosamente a la sala.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "add permit"
+ *                 room:
+ *                   type: object
+ *                   properties:
+ *                     id_room:
+ *                       type: string
+ *                     permissions:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *       404:
+ *         description: Token inválido, empleado o sala inexistente, o error de permisos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "nonexistent emp"
+ *       500:
+ *         description: Error en el servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error en el servidor"
+ */
+router.post('/assignRPermissions', assignRPermissions);
+/**
+ * @swagger
+ * /emp/assignUPermissions:
+ *   post:
+ *     tags: [Empresa]
+ *     summary: Asignar permisos a un usuario
+ *     description: Permite a un empleado autenticado asignar permisos a un usuario. Verifica que el usuario pertenezca al empleado y que el permiso no esté duplicado.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: Token JWT del empleado autenticado.
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               id_user:
+ *                 type: string
+ *                 description: ID del usuario al que se le asignarán los permisos.
+ *                 example: "615c1b2f23e4f1a1d2e5c892"
+ *               permissions:
+ *                 type: string
+ *                 description: Permiso que se asignará al usuario.
+ *                 example: "edit_profile"
+ *     responses:
+ *       200:
+ *         description: Permiso agregado exitosamente al usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "add permit"
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id_user:
+ *                       type: string
+ *                     permissions:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *       400:
+ *         description: El permiso ya existe para este usuario.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Permission already exists"
+ *       404:
+ *         description: Token inválido, empleado inexistente, usuario inexistente, o permisos no asignados.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "nonexistent user" o "Permissions no create"
+ *       500:
+ *         description: Error en el servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error en el servidor"
+ */
+router.post('/assignUPermissions', assignUPermissions);
 
 module.exports = router;

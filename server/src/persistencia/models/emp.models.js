@@ -20,6 +20,10 @@ const empSchema = new mongoose.Schema({
     isVerified: {
         type : Boolean,
         default : false
+    },
+    permissions_emp: {
+        type: Array,
+        default: []
     }
 },
     { timestamps: true }
