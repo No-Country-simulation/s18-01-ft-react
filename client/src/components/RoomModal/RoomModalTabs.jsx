@@ -12,7 +12,7 @@ export const RoomModalTabs = ({ rooms }) => {
         <TabListItem items={rooms} isRoom={true} />
       </TabsContent>
       <TabsContent value="active">
-        <TabListItem items={rooms} isRoom={true} />
+        <TabListItem items={[]} isRoom={true} />
       </TabsContent>
       <TabsContent value="inactive">
         <TabListItem items={[]} isRoom={true} />
