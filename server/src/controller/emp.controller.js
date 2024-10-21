@@ -1,4 +1,6 @@
 const Emp = require('../persistencia/models/emp.models.js');
+const User = require("../persistencia/models/user.models.js")
+const Rooms = require("../persistencia/models/rooms.models.js")
 const crip = require("bcryptjs");
 const { createAccess } = require("../utils/createAcesstoken.js");
 const nodemailer = require('nodemailer');
@@ -184,7 +186,8 @@ const sendResetPasswordEmail = async (req, res) => {
     }
 };
 const resetPassword = async (req, res) => {
-    const { token, newPassword } = req.body;
+    const { newPassword } = req.body;
+
     try {
         const decoded = await verifyAccessToken(token);
         const userId = decoded.id;
@@ -204,10 +207,91 @@ const resetPassword = async (req, res) => {
         });
     }
 };
+const createPermissions = async (req, res) => {
+    const { permissions } = req.body
+    const { token } = req.cookies
+    const decode = verifyAccessToken(token)
+    try {
+        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
+        const pre = await Emp.findById(decode.id)
+        if (!per) { return res.status(404).json({ message: 'nonexistent emp' }); }
+        if (!pre.permissions_emp.includes(permissions)) {
+            pre.permissions_emp.push(permissions);
+        } else {
+            return res.status(400).json({ message: 'Permission already exists' });
+        }
+        await pre.save();
+
+        return res.status(200).json({
+            message: 'Permissions created', user: pre.permissions_emp
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
+const assignUPermissions = async (req, res) => {
+    const { permissions, id_user } = req.body
+    const { token } = req.cookies
+    const decode = verifyAccessToken(token)
+    try {
+        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
+        const pre = await Emp.findById(decode.id)
+        if (!per) { return res.status(404).json({ message: 'nonexistent user' }); }
+        const user = await User.findById(id_user)
+        if (!user) { return res.status(404).json({ message: 'nonexistent user' }); }
+        if (!(user.id_emp == decode.id)) { return res.status(404).json({ message: 'not permit' }); }
+        if (!pre.permissions_emp.includes(permissions)) 
+        { return res.status(404).json({ message: 'Permissions no create' }); }
+        if (!user.permissions.includes(permissions)) {
+            user.permissions.push(permissions);
+        } else {
+            return res.status(400).json({ message: 'Permission already exists' });
+        }
+        await user.save();
+        return res.status(200).json({
+            message: 'add permit', user: user
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+const assignRPermissions = async (req, res) => {
+    const { permissions, id_room } = req.body
+    const { token } = req.cookies
+    const decode = verifyAccessToken(token)
+    try {
+        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
+        const pre = await Emp.findById(decode.id)
+        if (!per) { return res.status(404).json({ message: 'nonexistent emp' }); }
+        const room = Rooms.findById(id_room)
+        if (!room) { return res.status(404).json({ message: 'nonexistent room' }); }
+        if (room.id_emp == decode.id) { return res.status(404).json({ message: 'nonexistent room' }); }
+        if (!pre.permissions_emp.includes(permissions)) { return res.status(404).json({ message: 'Permissions no create' }); }
+        if (!room.permissions.includes(permissions)) {
+            room.permissions.push(permissions);
+        } else {
+            return res.status(400).json({ message: 'Permission already exists' });
+        }
+        room.save();
+        return res.status(200).json({
+            message: 'add permit', room: room
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
     registerEmp,
     loginEmp,
     confirmEmail,
     sendResetPasswordEmail,
-    resetPassword
+    resetPassword,
+    createPermissions,
+    assignUPermissions,
+    assignRPermissions
 };

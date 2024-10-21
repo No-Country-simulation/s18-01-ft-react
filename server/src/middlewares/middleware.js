@@ -9,7 +9,7 @@ dotenv.config({
 })
 
 exports.tokenMiddleware = async (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const {token} = req.cookie
 
     console.log('Intentando decodificar el token: ', token);
 

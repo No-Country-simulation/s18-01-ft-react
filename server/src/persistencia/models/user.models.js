@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const providerSchema = require("./provider.models");
 
 const userSchema = new mongoose.Schema(
 	{
@@ -46,9 +45,8 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 		},
 		id_emp: {
-			type: String,
-			default: "",
-			required: false,
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Emp'
 		},
 		rol: {
 			type: String,
@@ -58,6 +56,10 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			enum: ["online","busy","disconnected"],
 		},
+		permissions: {
+			type: Array,
+			default: []
+		}
 	},
 	{ timestamps: true },
 );

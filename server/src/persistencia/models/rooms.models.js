@@ -10,6 +10,14 @@ const roomsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tileset: {
+        type: String,
+        required: true
+    },
+    permissions: {
+        type: Array,
+        default: []
+    },
     users: [
         {
             socketId: String,

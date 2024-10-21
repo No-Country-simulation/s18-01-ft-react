@@ -4,7 +4,7 @@ const Emp = require('../persistencia/models/emp.models.js')
 // Crear Room
 exports.createRoom = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, tileset } = req.body;
         const empresa = req.empresa; // La empresa ya está disponible desde el middleware
 
         // Validación: Verificar si la empresa está disponible y verificada
@@ -26,6 +26,7 @@ exports.createRoom = async (req, res) => {
         const newRoom = new Rooms({
             id_emp: empresa._id,
             name: name.trim(),
+            tileset,
         });
 
         // Guardar la room en la base de datos
@@ -64,7 +65,7 @@ exports.getRooms = async (req, res) => {
     }
 };
 
-// ver Room por Id
+// ver Room de empresa por Id
 exports.getRoomsByEmpId = async (req, res) => {
     try {
         const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
