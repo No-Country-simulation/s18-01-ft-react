@@ -23,13 +23,13 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   response => {
-    if (response.data?.token) {
+    /*if (response.data?.token) {
       Cookies.set('token', response.data.token, {
         expires: 7, // Token expires in 7 days
         secure: import.meta.env['NODE_ENV'] === 'production',
         sameSite: 'strict',
       });
-    }
+    } */
     return response;
   },
   async error => {
