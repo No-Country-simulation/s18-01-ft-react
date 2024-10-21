@@ -4,8 +4,9 @@ import { toolbarOptions } from '../../utils/functions/toolbarOptions';
 
 import { useSetAtom } from 'jotai';
 import { modalAtom } from '@/store/modalAtom';
+import { cn } from '@/utils/functions/cn';
 
-const UserToolbar = () => {
+const UserToolbar = ({ hasId }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const setModal = useSetAtom(modalAtom);
   const buttonRefs = useRef([]);
@@ -22,7 +23,11 @@ const UserToolbar = () => {
   };
 
   return (
-    <div className="mx-auto mb-12 mt-6 flex h-[82px] w-[559px] flex-wrap items-center justify-center rounded-4xl border border-black bg-white shadow-drop">
+    <div
+      className={cn(
+        'mx-auto mb-12 flex h-[82px] w-[559px] flex-wrap items-center justify-center rounded-4xl border border-black bg-white shadow-drop',
+        hasId ? 'mt-6' : 'mt-auto'
+      )}>
       <div className="flex space-x-2">
         {toolbarOptions.slice(0, 4).map((option, index) => (
           <ToolbarButton
