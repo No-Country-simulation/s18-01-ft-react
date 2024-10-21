@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import Button from '../Button/Button';
 import FormInput from '../FormInput/FormInput';
 import { PresetRadioItem } from './PresetRadioItem';
+import { useForm } from '@/utils/hooks/useForm';
+import { createRoom } from '@/data/createRoom';
 
 export const CreateRoomForm = ({ close }) => {
-  const handleSend = () => {};
+  const { errors, isPending, submit } = useForm(createRoom);
   return (
-    <form className="mt-5 flex flex-col gap-y-4">
+    <form className="mt-5 flex flex-col gap-y-4" onSubmit={submit}>
       <label
         htmlFor="roomField"
         className="flex flex-col gap-y-3 text-base font-medium text-black">
@@ -66,7 +69,11 @@ export const CreateRoomForm = ({ close }) => {
           onClick={close}>
           Cancelar
         </Button>
-        <Button variant="primary" type="submit" className="h-9 px-5 text-accent-100">
+        <Button
+          variant="primary"
+          type="submit"
+          className="h-9 px-5 text-accent-100"
+          disabled={isPending}>
           Crear Sala
         </Button>
       </div>

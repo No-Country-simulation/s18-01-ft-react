@@ -1,8 +1,6 @@
-const { name } = require('eslint-plugin-prettier/recommended');
-const { z } = require('zod');
+import { z } from 'zod';
 
 export const roomSchema = z.object({
-  id: z.string(),
   name: z.string(),
-  preset: z.string(),
+  tileset: z.string(),
 });
