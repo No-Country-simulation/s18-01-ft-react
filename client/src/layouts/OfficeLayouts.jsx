@@ -1,5 +1,6 @@
+import { RoomModal } from '@/components/RoomModal/RoomModal';
 import AppSearchBar from '@/components/Search/AppSearchBar';
-import UserToolbar from '@/components/UserToolbar/UserToolbar';
+import { UsersModal } from '@/components/UsersModal/UsersModal';
 import ZoomControls from '@/components/ZoomControls/ZoomControls';
 
 const OfficeLayouts = ({ children, hasTools }) => {
@@ -21,6 +22,8 @@ const OfficeLayouts = ({ children, hasTools }) => {
           ) : null}
         </div>
       </div>
+      <RoomModal />
+      <UsersModal />
     </>
   );
 };

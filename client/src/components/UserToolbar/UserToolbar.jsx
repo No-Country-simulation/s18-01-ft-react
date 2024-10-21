@@ -1,10 +1,9 @@
 import { useState, useRef } from 'react';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import { toolbarOptions } from '../../utils/functions/toolbarOptions';
-import { RoomModal } from '../RoomModal/RoomModal';
+
 import { useSetAtom } from 'jotai';
 import { modalAtom } from '@/store/modalAtom';
-import { UsersModal } from '../UsersModal/UsersModal';
 
 const UserToolbar = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -17,6 +16,7 @@ const UserToolbar = () => {
       open: selectedOption !== value,
       modalId: value,
       coords: [btnRect.top - 20, btnRect.left],
+      position: 'top',
       firstOpen: true,
     }));
   };
@@ -53,8 +53,6 @@ const UserToolbar = () => {
           onClick={() => handleOptionClick(toolbarOptions[4].value)}
         />
       </div>
-      <RoomModal />
-      <UsersModal />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { authAtom } from '@/store/authAtom';
 import { useAtomValue } from 'jotai';
+import { USER_ROLES } from './roles';
 
 export const getCurrentUser = () => {
   const value = localStorage.getItem('AUTH');
@@ -9,11 +10,24 @@ export const getCurrentUser = () => {
 };
 
 export const isNormalUser = user => {
-  return user && user.hasOwnProperty('id_emp');
+  return user && user.hasOwnProperty('id_emp') && user['id_emp'] !== '';
+};
+export const isNormalUserWithoutCompany = user => {
+  console.log({ id: user['id_emp'] });
+  return user && user.hasOwnProperty('id_emp') && user['id_emp'] === '';
 };
 
 export const isEnterpriseUser = user => {
   return user && !user.hasOwnProperty('id_emp');
+};
+
+export const getUserRole = user => {
+  if (isEnterpriseUser(user)) {
+    return USER_ROLES.ENTERPRISE;
+  } else if (isNormalUser(user)) {
+    return USER_ROLES.COWORKER;
+  }
+  return USER_ROLES.USER;
 };
 
 export const getUserProfile = () => {

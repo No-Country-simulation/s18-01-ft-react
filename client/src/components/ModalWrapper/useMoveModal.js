@@ -72,7 +72,10 @@ export const useMoveModal = id => {
       const [currentY, currentX] = modalA.coords;
 
       if (!initialAdjustmentMade.current) {
-        setPosition({ y: currentY - modalHeight, x: currentX - modalWidth / 2.5 });
+        let newY = currentY;
+        if (modalA.position === 'top') newY = newY - modalHeight;
+        else if (modalA.position === 'bottom') newY = newY + modalHeight;
+        setPosition({ y: newY, x: currentX - modalWidth / 2.5 });
         initialAdjustmentMade.current = true;
       }
     }

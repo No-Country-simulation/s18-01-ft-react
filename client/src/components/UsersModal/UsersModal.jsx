@@ -1,3 +1,4 @@
+import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
 import Button from '../Button/Button';
 import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import { UserModalTabs } from './UserModalTabs';
@@ -15,6 +16,8 @@ const usersList = [
 ];
 
 export const UsersModal = () => {
+  const user = getCurrentUserAtom();
+  const isUserCompany = isEnterpriseUser(user);
   return (
     <ModalTitleWrapper
       imgStyle="invert brightness-0"
@@ -24,14 +27,16 @@ export const UsersModal = () => {
       title={`Usuarios (1)`}>
       <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
         <UserModalTabs users={usersList} />
-        <div className="mt-auto flex w-full items-center justify-center pb-8">
-          <Button
-            className="max-w-[75%] text-accent-100"
-            size="full"
-            onClick={() => alert('Proximamente')}>
-            Invitar al equipo
-          </Button>
-        </div>
+        {isUserCompany && (
+          <div className="mt-auto flex w-full items-center justify-center pb-8">
+            <Button
+              className="max-w-[75%] text-accent-100"
+              size="full"
+              onClick={() => alert('Proximamente')}>
+              Invitar al equipo
+            </Button>
+          </div>
+        )}
       </div>
     </ModalTitleWrapper>
   );

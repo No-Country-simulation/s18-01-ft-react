@@ -5,6 +5,7 @@ import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import { RoomModalTabs } from './RoomModalTabs';
 import container from '/public/svg/container.svg';
 import { modalAtom } from '@/store/modalAtom';
+import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
 
 const roomsData = [
   { name: 'Desarrollo', count: 4 },
@@ -15,7 +16,10 @@ const roomsData = [
 ];
 export const RoomModal = () => {
   const setModal = useSetAtom(modalAtom);
+  const user = getCurrentUserAtom();
+  const isUserCompany = isEnterpriseUser(user);
   const openCreate = () => {
+    if (!isUserCompany) return;
     setModal(val => ({ ...val, modalId: 'createRoom' }));
   };
   return (
@@ -27,14 +31,16 @@ export const RoomModal = () => {
         title={`Salas (${roomsData.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
           <RoomModalTabs rooms={roomsData} />
-          <div className="mt-auto flex w-full items-center justify-center pb-8">
-            <Button
-              className="max-w-[75%] text-accent-100"
-              size="full"
-              onClick={openCreate}>
-              Crear Sala
-            </Button>
-          </div>
+          {isUserCompany && (
+            <div className="mt-auto flex w-full items-center justify-center pb-8">
+              <Button
+                className="max-w-[75%] text-accent-100"
+                size="full"
+                onClick={openCreate}>
+                Crear Sala
+              </Button>
+            </div>
+          )}
         </div>
       </ModalTitleWrapper>
       <CreateRoomModal />
