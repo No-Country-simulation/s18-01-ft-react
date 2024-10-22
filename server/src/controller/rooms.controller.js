@@ -6,7 +6,7 @@ const User = require('../persistencia/models/user.models.js')
 exports.createRoom = async (req, res) => {
     try {
         const { name, tileset } = req.body;
-        const empresa = req.empresa; 
+        const empresa = req.empresa; // La empresa ya está disponible desde el middleware
 
         // Validación: Verificar si la empresa está disponible y verificada
         // if (!empresa || !empresa.isVerified) {
@@ -32,7 +32,13 @@ exports.createRoom = async (req, res) => {
 
         // Guardar la room en la base de datos
         const savedRoom = await newRoom.save();
-        return res.status(201).json(savedRoom);
+        res.status(201).json({
+            id: savedRoom.id,
+            name: savedRoom.name,
+            tileset: savedRoom.tileset,
+            users: savedRoom.users,
+            permissions: savedRoom.permissions,
+        });
     } catch (error) {
         console.error('Error creando la room:', error);
         return res.status(500).json({
@@ -69,8 +75,7 @@ exports.getRooms = async (req, res) => {
 // ver Room de empresa por Id
 exports.getRoomsByEmpId = async (req, res) => {
     try {
-        const {token} =req.cookies
-        res.status(200).json({ message: "token", token });
+        const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
         if (!empId) {
             return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
         }
@@ -81,7 +86,13 @@ exports.getRoomsByEmpId = async (req, res) => {
             return res.status(404).json({ message: "No se encontraron salas para esta empresa" });
         }
 
-        res.status(200).json(rooms);
+        res.status(200).json(rooms.map(room => ({
+            id: rooms.id,
+            name: rooms.name,
+            tileset: rooms.tileset,
+            users: rooms.users,
+            permissions: rooms.permissions,
+        })));
     } catch (error) {
         console.error("Error al obtener las salas:", error);
         res.status(500).json({ message: "Error al obtener las salas", error });
