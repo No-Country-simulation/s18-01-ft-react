@@ -7,8 +7,6 @@ import container from '/public/svg/container.svg';
 import { modalAtom } from '@/store/modalAtom';
 import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
 import { useEffect } from 'react';
-import { getData } from '@/data/getData';
-import { roomAtom } from '@/store/roomsAtom';
 import { useGetRoomList } from '@/data/useGetRoomList';
 
 const roomsData = [
@@ -21,7 +19,6 @@ const roomsData = [
 const MODAL_ID = 'Salas';
 export const RoomModal = () => {
   const [modal, setModal] = useAtom(modalAtom);
-  const [rooms, _] = useAtom(roomAtom);
   const user = getCurrentUserAtom();
   const isUserCompany = isEnterpriseUser(user);
   const { data, refetch } = useGetRoomList();
@@ -41,9 +38,9 @@ export const RoomModal = () => {
         className="max-h-[512px] w-full max-w-96"
         id={MODAL_ID}
         icon={container}
-        title={`Salas (${roomsData.length})`}>
+        title={`Salas (${data.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
-          <RoomModalTabs rooms={rooms} />
+          <RoomModalTabs rooms={data} />
           {isUserCompany && (
             <div className="mt-auto flex w-full items-center justify-center pb-8">
               <Button

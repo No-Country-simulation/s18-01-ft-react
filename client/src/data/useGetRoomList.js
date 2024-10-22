@@ -2,10 +2,14 @@ import { useRef } from 'react';
 import useSWR from 'swr';
 import { getData } from './getData';
 import { defaultConfig } from '@/utils/api/swrConfig';
+import { useAtom } from 'jotai';
+import { roomAtom } from '@/store/roomsAtom';
+import { useEffect } from 'react';
 
 export const useGetRoomList = () => {
   //TODO: Cambiar por el path que trae todas las salas de una empresa
-  const swrKeYRef = useRef('/rooms/allrooms');
+  const swrKeYRef = useRef('/rooms/roomsByEmpId');
+  const [rooms, setRooms] = useAtom(roomAtom);
 
   const { data, mutate, isLoading, isValidating } = useSWR(
     swrKeYRef.current,
@@ -13,16 +17,23 @@ export const useGetRoomList = () => {
     defaultConfig
   );
 
-  const refetch = () => {
-    mutate(undefined, {
+  const refetch = (data = undefined) => {
+    mutate(data, {
       revalidate: true,
       optimisticData: data,
     });
   };
+  useEffect(() => {
+    if (rooms !== null) {
+      refetch([...data, rooms]);
+      setRooms(null);
+    }
+  }, [rooms]);
 
   return {
     data: data ? data : [],
     isLoading: isLoading || isValidating,
+    isValidating,
     refetch,
   };
 };
