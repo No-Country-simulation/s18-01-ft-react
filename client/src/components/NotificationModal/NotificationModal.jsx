@@ -1,15 +1,9 @@
 import NotificationItem from './NotificationItem';
 
-const NotificationModal = ({ notifications, onClose }) => {
+const NotificationModal = ({ notifications }) => {
   return (
     <div>
-      <div>Notificaciones</div>
-      <div>
-        <button onClick={onClose}>
-          <svg></svg>
-        </button>
-      </div>
-      {NotificationStatus.length === 0 ? (
+      {notifications.length === 0 ? (
         <p>No tienes notificaciones por el momento</p>
       ) : (
         <div>
@@ -20,6 +14,7 @@ const NotificationModal = ({ notifications, onClose }) => {
               description={notification.description}
               date={notification.date}
               icon={notification.icon}
+              type={notification.type}
             />
           ))}
         </div>
