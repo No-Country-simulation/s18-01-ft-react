@@ -45,14 +45,7 @@ const UserToolbar = ({ hasId }) => {
       <hr className="ml-1 mr-5 h-[65px] border border-neutral-500" />
       <div>
         <ToolbarButton
-          icon={
-            <img
-              src={toolbarOptions[4].icon}
-              alt={toolbarOptions[4].label}
-              width="24px"
-              height="24px"
-            />
-          }
+          icon={toolbarOptions[4].icon}
           label={toolbarOptions[4].label}
           isSelected={selectedOption === toolbarOptions[4].value}
           onClick={() => handleOptionClick(toolbarOptions[4].value)}

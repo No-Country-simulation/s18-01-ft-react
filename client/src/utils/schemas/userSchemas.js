@@ -38,3 +38,7 @@ export const welcomeSchema = nameSchema.extend({
     .string({ required_error: 'El rol es requerido' })
     .min(1, 'El rol es requerido. Ingrese un rol valido'),
 });
+
+export const inviteSchema = emailSchema.extend({
+  role: z.string(),
+});

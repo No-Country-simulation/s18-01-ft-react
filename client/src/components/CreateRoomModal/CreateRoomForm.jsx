@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Button from '../Button/Button';
 import FormInput from '../FormInput/FormInput';
 import { PresetRadioItem } from './PresetRadioItem';
@@ -27,7 +26,7 @@ export const CreateRoomForm = ({ close }) => {
         <PresetRadioItem
           name="roomPreset"
           id="centralPreset"
-          value={1}
+          value={'CENTRAL'}
           img="hola"
           title="📍Central Hub"
           sub="Central y multifuncional donde todos pueden reunirse."
@@ -35,28 +34,28 @@ export const CreateRoomForm = ({ close }) => {
         <PresetRadioItem
           name="roomPreset"
           id="DevPreset"
-          value={2}
+          value={'FORGE'}
           title="⚒La forja dev"
           sub="Un lugar donde el código toma forma."
         />
         <PresetRadioItem
           name="roomPreset"
           id="DesignPreset"
-          value={3}
+          value={'DESIGN'}
           title="🎨Estudio de diseño"
           sub="El espacio donde la creatividad fluye."
         />
         <PresetRadioItem
           name="roomPreset"
           id="ZenPreset"
-          value={4}
+          value={'ZENZONE'}
           title="☘Zona Zen"
           sub="Un lugar para relajarse y despejarse."
         />
         <PresetRadioItem
           name="roomPreset"
           id="CheckinPreset"
-          value={5}
+          value={'DAILY'}
           title="☕Check-in Diario"
           sub="Una verificación rápida y diaria del progreso del equipo."
         />

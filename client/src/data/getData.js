@@ -1,7 +1,7 @@
 import { apiService } from '@/utils/api/axios';
 
-export const getRooms = async () => {
-  const [error, data] = await apiService.get('/rooms/allrooms');
+export const getData = async key => {
+  const [error, data] = await apiService.get(key);
   if (error) {
     console.error(error);
     return [];
