@@ -70,7 +70,7 @@ exports.getRooms = async (req, res) => {
 exports.getRoomsByEmpId = async (req, res) => {
     try {
         const {token} =req.cookies
-        res.status(200).json({ message: "token", error });
+        res.status(200).json({ message: "token", token });
         if (!empId) {
             return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
         }
