@@ -22,11 +22,6 @@ const roomsSchema = new mongoose.Schema({
         {
             socketId: String,
             username: String,
-            status: {
-                type: String,
-                enum: ['active',"absent", 'disconnected'],
-                default: 'active',
-            },
         },
     ],
 },

@@ -1,14 +1,37 @@
 const Rooms = require('../persistencia/models/rooms.models');
 const User = require('../persistencia/models/user.models');
+const Notifications = require('../persistencia/models/notifications.models');
 const socketAuth = require("../middlewares/socketAuth.js");
 
 const handleSocketEvents = (io) => {
   io.use(socketAuth);
 
+  const userChangeStream = User.watch();
+
+  userChangeStream.on('change', (change) => {
+    if (change.operationType === 'update') {
+      const userId = change.documentKey._id;
+      const updatedFields = change.updateDescription.updatedFields;
+
+      if (updatedFields.status) {
+        io.emit('userStatusUpdate', { userId: userId, status: updatedFields.status });
+      }
+    }
+  });
+
+  const notificationChangeStream = Notifications.watch();
+
+  notificationChangeStream.on('change', (change) => {
+    if (change.operationType === 'insert') {
+      const newNotification = change.fullDocument;
+      const userId = newNotification.userId;
+
+      io.to(userId).emit('newNotification', newNotification);
+    }
+  });
+
   io.on('connection', (socket) => {
-    const user = socket.user; // Usuario autenticado por middleware
-    
-    // Actualiza estado a 'online' y guarda socketId
+    const user = socket.user; 
     User.findByIdAndUpdate(user._id, { status: 'online', socketId: socket.id }, { new: true })
       .then(() => {
         console.log(`${user.username} se ha conectado.`);
@@ -16,13 +39,11 @@ const handleSocketEvents = (io) => {
       })
       .catch(console.error);
 
-    // Unirse a una sala específica
     socket.on('joinRoom', async ({ roomId }) => {
       try {
         const room = await Rooms.findById(roomId);
         if (!room) return;
 
-        // Dejar salas anteriores excepto la propia del socket
         socket.rooms.forEach((room) => {
           if (room !== socket.id) {
             socket.leave(room);
@@ -30,23 +51,22 @@ const handleSocketEvents = (io) => {
           }
         });
 
-        // Unirse a la nueva sala
         socket.join(roomId);
         console.log(`${user.username} se ha unido a la sala ${roomId}.`);
+        io.to(roomId).emit('userCountUpdate', room.users.length);
 
-        // Actualizar usuarios en la sala
-        room.users.push({ socketId: socket.id, username: user.username, status: 'online' });
+        room.users.push({ socketId: socket.id, username: user.username });
         await room.save();
 
         io.to(roomId).emit('userList', room.users);
+        io.to(room._id).emit('userCountUpdate', room.users.length);
       } catch (error) {
         console.error('Error al unirse a la sala:', error);
       }
     });
 
-    // Actualizar la posición del usuario
     socket.on('updatePosition', ({ x, y, prevDirection, direction }) => {
-      const roomId = [...socket.rooms][1]; // Primera sala a la que se unió
+      const roomId = [...socket.rooms][1]; // Obtener la primera sala a la que se unió
 
       if (roomId) {
         io.to(roomId).emit('userMoved', {
@@ -58,27 +78,15 @@ const handleSocketEvents = (io) => {
         });
       }
     });
-    //cambiuo de estado
-    socket.on('changeStatus', async ({ status }) => {
-      try {
-        await User.findByIdAndUpdate(user._id, { status: status });
-        console.log(`${user.username} ha cambiado su estado a ${status}.`);
-        io.emit('userStatusUpdate', { userId: user._id, status: status });
-      } catch (error) {
-        console.error('Error al cambiar el estado:', error);
-      }
-    });
-    // Desconectar al usuario
+
+
     socket.on('disconnect', async () => {
       console.log(`${user.username} se ha desconectado.`);
 
       try {
-        // Actualizar estado a 'disconnected'
-        await User.findByIdAndUpdate(user._id, { status: 'disconnected', socketId: '' });
+        await User.findByIdAndUpdate(user._id, { status: 'offline', socketId: '' });
 
-        io.emit('userStatusUpdate', { userId: user._id, status: 'disconnected' });
 
-        // Eliminar al usuario de la sala
         const room = await Rooms.findOneAndUpdate(
           { "users.socketId": socket.id },
           { $pull: { users: { socketId: socket.id } } },
@@ -87,6 +95,7 @@ const handleSocketEvents = (io) => {
 
         if (room) {
           io.to(room._id).emit('userList', room.users);
+          io.to(room._id).emit('userCountUpdate', room.users.length);
         }
       } catch (error) {
         console.error('Error al manejar desconexión:', error);
