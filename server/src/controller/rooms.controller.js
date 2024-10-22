@@ -76,6 +76,9 @@ exports.getRooms = async (req, res) => {
 exports.getRoomsByEmpId = async (req, res) => {
     try {
         const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
+        console.log(empId);
+        console.log(req.empresa);
+        
         if (!empId) {
             return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
         }
@@ -86,7 +89,7 @@ exports.getRoomsByEmpId = async (req, res) => {
             return res.status(404).json({ message: "No se encontraron salas para esta empresa" });
         }
 
-        res.status(200).json(rooms.map(room => ({
+        res.status(200).json(rooms.map(rooms => ({
             id: rooms.id,
             name: rooms.name,
             tileset: rooms.tileset,
