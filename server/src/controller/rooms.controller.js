@@ -1,5 +1,6 @@
 const Rooms = require('../persistencia/models/rooms.models.js');
 const Emp = require('../persistencia/models/emp.models.js')
+const User = require('../persistencia/models/user.models.js')
 
 // Crear Room
 exports.createRoom = async (req, res) => {
@@ -106,5 +107,16 @@ exports.deleteRoomById = async (req, res) => {
         res.status(200).json({ message: "Sala eliminada con éxito" });
     } catch (error) {
         res.status(500).json({ message: "Error al eliminar la sala", error });
+    }
+};
+
+exports.viewRooms = async (req, res) => {
+    try {
+        const {user} = req.user
+        const idemp=user.id_emp
+        const pre = user.permissions
+        
+        
+    } catch (error) {
     }
 };

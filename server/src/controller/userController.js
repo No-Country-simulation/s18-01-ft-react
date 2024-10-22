@@ -62,7 +62,7 @@ exports.login = async (req, res) => {
 		}
 		
 		// Genera el token JWT
-		const tokenPayload = !user.id_emp ? { empId: user._id } : { userId: user._id };
+		const tokenPayload = user.domain ? { empId: user._id } : { userId: user._id };
 		const token = createAccess(tokenPayload);
 
 		// Configurar la cookie con el token
@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
 			path: "/",
 		});
 
-		if (!user.id_emp) {
+		if (user.domain) {
 			res.json({
 				id: user.id,
 				email: user.email,
