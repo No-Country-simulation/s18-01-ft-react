@@ -45,21 +45,16 @@ exports.register = async (req, res) => {
 
 // Inicio de sesión (Login)
 exports.login = async (req, res) => {
-	const { email, password, isEmp } = req.body;
+	const { email, password } = req.body;
 
 	try {
 		let user;
-		if (isEmp) {
 			user = await Emp.findOne({ email });
 			if (!user) {
-				return res.status(400).json({ message: "Usuario no encontrado." });
+				user = await User.findOne({ email });
+				if (!user) return res.status(400).json({ message: "Usuario no encontrado." });
 			}
-		} else {
-			user = await User.findOne({ email });
-			if (!user) {
-				return res.status(400).json({ message: "Usuario no encontrado." });
-			}
-		}
+			
 		// Verifica la contraseña
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
@@ -67,7 +62,7 @@ exports.login = async (req, res) => {
 		}
 		
 		// Genera el token JWT
-		const tokenPayload = isEmp ? { empId: user._id } : { userId: user._id };
+		const tokenPayload = !user.id_emp ? { empId: user._id } : { userId: user._id };
 		const token = createAccess(tokenPayload);
 
 		// Configurar la cookie con el token
@@ -79,12 +74,13 @@ exports.login = async (req, res) => {
 			path: "/",
 		});
 
-		if (isEmp) {
+		if (!user.id_emp) {
 			res.json({
 				id: user.id,
 				email: user.email,
 				name: user.name,
 				domain: user.domain,
+				isEmp : true
 			});
 		} else {
 			res.json({
@@ -96,6 +92,7 @@ exports.login = async (req, res) => {
 				id_emp: user.id_emp,
 				rol: user.rol,
 				username: user.username,
+				isEmp: false
 			});
 		}
 	} catch (error) {
