@@ -23,6 +23,8 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   response => {
+    const cookie = response.headers.get('Set-Cookie');
+    console.log({ cookie });
     /*if (response.data?.token) {
       Cookies.set('token', response.data.token, {
         expires: 7, // Token expires in 7 days

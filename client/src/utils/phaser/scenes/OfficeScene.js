@@ -32,7 +32,7 @@ export class OfficeScene extends Scene {
   init() {
     this.initializeScale();
     this.otherPlayers = this.physics.add.group();
-    this.socket = io(SOCKET_URL, { autoConnect: false });
+    //this.socket = io(SOCKET_URL, { autoConnect: false });
   }
 
   create() {
@@ -64,7 +64,7 @@ export class OfficeScene extends Scene {
       faceColor: new Display.Color(40, 39, 37, 255),
     });
     */
-    // EventBus.emit(SCENE_KEYS.SCENE_READY, this);
+    EventBus.emit(SCENE_KEYS.SCENE_READY, this);
   }
   initializeScale() {
     this.scale.parentIsWindow = false;
@@ -75,6 +75,7 @@ export class OfficeScene extends Scene {
   }
 
   createInputs() {
+    //Solo se escuchan los eventos de teclados requeridos y no todo el resto
     const { LEFT, RIGHT, UP, DOWN, W, A, S, D } = Input.Keyboard.KeyCodes;
     this.keys = this.input.keyboard.addKeys({
       left: LEFT,
@@ -86,6 +87,7 @@ export class OfficeScene extends Scene {
       s: S,
       d: D,
     });
+    // Se inicializa el Joystick
     this.joystick = new Joystick(this, 50);
   }
   setupEventListeners() {
@@ -209,6 +211,7 @@ export class OfficeScene extends Scene {
   }
 
   updatePlayerAnimation(sprite, lastMove, prevMove) {
+    // Si el ultimo movimiento no fue "idle" (idle == estar quieto)
     if (lastMove && lastMove !== 'idle') {
       sprite.anims.play(PLAYER_KEYS[`WALK_TO_${lastMove.toUpperCase()}`], true);
     } else {
@@ -368,6 +371,7 @@ export class OfficeScene extends Scene {
 
     const isIdleIdle = direction === 'idle' && prevDirection === 'idle';
     if (this.hasPositionChanged(direction, [x, y], oldPosition) && !isIdleIdle) {
+      //TODO: Verificar datos enviados al socket al mover el player
       this.socket.emit('playerMovement', {
         x,
         y,

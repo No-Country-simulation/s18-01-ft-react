@@ -1,18 +1,18 @@
-import { createRoom } from '@/data/createRoom';
 import { useForm } from '@/utils/hooks/useForm';
 import Button from '../Button/Button';
 import FormInput from '../FormInput/FormInput';
 import { FormDropdown } from '../FormDropdown/FormDropdown';
+import { inviteUser } from '@/data/inviteUser';
 const roleDropdown = [
-  { placeholder: 'Desarrollador', value: 1 },
-  { placeholder: 'Diseñador', value: 2 },
-  { placeholder: 'Supervisor', value: 3 },
+  { placeholder: 'Desarrollador', value: '1' },
+  { placeholder: 'Diseñador', value: '2' },
+  { placeholder: 'Supervisor', value: '3' },
 ];
 export const UserCreateForm = ({ close }) => {
-  const { errors, isPending, submit } = useForm(createRoom);
+  const { errors, isPending, submit } = useForm(inviteUser);
 
   return (
-    <form className="mt-5 flex h-full flex-col gap-y-4" onSubmit={submit}>
+    <form className="mt-5 flex h-full flex-col gap-y-6" onSubmit={submit}>
       <label
         htmlFor="userEmailField"
         className="flex flex-col gap-y-3 text-base font-medium text-black">

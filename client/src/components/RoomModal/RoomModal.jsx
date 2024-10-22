@@ -7,8 +7,9 @@ import container from '/public/svg/container.svg';
 import { modalAtom } from '@/store/modalAtom';
 import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
 import { useEffect } from 'react';
-import { getRooms } from '@/data/getRooms';
+import { getData } from '@/data/getData';
 import { roomAtom } from '@/store/roomsAtom';
+import { useGetRoomList } from '@/data/useGetRoomList';
 
 const roomsData = [
   { name: 'Desarrollo', count: 4 },
@@ -17,27 +18,28 @@ const roomsData = [
   { name: 'Daily', count: 0 },
   { name: 'Descanso', count: 0 },
 ];
+const MODAL_ID = 'Salas';
 export const RoomModal = () => {
   const [modal, setModal] = useAtom(modalAtom);
-  const [rooms, setRooms] = useAtom(roomAtom);
+  const [rooms, _] = useAtom(roomAtom);
   const user = getCurrentUserAtom();
   const isUserCompany = isEnterpriseUser(user);
+  const { data, refetch } = useGetRoomList();
   const openCreate = () => {
     if (!isUserCompany) return;
     setModal(val => ({ ...val, modalId: 'createRoom' }));
   };
   useEffect(() => {
-    if (modal.open && (!rooms || rooms.length === 0)) {
-      getRooms().then(res => {
-        setRooms(res);
-      });
+    if (modal.open && modal.modalId === MODAL_ID) {
+      refetch();
+      console.log({ data });
     }
   }, [modal]);
   return (
     <>
       <ModalTitleWrapper
         className="max-h-[512px] w-full max-w-96"
-        id="Salas"
+        id={MODAL_ID}
         icon={container}
         title={`Salas (${roomsData.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">

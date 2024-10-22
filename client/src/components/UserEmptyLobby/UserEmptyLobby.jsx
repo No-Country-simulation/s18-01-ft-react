@@ -45,6 +45,30 @@ const LobbyButton = ({ role }) => {
       </Button>
     );
   }
+
+  if (role === USER_ROLES.ENTERPRISE) {
+    const openRooms = () => {
+      const btnRect = buttonRef.current.getBoundingClientRect();
+      const value = 'userCreate';
+      setModal(val => ({
+        open: !val.open,
+        modalId: value,
+        coords: [btnRect.bottom * -1 + 55, btnRect.left + 95],
+        position: 'bottom',
+        firstOpen: true,
+      }));
+    };
+    return (
+      <Button
+        ref={buttonRef}
+        variant="primary"
+        size="full"
+        onClick={openRooms}
+        className="mx-auto max-w-72 text-accent-100">
+        Invita un usuario
+      </Button>
+    );
+  }
   return null;
 };
 

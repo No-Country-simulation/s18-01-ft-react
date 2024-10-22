@@ -16,16 +16,17 @@ const Office = () => {
   const { roomId } = useParams();
   const user = getCurrentUserAtom();
   const userRole = getUserRole(user);
+  console.log({ userRole });
   return (
     <OfficeLayouts hasTools={!!roomId}>
       <div
         className={cn(
           'mx-6 mb-2 flex w-full min-w-[869px] flex-col',
-          hasAccessToToolbar(userRole, roomId) ? 'h-[85dvh]' : ''
+          hasAccessToToolbar(userRole) ? 'h-[85dvh]' : ''
         )}>
         <RoomName roomId={roomId} />
         {roomId ? <PhaserContainer /> : <UserEmptyLobby />}
-        {hasAccessToToolbar(userRole, roomId) || roomId ? (
+        {hasAccessToToolbar(userRole) || roomId ? (
           <UserToolbar hasId={!!roomId} />
         ) : null}
       </div>

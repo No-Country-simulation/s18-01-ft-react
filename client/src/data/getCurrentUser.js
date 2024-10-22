@@ -10,15 +10,14 @@ export const getCurrentUser = () => {
 };
 
 export const isNormalUser = user => {
-  return user && user.hasOwnProperty('id_emp') && user['id_emp'] !== '';
+  return user && !user.isEmp && user.hasOwnProperty('id_emp');
 };
 export const isNormalUserWithoutCompany = user => {
-  console.log({ id: user['id_emp'] });
-  return user && user.hasOwnProperty('id_emp') && user['id_emp'] === '';
+  return user && !user.isEmp && !user.hasOwnProperty('id_emp');
 };
 
 export const isEnterpriseUser = user => {
-  return user && !user.hasOwnProperty('id_emp');
+  return user && user.isEmp;
 };
 
 export const getUserRole = user => {
