@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/utils/functions/cn';
 import EyeButton from '../EyeButton/EyeButton';
 import IconBox from '../IconBox/IconBox';
+import FormInput from '../FormInput/FormInput';
 
 const formFieldCVA = cva(
   'autofill-removed no-outline shadow-inset-small border-neutral-1000 relative mt-px h-11 w-full rounded-4xl border-2 border-solid bg-white px-4 text-sm text-black transition-all duration-300 ease-in-out placeholder:text-neutral-800 focus:border-neutral-700',
@@ -41,17 +42,13 @@ const FormField = forwardRef(function FormField(
       <div className="relative mt-2 flex items-center space-x-4">
         {icon ? <IconBox icon={icon} color={iconColor} /> : ''}
         <div className="relative grow">
-          <input
+          <FormInput
             {...props}
             id={defaultID}
             ref={ref}
             type={type}
-            className={cn(
-              formFieldCVA({
-                className,
-                password: !!onTypeChange,
-              })
-            )}
+            className={className}
+            password={!!onTypeChange}
           />
           {onTypeChange ? <EyeButton onTypeChange={onTypeChange} /> : null}
         </div>

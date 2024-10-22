@@ -6,11 +6,12 @@ import { useRef } from 'react';
 import { useState } from 'react';
 
 export const useMoveModal = id => {
-  const [modalA, _] = useAtom(modalAtom);
-  const [shiftPosition, setShiftPosition] = useState([0, 0]);
-  const [position, setPosition] = useState([0, 0]);
+  const [modalA, setModal] = useAtom(modalAtom);
+  const [shiftPosition, setShiftPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isMoving, setMoving] = useState(false);
   const modal = useRef();
+  const initialAdjustmentMade = useRef(false);
 
   const onPointerDown = useCallback(
     e => {
@@ -19,11 +20,11 @@ export const useMoveModal = id => {
       if (!modal.current || !modalA.open || e.target.closest('.ignore-drag')) return;
       const shiftX = e.clientX - modal.current.getBoundingClientRect().left;
       const shiftY = e.clientY - modal.current.getBoundingClientRect().top;
-      setShiftPosition([shiftX, shiftY]);
+      setShiftPosition({ x: shiftX, y: shiftY });
       setMoving(true);
       document.documentElement.style.setProperty('--pointer-events-control', 'none');
     },
-    [isMoving, modalA.open]
+    [modalA.open]
   );
 
   const onPointerMove = useCallback(
@@ -31,28 +32,57 @@ export const useMoveModal = id => {
       e.preventDefault();
       e.stopPropagation();
       if (!modal.current || !isMoving || !e.isPrimary) return;
-      let newX = e.pageX - shiftPosition[0] - window.scrollX;
-      let newY = e.pageY - shiftPosition[1] - window.scrollY;
-      if (newX < 0) newX = 0;
-      if (newY < 0) newY = 0;
       const modalWidth = modal.current.offsetWidth;
       const modalHeight = modal.current.offsetHeight;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      if (newX + modalWidth > viewportWidth) newX = viewportWidth - modalWidth;
-      if (newY + modalHeight > viewportHeight) newY = viewportHeight - modalHeight;
-      setPosition([newX, newY]);
+
+      let newX = e.pageX - shiftPosition.x - window.scrollX;
+      let newY = e.pageY - shiftPosition.y - window.scrollY;
+
+      newX = Math.max(0, Math.min(newX, viewportWidth - modalWidth));
+      newY = Math.max(0, Math.min(newY, viewportHeight - modalHeight));
+
+      setPosition({ x: newX, y: newY });
     },
     [shiftPosition, isMoving]
   );
 
-  const onPointerStop = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isMoving) return;
-    setMoving(false);
-    document.documentElement.style.setProperty('--pointer-events-control', 'auto');
-  };
+  const onPointerStop = useCallback(
+    e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isMoving) return;
+
+      setMoving(false);
+      document.documentElement.style.setProperty('--pointer-events-control', 'auto');
+    },
+    [isMoving]
+  );
+
+  useLayoutEffect(() => {
+    if (
+      modalA.open &&
+      modalA.modalId === id &&
+      modal.current &&
+      !initialAdjustmentMade.current
+    ) {
+      const modalHeight = modal.current.offsetHeight;
+      const modalWidth = modal.current.offsetWidth;
+      const [currentY, currentX] = modalA.coords;
+
+      if (!initialAdjustmentMade.current) {
+        let newY = currentY;
+        if (modalA.position === 'top') newY = newY - modalHeight;
+        else if (modalA.position === 'bottom') newY = newY + modalHeight;
+        setPosition({ y: newY, x: currentX - modalWidth / 2.5 });
+        initialAdjustmentMade.current = true;
+      }
+    }
+    if (!modalA.open) {
+      initialAdjustmentMade.current = false;
+    }
+  }, [modalA.open, modalA.modalId, id, modalA.coords]);
 
   useLayoutEffect(() => {
     if (isMoving) {
@@ -69,7 +99,6 @@ export const useMoveModal = id => {
     };
   }, [isMoving, onPointerMove, onPointerStop]);
 
-  console.log({ modalSeted: modalA.modalId, id });
   return {
     modal,
     isOpen: modalA.open && modalA.modalId === id,

@@ -1,7 +1,9 @@
 import ButtonBox from '@/components/ButtonBox/ButtonBox';
 import FormComponent from '@/components/FormComponent/FormComponent';
 import AuthLayout from '@/layouts/AuthLayout';
+import { authAtom } from '@/store/authAtom';
 import { enterpriseSignup } from '@/utils/functions/enterpriseSignup';
+import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -52,10 +54,15 @@ const enterpriseSignupFields = [
 
 export const EnterpriseSignup = () => {
   const navigate = useNavigate();
+  const setAuth = useSetAtom(authAtom);
   const handleSuccess = async form => {
     const result = await enterpriseSignup(form);
-    if (result && result.status === 'SUCCESS') navigate('/');
-    return result;
+    if (!result || result.status !== 'SUCCESS') {
+      return result;
+    }
+
+    setAuth({ isAuth: true, user: result.data });
+    navigate('/office');
   };
 
   return (

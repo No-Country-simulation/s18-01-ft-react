@@ -1,7 +1,14 @@
+import { useAtom, useSetAtom } from 'jotai';
 import Button from '../Button/Button';
-import ModalWrapper from '../ModalWrapper/ModalWrapper';
+import { CreateRoomModal } from '../CreateRoomModal/CreateRoomModal';
+import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import { RoomModalTabs } from './RoomModalTabs';
 import container from '/public/svg/container.svg';
+import { modalAtom } from '@/store/modalAtom';
+import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
+import { useEffect } from 'react';
+import { getRooms } from '@/data/getRooms';
+import { roomAtom } from '@/store/roomsAtom';
 
 const roomsData = [
   { name: 'Desarrollo', count: 4 },
@@ -11,33 +18,43 @@ const roomsData = [
   { name: 'Descanso', count: 0 },
 ];
 export const RoomModal = () => {
+  const [modal, setModal] = useAtom(modalAtom);
+  const [rooms, setRooms] = useAtom(roomAtom);
+  const user = getCurrentUserAtom();
+  const isUserCompany = isEnterpriseUser(user);
+  const openCreate = () => {
+    if (!isUserCompany) return;
+    setModal(val => ({ ...val, modalId: 'createRoom' }));
+  };
+  useEffect(() => {
+    if (modal.open && (!rooms || rooms.length === 0)) {
+      getRooms().then(res => {
+        setRooms(res);
+      });
+    }
+  }, [modal]);
   return (
-    <ModalWrapper
-      className="max-h-[512px] w-full max-w-96 bg-primary-400 pt-16"
-      id="Salas">
-      <div className="relative flex w-full flex-col">
-        <h3 className="pointer-events-none absolute -top-12 left-1/2 -z-10 inline-flex w-fit -translate-x-1/2 touch-none gap-x-2 text-center text-lg font-semibold text-accent-100">
-          <img
-            src={container}
-            decoding="async"
-            width={24}
-            height={24}
-            className="aspect-square object-cover object-center"
-          />
-          Salas ({roomsData.length})
-        </h3>
+    <>
+      <ModalTitleWrapper
+        className="max-h-[512px] w-full max-w-96"
+        id="Salas"
+        icon={container}
+        title={`Salas (${roomsData.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
-          <RoomModalTabs rooms={roomsData} />
-          <div className="mt-auto flex w-full items-center justify-center pb-8">
-            <Button
-              className="max-w-[75%] text-accent-100"
-              size="full"
-              onClick={() => alert('Proximamente')}>
-              Crear Sala
-            </Button>
-          </div>
+          <RoomModalTabs rooms={rooms} />
+          {isUserCompany && (
+            <div className="mt-auto flex w-full items-center justify-center pb-8">
+              <Button
+                className="max-w-[75%] text-accent-100"
+                size="full"
+                onClick={openCreate}>
+                Crear Sala
+              </Button>
+            </div>
+          )}
         </div>
-      </div>
-    </ModalWrapper>
+      </ModalTitleWrapper>
+      <CreateRoomModal />
+    </>
   );
 };

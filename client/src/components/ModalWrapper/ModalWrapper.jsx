@@ -16,9 +16,10 @@ const ModalWrapper = ({ children, className, id }) => {
     <AnimatePresence>
       {isOpen ? (
         <motion.article
+          ref={modal}
           style={{
-            left: position[0],
-            top: position[1],
+            top: position.y,
+            left: position.x,
           }}
           initial={{ opacity: 0, scale: 0.8, rotateX: -20 }}
           animate={{ opacity: 1, scale: 1, rotateX: 0 }}
@@ -29,7 +30,6 @@ const ModalWrapper = ({ children, className, id }) => {
             stiffness: 300,
           }}
           onPointerDown={onPointerDown}
-          ref={modal}
           role="dialog"
           aria-modal="true"
           className={cn(

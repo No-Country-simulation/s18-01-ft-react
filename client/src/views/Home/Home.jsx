@@ -1,5 +1,4 @@
 import React from 'react';
-import { RoomModal } from '@/components/RoomModal/RoomModal.jsx';
 
 const Home = () => {
   return (

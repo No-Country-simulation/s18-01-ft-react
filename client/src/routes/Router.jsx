@@ -7,6 +7,9 @@ import { UserSigninPage } from '@/views/UserSignin/UserSigninPage';
 import { UserWelcomePage } from '@/views/UserWelcome/UserWelcomePage';
 import { EnterpriseSignup } from '@/views/EnterpriseSignup/EnterpriseSignup';
 import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
+import { Outlet } from 'react-router-dom';
+import { ProtectedRoute } from './ProtectedRoute';
+import { OnlyNoAuth } from './OnlyNoAuth';
 
 const AppRouter = () => {
   const routes = useRoutes([
@@ -15,24 +18,54 @@ const AppRouter = () => {
       element: <Home />,
     },
     {
-      path: '/office/:roomName',
-      element: <Office />,
+      path: '/office',
+      element: <Outlet />,
+      children: [
+        {
+          index: true,
+          element: (
+            <ProtectedRoute>
+              <Office />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: ':roomId',
+          element: <Office />,
+        },
+      ],
     },
     {
       path: '/signup',
-      element: <UserSignupPage />,
+      element: (
+        <OnlyNoAuth>
+          <UserSignupPage />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/signin',
-      element: <UserSigninPage />,
+      element: (
+        <OnlyNoAuth>
+          <UserSigninPage />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/enterprise-signup',
-      element: <EnterpriseSignup />,
+      element: (
+        <OnlyNoAuth>
+          <EnterpriseSignup />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/enterprise-signin',
-      element: <EnterpriseSignin />,
+      element: (
+        <OnlyNoAuth>
+          <EnterpriseSignin />
+        </OnlyNoAuth>
+      ),
     },
     {
       path: '/welcome',

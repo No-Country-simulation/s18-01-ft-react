@@ -15,6 +15,8 @@ const btnCVA = cva(
       variant: {
         primary:
           'bg-primary-400 text-accent-1000 font-medium [&:not(:disabled)]:hover:bg-primary-500 [&:not(:disabled)]:active:bg-primary-600',
+        'accent-outline':
+          'bg-transparent border-[3px] border-solid text-accent-1000 font-medium border-accent-1000 hover:border-accent-900 active:border-accent-800 active:bg-accent-200',
         secondary:
           'bg-secondary-300 text-accent-1000 font-medium [&:not(:disabled)]:hover:bg-secondary-400/50 [&:not(:disabled)]:active:bg-secondary-400/40',
         'secondary-light':

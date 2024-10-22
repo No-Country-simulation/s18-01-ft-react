@@ -15,19 +15,17 @@ const PhaserContainer = () => {
         gameRef.current.style.height = `${window.innerHeight}px`;
       }
     };
-    window.addEventListener('resize', handleResize);
     return () => {
       if (game) game.destroy(true);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
-    <div className="mx-auto mt-2 flex size-full max-w-4xl flex-col">
+    <div className="mt-2 flex size-full max-h-[75dvh] max-w-[67dvw] flex-col">
       <div
         ref={gameRef}
         id="office"
-        className="size-full max-h-[657px] w-[845px] rounded-lg border border-neutral-1000 shadow-drop"></div>
+        className="size-full rounded-lg border border-neutral-1000 shadow-drop"></div>
     </div>
   );
 };

@@ -81,6 +81,9 @@ importers:
       '@eslint/js':
         specifier: 9.11.1
         version: 9.11.1
+      '@swc-jotai/debug-label':
+        specifier: 0.1.1
+        version: 0.1.1
       '@types/react':
         specifier: 18.3.11
         version: 18.3.11
@@ -699,6 +702,9 @@ packages:
 
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
+
+  '@swc-jotai/debug-label@0.1.1':
+    resolution: {integrity: sha512-QXn/fNksCLObDqc/g5v0KALpG/paFiWeeVmXG3Dzan2HPFzhGHU1JEq9ryzeLm5mDDJ2lcK9o68nLWA/5vVS7Q==}
 
   '@swc/core-darwin-arm64@1.7.26':
     resolution: {integrity: sha512-FF3CRYTg6a7ZVW4yT9mesxoVVZTrcSWtmZhxKCYJX9brH4CS/7PRPjAKNk6kzWgWuRoglP7hkjQcd6EpMcZEAw==}
@@ -3308,6 +3314,8 @@ snapshots:
     optional: true
 
   '@socket.io/component-emitter@3.1.2': {}
+
+  '@swc-jotai/debug-label@0.1.1': {}
 
   '@swc/core-darwin-arm64@1.7.26':
     optional: true
