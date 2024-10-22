@@ -165,7 +165,7 @@ router.get('/allrooms', getRooms);
  *       500:
  *         description: Error interno del servidor.
  */
-router.get('/roomsByEmpId', tokenMiddleware, getRoomsByEmpId);
+router.get('/roomsByEmpId', getRoomsByEmpId);
 
 /**
  * @swagger
