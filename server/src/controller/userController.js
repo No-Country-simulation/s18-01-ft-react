@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
 		if (!isMatch) {
 			return res.status(400).json({ message: "Contraseña incorrecta." });
 		}
-
+		
 		// Genera el token JWT
 		const token = createAccess({ userId: user._id });
 
