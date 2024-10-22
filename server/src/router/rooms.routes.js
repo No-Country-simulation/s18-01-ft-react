@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createRoom, getRooms, deleteRoomById, getRoomById, getRoomsByEmpId } = require('../controller/rooms.controller.js');
+const { createRoom, getRooms, deleteRoomById, getRoomById, getRoomsByEmpId, viewRooms } = require('../controller/rooms.controller.js');
 const { tokenMiddleware } = require('../middlewares/middleware.js');
 
 /**
@@ -268,6 +268,8 @@ router.get('/:id', getRoomById);
  */
 
 router.delete('/:id', tokenMiddleware, deleteRoomById);
+router.delete('/viewRooms', tokenMiddleware, viewRooms);
+
 
 
 module.exports = router;

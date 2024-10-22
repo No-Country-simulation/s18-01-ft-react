@@ -10,7 +10,7 @@ exports.createRoom = async (req, res) => {
 
         // Validación: Verificar si la empresa está disponible y verificada
         // if (!empresa || !empresa.isVerified) {
-		if (!empresa) {
+        if (!empresa) {
             return res.status(403).json({
                 message: 'Acceso denegado. La empresa no está verificada.',
             });
@@ -75,7 +75,7 @@ exports.getRoomsByEmpId = async (req, res) => {
         }
 
         const rooms = await Rooms.find({ id_emp: empId });
-        
+
         if (rooms.length === 0) {
             return res.status(404).json({ message: "No se encontraron salas para esta empresa" });
         }
@@ -112,11 +112,21 @@ exports.deleteRoomById = async (req, res) => {
 
 exports.viewRooms = async (req, res) => {
     try {
-        const {user} = req.user
-        const idemp=user.id_emp
-        const pre = user.permissions
-        
-        
+        const { user } = req.user
+        const idemp = user.id_emp
+        const premit = user.permissions
+        const exrooms = await Rooms.find
+            ({
+                id_emp: idemp,
+                $or:[
+                    { permissions: { $in: premit } },
+                    { permissions: { $exists: true, $size: 0 } }
+                ]
+        })
+
+        if (!exrooms) { return res.status(404).json({ message: "No encontro ninguna sala" }); }
+        { return res.status(200).json(exrooms, exrooms.users.legth) }
     } catch (error) {
+        res.status(500).json({ message: "Error al eliminar la sala", error });
     }
 };
