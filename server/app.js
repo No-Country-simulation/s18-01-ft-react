@@ -1,5 +1,5 @@
 const express = require("express");
-const http = require("http");
+const http = require("node:http");
 const path = require("node:path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -17,13 +17,11 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 const authRoutes = require("./src/router/auth.routes.js");
 const connectDB = require("./src/config/dbConfig.js");
 
-const {Server} = require("socket.io"); 
+const { Server } = require("socket.io");
 //const socketAuth = require("./src/middlewares/socketAuth.js");
 //const { handleSocketEvents } = require("./src/sockets/roomIo.js");
 
 const app = express();
-
-
 
 app.set("views", path.join(__dirname, "./src/views"));
 app.set("view engine", "ejs");
@@ -42,23 +40,23 @@ const server = http.createServer(app);
 
 const corsOptions = {
 	origin: [
-	  'http://localhost:8080',
-	  'https://s18-01-ft-react.onrender.com',
-	  'http://localhost:3000',
-	  'http://localhost:5173',
-	  'https://no-countrys18.up.railway.app',
+		"http://localhost:8080",
+		"https://s18-01-ft-react.onrender.com",
+		"http://localhost:3000",
+		"http://localhost:5173",
+		"https://no-countrys18.up.railway.app",
 	],
 	credentials: true, // Permite cookies y autenticación
 	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	preflightContinue: false, // Maneja automáticamente la solicitud OPTIONS
 	optionsSuccessStatus: 204, // Estado para solicitudes preflight exitosas
-  };
-  console.log('cors activados...')
-  app.use(cors(corsOptions));
-  const io = new Server(server, {
-	cors:corsOptions,
-  })
+};
+
+app.use(cors(corsOptions));
+const io = new Server(server, {
+	cors: corsOptions,
+});
 connectDB();
 
 // Ruta principal (índice)

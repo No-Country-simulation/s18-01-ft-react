@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../persistencia/models/user.models.js");
 const nodemailer = require("nodemailer");
 const entorno = require("../config/authConfig.js");
-const {createAccess} = require('../utils/createAcesstoken.js')
-
+const { createAccess } = require("../utils/createAcesstoken.js");
+const Emp = require("../persistencia/models/emp.models.js");
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRATION = "1h"; // Expiración del token
 
@@ -45,42 +45,59 @@ exports.register = async (req, res) => {
 
 // Inicio de sesión (Login)
 exports.login = async (req, res) => {
-	const { email, password } = req.body;
+	const { email, password, isEmp } = req.body;
 
 	try {
-		// Verifica si el usuario existe
-		const user = await User.findOne({ email });
-		if (!user) {
-			return res.status(400).json({ message: "Usuario no encontrado." });
+		let user;
+		if (isEmp) {
+			user = await Emp.findOne({ email });
+			if (!user) {
+				return res.status(400).json({ message: "Usuario no encontrado." });
+			}
+		} else {
+			user = await User.findOne({ email });
+			if (!user) {
+				return res.status(400).json({ message: "Usuario no encontrado." });
+			}
 		}
-
 		// Verifica la contraseña
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
-			return res.status(400).json({ message: "Contraseña incorrecta." });
+			return res.status(400).json({ message: "Credenciales incorrectas." });
 		}
 
 		// Genera el token JWT
-		const token = createAccess({ userId: user._id });
+		const tokenPayload = isEmp ? { empId: user._id } : { userId: user._id };
+		const token = createAccess(tokenPayload);
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000, // 1 día
-            path: '/'
-        });
+		// Configurar la cookie con el token
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 24 * 60 * 60 * 1000, // 1 día
+			path: "/",
+		});
 
-		res.json({
-			id: user.id,
-			email: user.email,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			profilePicture: user.profilePicture,
-			id_emp: user.id_emp,
-			rol: user.rol,
-			username: user.username,
-		})
+		if (isEmp) {
+			res.json({
+				id: user.id,
+				email: user.email,
+				name: user.name,
+				domain: user.domain,
+			});
+		} else {
+			res.json({
+				id: user.id,
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				profilePicture: user.profilePicture,
+				id_emp: user.id_emp,
+				rol: user.rol,
+				username: user.username,
+			});
+		}
 	} catch (error) {
 		return res.status(500).json({ message: "Error en el servidor", error });
 	}
@@ -208,18 +225,15 @@ exports.updateProfile = async (req, res) => {
 	}
 };
 
-
-exports.getProfile = async(req, res)=> {
-	try{
-		const user = await User.findById(req.user.id).select(
-			"-password -__v"
-		);
+exports.getProfile = async (req, res) => {
+	try {
+		const user = await User.findById(req.user.id).select("-password -__v");
 		//
-		if(!user){
-			return res.status(404).json({message:"Usuario no encontrado"})
+		if (!user) {
+			return res.status(404).json({ message: "Usuario no encontrado" });
 		}
-		res.status(200).json(user)
-	} catch(error){
-		return res.status(500).json({message:" Error en el servidor", error});
+		res.status(200).json(user);
+	} catch (error) {
+		return res.status(500).json({ message: " Error en el servidor", error });
 	}
-}
+};
