@@ -59,7 +59,12 @@ const userSchema = new mongoose.Schema(
 		permissions: {
 			type: Array,
 			default: []
-		}
+		},
+		notifications: [
+			{ type: mongoose.Schema.Types.ObjectId, 
+			ref: 'Notification'
+			} 
+		]
 	},
 	{ timestamps: true },
 );

@@ -185,6 +185,7 @@ const sendResetPasswordEmail = async (req, res) => {
         });
     }
 };
+
 const resetPassword = async (req, res) => {
     const { newPassword } = req.body;
 
@@ -207,6 +208,7 @@ const resetPassword = async (req, res) => {
         });
     }
 };
+
 const createPermissions = async (req, res) => {
     const { permissions } = req.body
     const { token } = req.cookies
@@ -258,6 +260,7 @@ const assignUPermissions = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor' });
     }
 };
+
 const assignRPermissions = async (req, res) => {
     const { permissions, id_room } = req.body
     const { token } = req.cookies

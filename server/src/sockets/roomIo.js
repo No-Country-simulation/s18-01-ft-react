@@ -58,7 +58,16 @@ const handleSocketEvents = (io) => {
         });
       }
     });
-
+    //cambiuo de estado
+    socket.on('changeStatus', async ({ status }) => {
+      try {
+        await User.findByIdAndUpdate(user._id, { status: status });
+        console.log(`${user.username} ha cambiado su estado a ${status}.`);
+        io.emit('userStatusUpdate', { userId: user._id, status: status });
+      } catch (error) {
+        console.error('Error al cambiar el estado:', error);
+      }
+    });
     // Desconectar al usuario
     socket.on('disconnect', async () => {
       console.log(`${user.username} se ha desconectado.`);

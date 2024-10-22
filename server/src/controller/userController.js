@@ -65,7 +65,7 @@ exports.login = async (req, res) => {
 		if (!isMatch) {
 			return res.status(400).json({ message: "Credenciales incorrectas." });
 		}
-
+		
 		// Genera el token JWT
 		const tokenPayload = isEmp ? { empId: user._id } : { userId: user._id };
 		const token = createAccess(tokenPayload);
