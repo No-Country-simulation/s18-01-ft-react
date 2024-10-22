@@ -6,7 +6,7 @@ const User = require('../persistencia/models/user.models.js')
 exports.createRoom = async (req, res) => {
     try {
         const { name, tileset } = req.body;
-        const empresa = req.empresa; // La empresa ya está disponible desde el middleware
+        const empresa = req.empresa; 
 
         // Validación: Verificar si la empresa está disponible y verificada
         // if (!empresa || !empresa.isVerified) {
@@ -69,7 +69,8 @@ exports.getRooms = async (req, res) => {
 // ver Room de empresa por Id
 exports.getRoomsByEmpId = async (req, res) => {
     try {
-        const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
+        const {token} =req.cookies
+        res.status(200).json({ message: "token", error });
         if (!empId) {
             return res.status(400).json({ message: "ID de empresa no proporcionado en el token" });
         }
