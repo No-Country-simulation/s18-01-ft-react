@@ -1,3 +1,4 @@
+import AppHeader from '@/components/AppHeader/AppHeader';
 import { RoomModal } from '@/components/RoomModal/RoomModal';
 import AppSearchBar from '@/components/Search/AppSearchBar';
 import { UsersModal } from '@/components/UsersModal/UsersModal';
@@ -6,8 +7,8 @@ import ZoomControls from '@/components/ZoomControls/ZoomControls';
 const OfficeLayouts = ({ children, hasTools }) => {
   return (
     <>
-      <header className="bg-white p-4 shadow">
-        <AppSearchBar />
+      <header className="mx-7 my-6 px-10">
+        <AppHeader />
       </header>
       <div className="mt-5 flex flex-col items-center justify-center">
         <div className="flex w-full justify-between px-[3.5dvw]">

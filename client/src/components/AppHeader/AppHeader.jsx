@@ -1,12 +1,16 @@
-import React from 'react';
 import AppSearchBar from '../Search/AppSearchBar';
+import ButtonNotification from '../ButtonNotification/ButtonNotification';
 
 function AppHeader() {
   return (
-    <div className="flex h-28 w-auto items-center justify-center space-x-24">
-      <button className="size-auto space-x-24 rounded-full bg-white p-2">---</button>
-      <AppSearchBar />
-      <div className="size-auto rounded-full bg-white p-2"> Avatar</div>
+    <div className="flex flex-row items-center justify-between">
+      <div className="h-[60px] w-[65px] rounded-lg border border-neutral-950">
+        <button className="size-auto bg-white"></button>
+      </div>
+      <div className="flex flex-row gap-5">
+        <AppSearchBar />
+        <ButtonNotification />
+      </div>
     </div>
   );
 }
