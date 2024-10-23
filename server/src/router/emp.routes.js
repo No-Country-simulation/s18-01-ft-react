@@ -362,7 +362,7 @@ router.post('/assignRPermissions', assignRPermissions);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "nonexistent user" o "Permissions no create"
+ *                   example: "nonexistent usero Permissions no create"
  *       500:
  *         description: Error en el servidor.
  *         content:
