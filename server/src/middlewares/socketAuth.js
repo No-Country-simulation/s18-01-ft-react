@@ -10,7 +10,7 @@ const socketAuth = (socket, next) => {
         const token = parseCookie(cookie).authToken; 
 
         // crear token con id 
-        jwt.verify(cookie, process.env.JWT_SECRET, async (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) return next(new Error('Autenticación fallida'));
 
             const user = await User.findById(decoded.id);
