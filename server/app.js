@@ -9,13 +9,14 @@ const roomRoutes = require("./src/router/rooms.routes.js");
 const vsRoutes = require("./src/router/vsactivity.routes.js");
 const empRoutes = require("./src/router/emp.routes.js");
 const userRoutes = require("./src/router/user.routes.js");
-const postmanRoutes = require("./src/router/postman.routes.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerOptions = require("./src/docs/swaggerOptions.js");
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 const authRoutes = require("./src/router/auth.routes.js");
 const connectDB = require("./src/config/dbConfig.js");
+const adminRoutes = require("./src/router/admin.routes.js");
+const notificationRoutes = require("./src/router/notifications.routes.js");
 
 const { Server } = require("socket.io");
 //const socketAuth = require("./src/middlewares/socketAuth.js");
@@ -70,7 +71,8 @@ app.use("/rooms", roomRoutes);
 app.use("/vs", vsRoutes);
 app.use("/emp", empRoutes);
 app.use("/user", userRoutes);
-app.use("/", postmanRoutes);
+app.use("/admin", adminRoutes);
+app.use("/notifications", notificationRoutes);
 
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));

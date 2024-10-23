@@ -10,9 +10,9 @@ dotenv.config({
 
 exports.tokenMiddleware = async (req, res, next) => {
     const {token} = req.cookies
-    console.log(token);
+    //console.log(token);
     
-    console.log('Intentando decodificar el token: ', token);
+    //console.log('Intentando decodificar el token: ', token);
 
     if (!token) {
         return res.status(401).json({ message: "Acceso no autorizado" });
