@@ -10,6 +10,7 @@ const vsRoutes = require("./src/router/vsactivity.routes.js");
 const empRoutes = require("./src/router/emp.routes.js");
 const userRoutes = require("./src/router/user.routes.js");
 const postmanRoutes = require("./src/router/postman.routes.js");
+const chatRoutes = require("./src/router/chat.routes.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerOptions = require("./src/docs/swaggerOptions.js");
@@ -71,6 +72,7 @@ app.use("/vs", vsRoutes);
 app.use("/emp", empRoutes);
 app.use("/user", userRoutes);
 app.use("/", postmanRoutes);
+app.use("/chat", chatRoutes);
 
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
