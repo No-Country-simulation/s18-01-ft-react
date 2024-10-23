@@ -7,9 +7,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mypassword
       MONGO_INITDB_DATABASE: mydatabase
     ports:
-      - "27017:27017"
+      - "27018:27017"
+    command: ["mongod", "--replSet", "rs0"]  # Habilitar replica set
     volumes:
       - mongo_data:/data/db
 
 volumes:
   mongo_data:
+
+# docker run -d --name mongodb-test -p 27018:27017 mongo:4.4 --replSet rs0

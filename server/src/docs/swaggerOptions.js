@@ -18,17 +18,17 @@ const swaggerOptions = {
     // Definición de esquemas de seguridad
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: 'http',
+        cookiesAuth: {
+          type: 'apiKey',
           scheme: 'bearer',
-          bearerFormat: 'JWT', // Opcional, indica el formato del token
+          name: 'token', // Opcional, indica el formato del token
         },
       },
     },
     // Aplicando el esquema de seguridad globalmente a todas las rutas
     security: [
       {
-        bearerAuth: [],
+        cookieAuth: [],
       },
     ],
   },
