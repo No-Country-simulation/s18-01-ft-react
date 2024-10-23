@@ -56,14 +56,8 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-const io = new Server(server, {
-	cors: {
-	  origin: corsOptions.origin,
-	  methods: corsOptions.methods,
-	  credentials: corsOptions.credentials,
-	},
-  });
-  
+
+
 connectDB()
 
 // Ruta principal (índice)
