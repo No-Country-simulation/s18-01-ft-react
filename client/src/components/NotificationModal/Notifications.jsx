@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useAtom } from 'jotai';
 import NotificationModal from './NotificationModal';
-import ModalWrapper from '../ModalWrapper/ModalWrapper';
+import { modalAtom } from '@/store/modalAtom';
 
 const Notifications = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useAtom(modalAtom);
 
   const notifications = [
     {
@@ -29,13 +29,23 @@ const Notifications = () => {
     },
   ];
   return (
-    <div className="p-6">
-      <NotificationModal
-        isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
-        notifications={notifications}
-      />
-    </div>
+    <>
+      {/* Condicionalmente renderiza el modal */}
+      {modal.open && modal.modalId === 'notification' && (
+        <NotificationModal
+          notifications={notifications}
+          isOpen={modal.open}
+          closeModal={() => setModal(prev => ({ ...prev, open: false }))}
+        />
+      )}
+    </>
+    // <div className="p-6">
+    //   <NotificationModal
+    //     isOpen={isModalOpen}
+    //     closeModal={() => setIsModalOpen(false)}
+    //     notifications={notifications}
+    //   />
+    // </div>
   );
 };
 

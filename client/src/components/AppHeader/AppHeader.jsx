@@ -1,5 +1,6 @@
 import AppSearchBar from '../Search/AppSearchBar';
 import ButtonNotification from '../ButtonNotification/ButtonNotification';
+import Notifications from '../NotificationModal/Notifications';
 
 function AppHeader() {
   return (
@@ -10,6 +11,8 @@ function AppHeader() {
       <div className="flex flex-row gap-5">
         <AppSearchBar />
         <ButtonNotification />
+        {/* Modal de Notificaciones */}
+        <Notifications />
       </div>
     </div>
   );
