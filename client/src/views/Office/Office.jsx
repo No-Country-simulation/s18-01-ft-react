@@ -25,7 +25,7 @@ const Office = () => {
           hasAccessToToolbar(userRole) ? 'h-[85dvh]' : ''
         )}>
         <RoomName roomId={roomId} />
-        {roomId ? <PhaserContainer /> : <UserEmptyLobby />}
+        {roomId ? <PhaserContainer roomId={roomId} /> : <UserEmptyLobby />}
         {hasAccessToToolbar(userRole) || roomId ? (
           <UserToolbar hasId={!!roomId} />
         ) : null}

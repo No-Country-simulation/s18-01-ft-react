@@ -29,7 +29,6 @@ export const RoomModal = () => {
   useEffect(() => {
     if (modal.open && modal.modalId === MODAL_ID) {
       refetch();
-      console.log({ data });
     }
   }, [modal]);
   return (
@@ -38,7 +37,7 @@ export const RoomModal = () => {
         className="max-h-[512px] w-full max-w-96"
         id={MODAL_ID}
         icon={container}
-        title={`Salas (${data.length})`}>
+        title={`Salas (${data?.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
           <RoomModalTabs rooms={data} />
           {isUserCompany && (

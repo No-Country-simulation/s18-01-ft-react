@@ -3,6 +3,7 @@ import StartGame from '@/utils/phaser';
 import { SCENE_KEYS } from '@/utils/phaser/consts';
 import { EventBus } from '@/utils/phaser/EventBus';
 import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 
 const PhaserContainer = ({ roomId }) => {
   const gameRef = useRef(null);
@@ -12,10 +13,8 @@ const PhaserContainer = ({ roomId }) => {
     if (gameRef.current) {
       game = StartGame(gameRef.current);
       EventBus.on(SCENE_KEYS.SCENE_READY, mainScene => {
-        mainScene.socket = io(`${SOCKET_URL}/${roomId || ''}`, {
-          autoConnect: false,
-        });
-        // mainScene.setupSocketListeners();
+        mainScene.socket = io(SOCKET_URL);
+        mainScene.setupSocketListeners(roomId);
       });
     }
 

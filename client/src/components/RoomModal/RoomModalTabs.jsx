@@ -12,10 +12,20 @@ export const RoomModalTabs = ({ rooms }) => {
         <TabListItem items={rooms} isRoom={true} />
       </TabsContent>
       <TabsContent value="active">
-        <TabListItem items={rooms} isRoom={true} />
+        <TabListItem
+          items={rooms.filter(
+            item => Array.isArray(item.users) && item.users.length > 0
+          )}
+          isRoom={true}
+        />
       </TabsContent>
       <TabsContent value="inactive">
-        <TabListItem items={rooms} isRoom={true} />
+        <TabListItem
+          items={rooms.filter(
+            item => Array.isArray(item.users) && item.users.length === 0
+          )}
+          isRoom={true}
+        />
       </TabsContent>
     </Tabs>
   );

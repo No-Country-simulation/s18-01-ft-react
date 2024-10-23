@@ -177,8 +177,13 @@ export class OfficeScene extends Scene {
     });
   }
 
-  setupSocketListeners() {
-    this.socket.on('currentPlayers', players => {
+  setupSocketListeners(roomId) {
+    this.socket.on('connection', () => {
+      console.log('Me conecte');
+      this.socket.emit('joinRoom', { roomId });
+    });
+
+    /*this.socket.on('currentPlayers', players => {
       Object.values(players).forEach(playerInfo => {
         this.addPlayer(playerInfo, playerInfo.playerId === this.socket.id);
       });
@@ -188,13 +193,13 @@ export class OfficeScene extends Scene {
       this.addPlayer(playerInfo);
     });
 
-    this.socket.on('disconnectPlayer', playerId => {
+    this.socket.on('userLeft', playerId => {
       this.removePlayer(playerId);
     });
 
     this.socket.on('playerMoved', playerInfo => {
       this.updatePlayerPosition(playerInfo);
-    });
+    });*/
   }
 
   updatePlayerPosition(playerInfo) {
@@ -372,12 +377,12 @@ export class OfficeScene extends Scene {
     const isIdleIdle = direction === 'idle' && prevDirection === 'idle';
     if (this.hasPositionChanged(direction, [x, y], oldPosition) && !isIdleIdle) {
       //TODO: Verificar datos enviados al socket al mover el player
-      this.socket.emit('playerMovement', {
+      /*this.socket.emit('playerMovement', {
         x,
         y,
         direction: direction,
         prevDirection,
-      });
+      });*/
     }
     this.player.oldPosition = { x, y, direction: direction };
   }
