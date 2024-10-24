@@ -9,7 +9,6 @@ const roomRoutes = require('./src/router/rooms.routes.js')
 const vsRoutes = require('./src/router/vsactivity.routes.js')
 const empRoutes = require('./src/router/emp.routes.js')
 const userRoutes = require('./src/router/user.routes.js')
-const postmanRoutes = require('./src/router/postman.routes.js')
 const chatRoutes = require('./src/router/chat.routes.js')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
@@ -57,9 +56,8 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-const io = new Server(server, {
-	cors: corsOptions,
-})
+
+
 connectDB()
 
 // Ruta principal (índice)
@@ -75,7 +73,6 @@ app.use('/emp', empRoutes)
 app.use('/user', userRoutes)
 app.use('/admin', adminRoutes)
 app.use('/notifications', notificationRoutes)
-app.use('/', postmanRoutes)
 app.use('/chat', chatRoutes)
 
 // Swagger documentation
