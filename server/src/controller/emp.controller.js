@@ -244,8 +244,7 @@ const assignUPermissions = async (req, res) => {
         const user = await User.findById(id_user)
         if (!user) { return res.status(404).json({ message: 'nonexistent user' }); }
         if (!(user.id_emp == decode.id)) { return res.status(404).json({ message: 'not permit' }); }
-        if (!pre.permissions_emp.includes(permissions)) 
-        { return res.status(404).json({ message: 'Permissions no create' }); }
+        if (!pre.permissions_emp.includes(permissions)) { return res.status(404).json({ message: 'Permissions no create' }); }
         if (!user.permissions.includes(permissions)) {
             user.permissions.push(permissions);
         } else {
@@ -288,6 +287,31 @@ const assignRPermissions = async (req, res) => {
     }
 };
 
+const viwsuser = async (req, res) => {
+    const empId = req.user ? req.user.id_emp : req.emp.id;
+    try {
+        const users = await User.find({ id_emp: empId })
+            .select("username profilePicture status socketId");
+
+        const usersWithRoomInfo = await Promise.all(users.map(async (user) => {
+            const room = await Rooms.findOne({ "users.socketId": user.socketId });
+            return {
+                username: user.username,
+                profilePicture: user.profilePicture,
+                status: user.status,
+                inRoom: !!room, 
+                roomId: room ? room._id : null, 
+            };
+        }));
+
+        return usersWithRoomInfo;
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
     registerEmp,
     loginEmp,
@@ -296,5 +320,6 @@ module.exports = {
     resetPassword,
     createPermissions,
     assignUPermissions,
-    assignRPermissions
+    assignRPermissions,
+    viwsuser
 };

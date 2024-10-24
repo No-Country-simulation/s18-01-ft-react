@@ -5,7 +5,8 @@ const { registerEmp,
         resetPassword, 
         createPermissions, 
         assignUPermissions,
-        assignRPermissions } = require('../controller/emp.controller.js');
+        assignRPermissions,
+        viwsuser } = require('../controller/emp.controller.js');
 const express = require('express');
 const router = express.Router();
 
@@ -375,5 +376,6 @@ router.post('/assignRPermissions', assignRPermissions);
  *                   example: "Error en el servidor"
  */
 router.post('/assignUPermissions', assignUPermissions);
+router.post('/viwsuser', viwsuser)
 
 module.exports = router;

@@ -1,26 +1,34 @@
 import { io } from 'socket.io-client';
 
-// No incluir la cookie de autenticación para simular una conexión no autenticada
+// Establecer la conexión con el servidor Socket.io
 const socket = io('http://localhost:8080', {
   extraHeaders: {
-    // Simular que no envías un token de autenticación o enviar uno inválido
     cookie:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoiNjcxMTRlN2ExN2QwNjBmOWI1OWNiZDhkIn0sImlhdCI6MTcyOTE4NzUzMywiZXhwIjoxNzI5MTkxMTMzfQ.2rIN0ZRmB8GoE_VhmnUbFDUMXy_VMohvefN5JoLKQ7c',
+      'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzExNDA4ZDhmYzUyY2Q5YzU2MGRkODAiLCJpYXQiOjE3Mjk3MTc2MzYsImV4cCI6MTcyOTgwNDAzNn0.YR6dC8KIwfKi3oBAmmIlrWiXCYHBcjUORWUQfQvxAgw',
   },
 });
 
+console.log('Intentando conectar...');
+
+// Escuchar el evento 'connect' para verificar si la conexión se ha establecido
 socket.on('connect', () => {
-  console.log('Conectado al servidor');
+  console.log('Conectado al servidor Socket.io');
 
-  // Intentar unirse a una sala (esto debería fallar si no se está autenticado)
-  socket.emit('joinRoom', { roomId: 'sala1' });
+  // Intentar unirse a una sala
+  socket.emit('joinRoom', { roomId: '67181d679a264b394d1f5925' });
 });
 
+// Manejar errores de conexión
 socket.on('connect_error', error => {
-  console.log('Error de conexión:', error.message); // Aquí debería mostrar el mensaje "Autenticación fallida"
+  console.error('Error de conexión:', error.message); // Mostrar mensaje de error si la autenticación falla
 });
 
-// Escuchar cuando un usuario se une a la sala (solo debería ocurrir si la autenticación tiene éxito)
+// Escuchar cuando un usuario se une a una sala (si la autenticación es exitosa)
 socket.on('userJoined', data => {
   console.log(`${data.username} se unió a la sala`);
+});
+
+// Escuchar cualquier actualización de estado de usuario
+socket.on('userStatusUpdate', data => {
+  console.log(`El estado del usuario ${data.userId} ha cambiado a ${data.status}`);
 });

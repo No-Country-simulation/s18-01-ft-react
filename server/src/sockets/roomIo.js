@@ -70,6 +70,8 @@ const handleSocketEvents = (io) => {
 
 	io.on("connection", (socket) => {
 		const user = socket.user;
+		console.log(user);
+
 		User.findByIdAndUpdate(
 			user._id,
 			{ status: "online", socketId: socket.id },
@@ -81,9 +83,11 @@ const handleSocketEvents = (io) => {
 			})
 			.catch(console.error);
 
-		socket.on("joinRoom", async ({ roomId }) => {
+		socket.on("joinRoom", async ({ roomId ,x,y}) => {
 			try {
 				const room = await Rooms.findById(roomId);
+				console.log(room, "sala");
+
 				if (!room) return;
 
 				socket.rooms.forEach((room) => {
@@ -96,14 +100,19 @@ const handleSocketEvents = (io) => {
 					}
 				});
 
-				socket.join(roomId);
-				console.log(`${user.username} se ha unido a la sala ${roomId}.`);
-				io.to(roomId).emit("userCountUpdate", room.users.length);
-
-				room.users.push({ socketId: socket.id, username: user.username });
+				room.users.push({ socketId: socket.id, username: user.username , x , y });
 				await room.save();
 
-				io.to(roomId).emit("userList", room.users);
+				socket.join(roomId);
+				console.log(`${user.username} se ha unido a la sala ${roomId}.`);
+
+				socket.emit("userList", room.users);
+
+				socket.to(roomId).emit("newUserJoined", {
+					username: user.username,
+					userId: user._id,
+				});
+
 				io.to(room._id).emit("userCountUpdate", room.users.length);
 			} catch (error) {
 				console.error("Error al unirse a la sala:", error);

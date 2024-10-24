@@ -1,22 +1,20 @@
 const jwt = require('jsonwebtoken');
-const Emp = require('../persistencia/models/emp.models.js');
+const User = require('../persistencia/models/user.models.js');
 const dotenv = require('dotenv').config();
 
 const socketAuth = (socket, next) => {
     const cookie = socket.handshake.headers.cookie;
-    console.log(cookie);
     
     if (cookie) { 
-        const token= cookie.split('; ')
+        const token = cookie.split('; ')
             .find(row => row.startsWith('token='))
             .split('=')[1];
-        console.log(token);
         
+
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) return next(new Error('Autenticación fallida'));
-            console.log(decoded);
-            
-            const user = await Emp.findById(decoded.empId);
+
+            const user = await User.findById(decoded.userId);
             if (!user) return next(new Error('Usuario no encontrado'));
 
             socket.user = user; 
