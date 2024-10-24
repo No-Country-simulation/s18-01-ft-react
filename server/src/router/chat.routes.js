@@ -17,7 +17,11 @@ router.post("/room/:roomId/message", upload.single("file"), sendMessage);
 router.get("/room/:roomId/messages", getMessages);
 
 // Enviar un mensaje en un chat privado
-router.post("/private/:userId1/:userId2/message", sendPrivateMessage);
+router.post(
+	"/private/:userId1/:userId2/message",
+	upload.single("file"),
+	sendPrivateMessage,
+);
 
 // Obtener todos los mensajes de un chat privado
 router.get("/private/:userId1/:userId2/messages", getPrivateMessages);
