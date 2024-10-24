@@ -27,7 +27,7 @@ export const UsersModal = () => {
   const isUserCompany = isEnterpriseUser(user);
   const [modal, setModal] = useAtom(modalAtom);
   const [rooms, setRooms] = useAtom(roomAtom);
-  const { data, refetch } = useGetUserList();
+  const { data, refetch, isLoading } = useGetUserList();
   const openCreate = () => {
     if (!isUserCompany) return;
     setModal(val => ({ ...val, modalId: 'userCreate' }));

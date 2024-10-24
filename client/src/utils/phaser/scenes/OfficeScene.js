@@ -1,7 +1,5 @@
 import { Scene, Input, Math, Geom } from 'phaser';
 import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
-import { SOCKET_URL } from '@/utils/api/socket';
-import { io } from 'socket.io-client';
 import { Joystick } from '../utils/joystick';
 import { EventBus } from '../EventBus';
 
@@ -13,8 +11,8 @@ export class OfficeScene extends Scene {
   otherPlayers;
   groundHouseLayer;
   grassLayer;
-  socket;
   joystick;
+  socket;
   playerName;
 
   constructor() {
@@ -32,7 +30,6 @@ export class OfficeScene extends Scene {
   init() {
     this.initializeScale();
     this.otherPlayers = this.physics.add.group();
-    //this.socket = io(SOCKET_URL, { autoConnect: false });
   }
 
   create() {
@@ -178,9 +175,28 @@ export class OfficeScene extends Scene {
   }
 
   setupSocketListeners(roomId) {
-    this.socket.on('connection', () => {
+    this.socket.on('connect', () => {
       console.log('Me conecte');
       this.socket.emit('joinRoom', { roomId });
+    });
+
+    // UserList equivalente a currentPlayers
+    this.socket.on('userList', players => {
+      Object.values(players).forEach(playerInfo => {
+        console.log({ playerInfo });
+      });
+    });
+
+    //Recupera el numero de jugadores activos
+    this.socket.on('userCountUpdate', count => {
+      console.log(`La sala tiene ${count} jugadores`);
+    });
+
+    // UserLeft no estoy seguro ??
+    // La ides es que cuando un jugar cambie de sala se notifica la salida de la anterior
+    this.socket.on('userLeft', ({ username, userId }) => {
+      console.log(`${username} abandonó la sala, con ID ${userId}`);
+      this.removePlayer(userId);
     });
 
     /*this.socket.on('currentPlayers', players => {
@@ -401,7 +417,6 @@ export class OfficeScene extends Scene {
   }
 
   shutdown() {
-    this.socket?.disconnect();
     this.joystick?.destroy();
     this.players.forEach(({ sprite, name }) => {
       sprite.destroy();

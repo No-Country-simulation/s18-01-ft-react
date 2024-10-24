@@ -7,7 +7,7 @@ import container from '/public/svg/container.svg';
 import { modalAtom } from '@/store/modalAtom';
 import { getCurrentUserAtom, isEnterpriseUser } from '@/data/getCurrentUser';
 import { useEffect } from 'react';
-import { useGetRoomList } from '@/data/useGetRoomList';
+import { useGetRoomList } from '@/utils/hooks/useGetRoomList';
 
 const roomsData = [
   { name: 'Desarrollo', count: 4 },
@@ -21,7 +21,7 @@ export const RoomModal = () => {
   const [modal, setModal] = useAtom(modalAtom);
   const user = getCurrentUserAtom();
   const isUserCompany = isEnterpriseUser(user);
-  const { data, refetch } = useGetRoomList();
+  const { data, refetch, isLoading } = useGetRoomList();
   const openCreate = () => {
     if (!isUserCompany) return;
     setModal(val => ({ ...val, modalId: 'createRoom' }));
@@ -39,7 +39,7 @@ export const RoomModal = () => {
         icon={container}
         title={`Salas (${data?.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
-          <RoomModalTabs rooms={data} />
+          <RoomModalTabs rooms={data} isLoading={isLoading && data.length === 0} />
           {isUserCompany && (
             <div className="mt-auto flex w-full items-center justify-center pb-8">
               <Button

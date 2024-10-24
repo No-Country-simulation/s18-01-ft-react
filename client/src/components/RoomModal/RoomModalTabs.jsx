@@ -1,6 +1,6 @@
 import { TabListItem, Tabs, TabsContent, TabsList, TabsTrigger } from '../Tabs';
 
-export const RoomModalTabs = ({ rooms }) => {
+export const RoomModalTabs = ({ rooms, isLoading }) => {
   return (
     <Tabs defaultValue="all" className="max-h-full overflow-hidden px-4">
       <TabsList className="mb-3 mt-4">
@@ -8,10 +8,12 @@ export const RoomModalTabs = ({ rooms }) => {
         <TabsTrigger value="active">Activas</TabsTrigger>
         <TabsTrigger value="inactive">Inactivas</TabsTrigger>
       </TabsList>
-      <TabsContent value="all">
+      <TabsContent value="all" className={isLoading ? 'animate-pulse blur-sm' : ''}>
         <TabListItem items={rooms} isRoom={true} />
       </TabsContent>
-      <TabsContent value="active">
+      <TabsContent
+        value="active"
+        className={isLoading ? 'animate-pulse blur-sm' : ''}>
         <TabListItem
           items={rooms.filter(
             item => Array.isArray(item.users) && item.users.length > 0
@@ -19,7 +21,9 @@ export const RoomModalTabs = ({ rooms }) => {
           isRoom={true}
         />
       </TabsContent>
-      <TabsContent value="inactive">
+      <TabsContent
+        value="inactive"
+        className={isLoading ? 'animate-pulse blur-sm' : ''}>
         <TabListItem
           items={rooms.filter(
             item => Array.isArray(item.users) && item.users.length === 0

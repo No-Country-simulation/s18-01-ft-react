@@ -16,7 +16,6 @@ const Office = () => {
   const { roomId } = useParams();
   const user = getCurrentUserAtom();
   const userRole = getUserRole(user);
-  console.log({ userRole });
   return (
     <OfficeLayouts hasTools={!!roomId}>
       <div
