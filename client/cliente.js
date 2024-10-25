@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:8080', {
   extraHeaders: {
     cookie:
-      'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzExNDA4ZDhmYzUyY2Q5YzU2MGRkODAiLCJpYXQiOjE3Mjk3MTc2MzYsImV4cCI6MTcyOTgwNDAzNn0.YR6dC8KIwfKi3oBAmmIlrWiXCYHBcjUORWUQfQvxAgw',
+      'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzExNDA4ZDhmYzUyY2Q5YzU2MGRkODAiLCJpYXQiOjE3Mjk4Nzg5MTEsImV4cCI6MTcyOTk2NTMxMX0.7_0hI89K2uGSDW_9VhtUYEjxlej90ZEDhb_Xn6nbpu0',
   },
 });
 
