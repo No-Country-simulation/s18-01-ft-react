@@ -30,7 +30,6 @@ const Notifications = () => {
   ];
   return (
     <>
-      {/* Condicionalmente renderiza el modal */}
       {modal.open && modal.modalId === 'notification' && (
         <NotificationModal
           notifications={notifications}
@@ -39,13 +38,6 @@ const Notifications = () => {
         />
       )}
     </>
-    // <div className="p-6">
-    //   <NotificationModal
-    //     isOpen={isModalOpen}
-    //     closeModal={() => setIsModalOpen(false)}
-    //     notifications={notifications}
-    //   />
-    // </div>
   );
 };
 
