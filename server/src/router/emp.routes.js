@@ -377,6 +377,6 @@ router.post('/assignRPermissions', assignRPermissions);
  *                   example: "Error en el servidor"
  */
 router.post('/assignUPermissions', assignUPermissions);
-router.post('/viewusers', tokenMiddleware, viewusers)
+router.get('/viewusers', tokenMiddleware, viewusers)
 
 module.exports = router;
