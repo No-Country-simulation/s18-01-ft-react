@@ -4,6 +4,14 @@ import NotificationItem from './NotificationItem';
 const NotificationModal = ({ notifications, closeModal }) => {
   const MODAL_ID = 'notification';
 
+  const onHover = notificationId => {
+    console.log(`notificacion leida ${notificationId}`);
+  };
+
+  const onAccept = notificationId => {
+    console.log(`notificacion aceptada ${notificationId}`);
+  };
+
   return (
     <div>
       <ModalTitleWrapper
@@ -28,6 +36,8 @@ const NotificationModal = ({ notifications, closeModal }) => {
                   date={notification.date}
                   icon={notification.icon}
                   type={notification.type}
+                  onHover={onHover(notification.id)}
+                  onAccept={onAccept(notification.id)}
                 />
               ))}
             </div>

@@ -1,7 +1,15 @@
 import dateFormat from '@/utils/functions/dateFormat';
 import Button from '../Button/Button';
 
-const NotificationItem = ({ title, description, date, icon, type }) => {
+const NotificationItem = ({
+  title,
+  description,
+  date,
+  icon,
+  type,
+  onHover,
+  onAccept,
+}) => {
   const timeAgo = dateFormat(date);
 
   const iconType = () => {
@@ -12,7 +20,7 @@ const NotificationItem = ({ title, description, date, icon, type }) => {
   };
 
   return (
-    <div className="my-3 flex flex-row items-start gap-2">
+    <div className="my-3 flex flex-row items-start gap-2" onClick={onHover}>
       <div className="mt-[3px] flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-neutral-400 text-center">
         {iconType()}
       </div>
@@ -26,7 +34,9 @@ const NotificationItem = ({ title, description, date, icon, type }) => {
           <span className="pt-1 text-sm text-neutral-800">{timeAgo}</span>
         </div>
         {type === 'invitation' && (
-          <Button className="my-2 h-[35px] w-[93px] text-white">Aceptar</Button>
+          <Button className="my-2 h-[35px] w-[93px] text-white" onClick={onAccept}>
+            Aceptar
+          </Button>
         )}
       </div>
     </div>

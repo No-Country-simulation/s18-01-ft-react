@@ -125,6 +125,24 @@ export const apiService = {
   async delete(url, config = {}) {
     return handleRequest(() => api.delete(url, config));
   },
+
+  // notifications
+
+  async allNotifications() {
+    return handleRequest(() => api.get('/notifications'));
+  },
+
+  async unreadNotifications() {
+    return handleRequest(() => api.get('/notifications/unread'));
+  },
+
+  async readNotification(notificationId) {
+    return handleRequest(() => api.put(`/notifications/${notificationId}`));
+  },
+
+  async acceptInvitation(token) {
+    return handleRequest(() => api.put('/notifications/accept', token));
+  },
 };
 
 export default api;

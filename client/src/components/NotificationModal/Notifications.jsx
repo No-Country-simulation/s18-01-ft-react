@@ -1,12 +1,34 @@
 import { useAtom } from 'jotai';
 import NotificationModal from './NotificationModal';
 import { modalAtom } from '@/store/modalAtom';
+import { useEffect, useState } from 'react';
+// import getNotifications from '@/utils/functions/notificationService';
 
 const Notifications = () => {
   const [modal, setModal] = useAtom(modalAtom);
+  // const [notifications, setNotifications] = useState([]);
+  // // const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     // setLoading(true);
+  //     const data = await getNotifications();
+  //     if (data) {
+  //       setNotifications(data);
+  //       // setLoading(false);
+  //     } else {
+  //       setError('Error al cargar notificaciones');
+  //       // setLoading(false);
+  //     }
+  //     // setLoading(false);
+  //   };
+  //   fetchNotifications();
+  // }, []);
 
   const notifications = [
     {
+      id: 1,
       icon: '',
       title: 'Tarea asignada',
       description: 'Admin te ha asignado una nueva tarea.',
@@ -14,6 +36,7 @@ const Notifications = () => {
       type: 'task',
     },
     {
+      id: 2,
       icon: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
       title: 'Invitación',
       description: 'Empresa te ha invitado a unirte a su equipo.',
@@ -21,6 +44,7 @@ const Notifications = () => {
       type: 'invitation',
     },
     {
+      id: 3,
       icon: '',
       title: 'Bienvenido',
       description: 'Bienvenido a Escape CO',
@@ -28,6 +52,7 @@ const Notifications = () => {
       type: 'welcome',
     },
   ];
+
   return (
     <>
       {modal.open && modal.modalId === 'notification' && (
@@ -37,6 +62,8 @@ const Notifications = () => {
           closeModal={() => setModal(prev => ({ ...prev, open: false }))}
         />
       )}
+      {/* {loading && <p>Cargando notificaciones...</p>} */}
+      {error && <p>{error}</p>}
     </>
   );
 };
