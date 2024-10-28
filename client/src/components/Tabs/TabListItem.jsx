@@ -12,10 +12,11 @@ export const TabListItem = ({ items, isRoom = false }) => (
           <TabItem
             key={item.name + i}
             id={item.id}
+            roomId={item.roomId}
             name={item.name}
             count={item?.users?.length}
             sub={item?.sub}
-            img={isRoom ? getRoomImage(item.tileset) : ''}
+            img={isRoom ? getRoomImage(item.tileset) : item?.picture}
             isRoom={isRoom}
           />
         ))

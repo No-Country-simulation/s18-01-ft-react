@@ -26,7 +26,6 @@ export const UsersModal = () => {
   const user = getCurrentUserAtom();
   const isUserCompany = isEnterpriseUser(user);
   const [modal, setModal] = useAtom(modalAtom);
-  const [rooms, setRooms] = useAtom(roomAtom);
   const { data, refetch, isLoading } = useGetUserList();
   const openCreate = () => {
     if (!isUserCompany) return;
@@ -35,7 +34,6 @@ export const UsersModal = () => {
   useEffect(() => {
     if (modal.open && modal.modalId === MODAL_ID) {
       refetch();
-      console.log({ data });
     }
   }, [modal]);
   return (
@@ -45,7 +43,7 @@ export const UsersModal = () => {
         className="max-h-[512px] w-full max-w-96"
         id={MODAL_ID}
         icon={users}
-        title={`Usuarios (1)`}>
+        title={`Usuarios (${data.length})`}>
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
           <UserModalTabs users={data} />
           {isUserCompany && (

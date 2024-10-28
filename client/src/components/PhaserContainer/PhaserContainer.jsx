@@ -14,11 +14,10 @@ const PhaserContainer = ({ roomId }) => {
     if (gameRef.current) {
       game = StartGame(gameRef.current);
       EventBus.on(SCENE_KEYS.SCENE_READY, mainScene => {
-        console.log('Entre');
         if (mainScene instanceof OfficeScene) {
           mainScene.socket = io(SOCKET_URL, {
             withCredentials: true,
-            autoConnect: false,
+            autoConnect: true,
           });
           mainScene.socket.connect();
           mainScene.setupSocketListeners(roomId);

@@ -31,7 +31,11 @@ const AppRouter = () => {
         },
         {
           path: ':roomId',
-          element: <Office />,
+          element: (
+            <ProtectedRoute isAllowed={user => !user.isEmp}>
+              <Office />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
@@ -56,14 +60,6 @@ const AppRouter = () => {
       element: (
         <OnlyNoAuth>
           <EnterpriseSignup />
-        </OnlyNoAuth>
-      ),
-    },
-    {
-      path: '/enterprise-signin',
-      element: (
-        <OnlyNoAuth>
-          <EnterpriseSignin />
         </OnlyNoAuth>
       ),
     },

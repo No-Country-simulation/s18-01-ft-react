@@ -12,10 +12,10 @@ export const UserModalTabs = ({ users }) => {
         <TabListItem items={users} />
       </TabsContent>
       <TabsContent value="online">
-        <TabListItem items={users} />
+        <TabListItem items={users.filter(user => user.status !== 'offline')} />
       </TabsContent>
       <TabsContent value="offline">
-        <TabListItem items={[]} />
+        <TabListItem items={users.filter(user => user.status === 'offline')} />
       </TabsContent>
     </Tabs>
   );

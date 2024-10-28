@@ -3,6 +3,22 @@ import { ASSETS_KEYS, SCENE_KEYS, PLAYER_KEYS } from '../consts';
 import { Joystick } from '../utils/joystick';
 import { EventBus } from '../EventBus';
 
+const colors = [
+  0xff0000, // Rojo
+  0x00ff00, // Verde
+  0x0000ff, // Azul
+  0x808080, // Gris
+  0xffff00, // Dorado (amarillo)
+  0x00ffff, // Celeste (cian)
+  0x800080, // Morado
+  0xff69b4, // Rosado (Hot Pink)
+];
+
+function getPlayerColor() {
+  const indiceAleatorio = Math.FloorTo(window.Math.random() * colors.length, 0, 10);
+  return colors[indiceAleatorio];
+}
+
 export class OfficeScene extends Scene {
   player;
   keys;
@@ -177,14 +193,39 @@ export class OfficeScene extends Scene {
   setupSocketListeners(roomId) {
     this.socket.on('connect', () => {
       console.log('Me conecte');
-      this.socket.emit('joinRoom', { roomId });
+      this.socket.emit('joinRoom', { roomId, x: 350, y: 500 });
     });
 
     // UserList equivalente a currentPlayers
     this.socket.on('userList', players => {
+      console.log({ players });
       Object.values(players).forEach(playerInfo => {
-        console.log({ playerInfo });
+        const userId = playerInfo['_id'];
+        const socketId = playerInfo['socketId'];
+        console.log({ socketId });
+        console.log({ has: this.players.has(socketId) });
+        if (!this.players.has(socketId)) {
+          console.log('Agrego al user');
+          this.addPlayer(
+            {
+              id: userId,
+              socketId: socketId,
+              x: playerInfo.x,
+              y: playerInfo.y,
+              username: 'Guest',
+              colors: getPlayerColor(),
+            },
+            socketId === this.socket.id
+          );
+        }
       });
+    });
+
+    this.socket.on('newUserJoined', playerInfo => {
+      console.log('Entre al new user joined', { playerInfo });
+      if (this.players.has(playerInfo.id)) {
+        //this.addPlayer(playerInfo);
+      }
     });
 
     //Recupera el numero de jugadores activos
@@ -219,8 +260,8 @@ export class OfficeScene extends Scene {
   }
 
   updatePlayerPosition(playerInfo) {
-    if (this.players.has(playerInfo.playerId)) {
-      const { sprite, name } = this.players.get(playerInfo.playerId);
+    if (this.players.has(playerInfo.id)) {
+      const { sprite, name } = this.players.get(playerInfo.id);
       sprite.setPosition(playerInfo.x, playerInfo.y);
       name.setPosition(playerInfo.x, playerInfo.y);
       this.updatePlayerAnimation(
@@ -241,20 +282,19 @@ export class OfficeScene extends Scene {
     }
   }
 
-  removePlayer(playerId) {
-    if (this.players.has(playerId)) {
-      const { sprite, name } = this.players.get(playerId);
+  removePlayer(id) {
+    if (this.players.has(id)) {
+      const { sprite, name } = this.players.get(id);
       sprite.destroy();
       name.destroy();
-      this.players.delete(playerId);
+      this.players.delete(id);
     }
   }
 
   addPlayer(playerInfo, isMainPlayer = false) {
     const player = this.createPlayerSprite(playerInfo);
     const playerName = this.createPlayerName(playerInfo);
-    playerName.playerId = playerInfo.playerId;
-    this.removePlayer(playerInfo.playerId);
+    playerName.id = playerInfo.id;
     if (isMainPlayer) {
       this.player = player;
       this.playerName = playerName;
@@ -264,7 +304,7 @@ export class OfficeScene extends Scene {
       this.otherPlayers.add(player);
     }
 
-    this.players.set(playerInfo.playerId, { sprite: player, name: playerName });
+    this.players.set(playerInfo.socketId, { sprite: player, name: playerName });
   }
 
   createPlayerSprite(playerInfo) {
@@ -281,18 +321,20 @@ export class OfficeScene extends Scene {
         Geom.Rectangle.Contains
       );
     player.open = false;
+    player.socketId = playerInfo.socketId;
+    player.id = playerInfo.id;
     player.on('pointerdown', _ => {
       this.players.forEach((otherPlayer, key) => {
-        if (key !== playerInfo.playerId && otherPlayer.sprite.open) {
+        if (key !== playerInfo.id && otherPlayer.sprite.open) {
           otherPlayer.sprite.open = false;
         }
       });
-      let playerD = !player.open;
-      player.open = playerD;
-      EventBus.emit('playerCLICKED', { ...playerInfo, open: playerD });
+      let isPlayerInfoClose = !player.open;
+      player.open = isPlayerInfoClose;
+      EventBus.emit('playerCLICKED', { ...playerInfo, open: isPlayerInfoClose });
     });
 
-    player.playerId = playerInfo.playerId;
+    player.id = playerInfo.id;
     this.physics.add.collider(player, [this.grassLayer, this.groundHouseLayer]);
     player.setFrame(this.idleFrame.down);
 
@@ -300,7 +342,7 @@ export class OfficeScene extends Scene {
   }
   createPlayerName(playerInfo) {
     return this.add
-      .text(playerInfo.x, playerInfo.y, playerInfo.username, {
+      .text(playerInfo?.x, playerInfo?.y, playerInfo?.username, {
         font: '16px Arial',
         fill: '#ffffff',
         stroke: '#000000',
