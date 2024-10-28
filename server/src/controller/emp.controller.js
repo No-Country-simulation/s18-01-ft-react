@@ -299,9 +299,9 @@ const viewusers = async (req, res) => {
             const room = await Rooms.findOne({ "users.socketId": user.socketId });
             return {
                 id: user._id,
-                username: user.username,
-                profilePicture: user.profilePicture,
-                status: user.status,
+                username: user.username || "",
+                profilePicture: user.profilePicture || "URL predeterminada",
+                status: user.status || "offline",
                 inRoom: !!room, 
                 roomId: room ? room._id : null, 
                 roomId: room ? room.name : null, 
