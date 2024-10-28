@@ -5,10 +5,11 @@ const { registerEmp,
         resetPassword, 
         createPermissions, 
         assignUPermissions,
-        assignRPermissions,
-        viwsuser } = require('../controller/emp.controller.js');
+        assignRPermissions, 
+        viewusers } = require('../controller/emp.controller.js');
 const express = require('express');
 const router = express.Router();
+const { tokenMiddleware } = require('../middlewares/middleware.js');
 
 
 /**
@@ -376,6 +377,6 @@ router.post('/assignRPermissions', assignRPermissions);
  *                   example: "Error en el servidor"
  */
 router.post('/assignUPermissions', assignUPermissions);
-router.post('/viwsuser', viwsuser)
+router.post('/viewusers', tokenMiddleware, viewusers)
 
 module.exports = router;

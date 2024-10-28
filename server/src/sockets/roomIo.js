@@ -70,7 +70,7 @@ const handleSocketEvents = (io) => {
 
 	io.on("connection", (socket) => {
 		const user = socket.user;
-		console.log(user);
+		//console.log(user);
 
 		User.findByIdAndUpdate(
 			user._id,
@@ -86,7 +86,7 @@ const handleSocketEvents = (io) => {
 		socket.on("joinRoom", async ({ roomId ,x,y}) => {
 			try {
 				const room = await Rooms.findById(roomId);
-				console.log(room, "sala");
+				//console.log(room, "sala");
 
 				if (!room) return;
 
@@ -99,8 +99,8 @@ const handleSocketEvents = (io) => {
 						});
 					}
 				});
-
-				room.users.push({ socketId: socket.id, username: user.username , x , y });
+				const newUser = { userId: user.id, socketId: socket.id, username: user.username, x, y }
+				room.users.push(newUser);
 				await room.save();
 
 				socket.join(roomId);
@@ -108,10 +108,9 @@ const handleSocketEvents = (io) => {
 
 				socket.emit("userList", room.users);
 
-				socket.to(roomId).emit("newUserJoined", {
-					username: user.username,
-					userId: user._id,
-				});
+				socket.to(roomId).emit("newUserJoined", 
+					newUser
+				);
 
 				io.to(room._id).emit("userCountUpdate", room.users.length);
 			} catch (error) {

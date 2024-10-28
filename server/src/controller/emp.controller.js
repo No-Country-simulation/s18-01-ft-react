@@ -287,7 +287,9 @@ const assignRPermissions = async (req, res) => {
     }
 };
 
-const viwsuser = async (req, res) => {
+const viewusers = async (req, res) => {
+    console.log(req.user);
+    
     const empId = req.user ? req.user.id_emp : req.emp.id;
     try {
         const users = await User.find({ id_emp: empId })
@@ -296,15 +298,19 @@ const viwsuser = async (req, res) => {
         const usersWithRoomInfo = await Promise.all(users.map(async (user) => {
             const room = await Rooms.findOne({ "users.socketId": user.socketId });
             return {
+                id: user._id,
                 username: user.username,
                 profilePicture: user.profilePicture,
                 status: user.status,
                 inRoom: !!room, 
                 roomId: room ? room._id : null, 
+                roomId: room ? room.name : null, 
             };
         }));
 
-        return usersWithRoomInfo;
+        return res.status(200).json({
+            users: usersWithRoomInfo
+        });
 
     } catch (error) {
         console.error(error);
@@ -321,5 +327,5 @@ module.exports = {
     createPermissions,
     assignUPermissions,
     assignRPermissions,
-    viwsuser
+    viewusers
 };
