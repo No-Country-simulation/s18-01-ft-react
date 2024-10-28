@@ -299,11 +299,11 @@ const viewusers = async (req, res) => {
             return {
                 id: user._id,
                 username: user.username || "",
-                profilePicture: user.profilePicture || "URL predeterminada",
+                profilePicture: user.profilePicture || "",
                 status: user.status || "offline",
                 inRoom: !!room, 
                 roomId: room ? room._id : null, 
-                roomId: room ? room.name : null, 
+                roomName: room ? room.name : null, 
             };
         }));
 
