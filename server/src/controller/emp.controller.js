@@ -288,9 +288,8 @@ const assignRPermissions = async (req, res) => {
 };
 
 const viewusers = async (req, res) => {
-    console.log(req.user);
     
-    const empId = req.user ? req.user.id_emp : req.emp.id;
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
     try {
         const users = await User.find({ id_emp: empId })
             .select("username profilePicture status socketId");
