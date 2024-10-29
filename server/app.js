@@ -47,6 +47,7 @@ const corsOptions = {
 		'http://localhost:3000',
 		'http://localhost:5173',
 		'https://no-countrys18.up.railway.app',
+		'https://no-countrys18.netlify.app',
 	],
 	credentials: true, // Permite cookies y autenticación
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
