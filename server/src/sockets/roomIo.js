@@ -107,10 +107,10 @@ const handleSocketEvents = (io) => {
 				console.log(`${user.username} se ha unido a la sala ${roomId}.`);
 
 				socket.emit("userList", room.users);
+				//socket.emit("newUserJoined", newUser);
 
-				socket.to(roomId).emit("newUserJoined", 
-					newUser
-				);
+				socket.to(roomId).emit("newUserJoined", newUser);
+				console.log("Evento `newUserJoined` emitido con éxito");
 
 				io.to(room._id).emit("userCountUpdate", room.users.length);
 			} catch (error) {
