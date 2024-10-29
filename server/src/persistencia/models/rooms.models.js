@@ -20,7 +20,7 @@ const roomsSchema = new mongoose.Schema({
     },
     users: [
         {
-            userid: String,
+            userId: String,
             socketId: String,
             username: String,
             x : Number,
