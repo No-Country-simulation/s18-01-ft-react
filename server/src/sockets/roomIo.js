@@ -121,7 +121,7 @@ const handleSocketEvents = (io) => {
 					{ new: true }
 				);
 				if (room) {
-					io.to(room._id).emit("userList", room.users);
+					io.to(room._id).emit("userLeft", user._id);
 					io.to(room._id).emit("userCountUpdate", room.users.length);
 				}
 			} catch (error) {
