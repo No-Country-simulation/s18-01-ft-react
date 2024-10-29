@@ -4,10 +4,35 @@ import more from '/public/svg/more.svg';
 import { Link } from 'react-router-dom';
 import { modalAtom } from '@/store/modalAtom';
 import { useSetAtom } from 'jotai';
+import { MenuDropDownOp } from '../MenuDropDownOp/MenuDropDownOp';
 
 export const TabItem = ({ id, name, count, sub, img, isRoom }) => {
   const Wrapper = isRoom ? Link : 'div';
   const setModal = useSetAtom(modalAtom);
+  const userItems = [
+    {
+      placeholder: 'Ver perfil',
+      action: () => alert('Proximamente'),
+      icon: '/svg/user.svg',
+    },
+    {
+      placeholder: 'Unirse a la sala',
+      action: () => alert('Proximamente'),
+      icon: '/svg/arrowLeft.svg',
+    },
+  ];
+  const roomItem = [
+    {
+      placeholder: 'Editar sala',
+      action: () => alert('Proximamente'),
+      icon: '/svg/edit.svg',
+    },
+    {
+      placeholder: 'Unirse a la sala',
+      action: () => alert('Proximamente'),
+      icon: '/svg/arrowLeft.svg',
+    },
+  ];
   return (
     <Wrapper
       to={isRoom ? `/office/${id}?roomName=${name}` : undefined}
@@ -51,15 +76,11 @@ export const TabItem = ({ id, name, count, sub, img, isRoom }) => {
             className="aspect-square object-cover object-center"
           />
         </div>
-        <div className="cursor-pointer" onClick={() => alert('Proximamente')}>
-          <img
-            src={more}
-            decoding="async"
-            width={24}
-            height={24}
-            className="aspect-square object-cover object-center"
-          />
-        </div>
+        <MenuDropDownOp
+          img={more}
+          label="Opciones"
+          items={isRoom ? roomItem : userItems}
+        />
       </div>
     </Wrapper>
   );
