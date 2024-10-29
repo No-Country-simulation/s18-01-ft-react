@@ -2,13 +2,15 @@ import dateFormat from '@/utils/functions/dateFormat';
 import Button from '../Button/Button';
 
 const NotificationItem = ({
+  id,
   title,
   description,
   date,
   icon,
   type,
-  onHover,
   onAccept,
+  onHover,
+  token,
 }) => {
   const timeAgo = dateFormat(date);
 
@@ -19,8 +21,21 @@ const NotificationItem = ({
     return <span className="rounded-full">!</span>;
   };
 
+  const handleAcceptClick = e => {
+    e.stopPropagation();
+    onAccept(token);
+  };
+
+  const handleClick = () => {
+    if (type !== 'invitation') {
+      onHover(id);
+    }
+  };
+
   return (
-    <div className="my-3 flex flex-row items-start gap-2" onClick={onHover}>
+    <div
+      onClick={handleClick}
+      className={`${type !== 'invitation' ? 'cursor-pointer' : ''} my-3 flex flex-row items-start gap-2`}>
       <div className="mt-[3px] flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-neutral-400 text-center">
         {iconType()}
       </div>
@@ -34,7 +49,9 @@ const NotificationItem = ({
           <span className="pt-1 text-sm text-neutral-800">{timeAgo}</span>
         </div>
         {type === 'invitation' && (
-          <Button className="my-2 h-[35px] w-[93px] text-white" onClick={onAccept}>
+          <Button
+            onClick={handleAcceptClick}
+            className="my-2 h-[35px] w-[93px] text-white">
             Aceptar
           </Button>
         )}

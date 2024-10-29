@@ -1,15 +1,35 @@
+import {
+  putAcceptInvitation,
+  putReadNotification,
+} from '@/utils/functions/notificationService';
 import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import NotificationItem from './NotificationItem';
+import { useState } from 'react';
 
 const NotificationModal = ({ notifications, closeModal }) => {
   const MODAL_ID = 'notification';
 
-  const onHover = notificationId => {
-    console.log(`notificacion leida ${notificationId}`);
+  const handleAcceptNotification = token => {
+    // const data = await putAcceptInvitation(token);
+    // if (data) {
+    //   console.log('Invitación aceptada:', data);
+    // }
+    console.log(`Invitación aceptada: ${token}`);
   };
 
-  const onAccept = notificationId => {
-    console.log(`notificacion aceptada ${notificationId}`);
+  const handleReadNotification = id => {
+    // const data = putReadNotification(id);
+
+    // if (data) {
+    //   console.log(`Notificación ${id} marcada como leída`);
+    //   // Opcional: actualiza el estado para reflejar el cambio en la notificación
+    //   setAllNotifications(prev =>
+    //     prev.map(notif =>
+    //       notif.id === id ? { ...notif, read: true } : notif
+    //     )
+    //   );
+    // }
+    console.log(`Notificación marcada como leida: ${id}`);
   };
 
   return (
@@ -31,13 +51,15 @@ const NotificationModal = ({ notifications, closeModal }) => {
               {notifications.map(notification => (
                 <NotificationItem
                   key={notification.id}
+                  id={notification.id}
                   title={notification.title}
                   description={notification.description}
                   date={notification.date}
                   icon={notification.icon}
                   type={notification.type}
-                  onHover={onHover(notification.id)}
-                  onAccept={onAccept(notification.id)}
+                  token={notification.token}
+                  onAccept={handleAcceptNotification}
+                  onHover={handleReadNotification}
                 />
               ))}
             </div>
