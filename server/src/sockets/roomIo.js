@@ -68,7 +68,13 @@ const handleSocketEvents = (io) => {
 
 				const isUserInRoom = room.users.some(u => u.userId.toString() === user._id.toString());
 				if (!isUserInRoom) {
-					const newUser = { userId: user._id, socketId: socket.id, username: user.username, x, y };
+					const newUser = {
+						userId: user._id,
+						socketId: socket.id,
+						username: user.username || null,
+						x,
+						y
+					};
 					room.users.push(newUser);
 					await room.save();
 					socket.join(roomId);
