@@ -107,7 +107,7 @@ const handleSocketEvents = (io) => {
 				);
 				console.log("condenada", x, y);
 
-				io.to(roomId).emit("userMoved", { userId: user._id, x, y, prevDirection, direction });
+				socket.broadcast.to(roomId).emit("userMoved", { userId: user._id, x, y, prevDirection, direction });
 			}
 		});
 
