@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import useSWR from 'swr';
-import { getData } from './getData';
+import { getData } from '../../data/getData';
 import { defaultConfig } from '@/utils/api/swrConfig';
 import { useAtom } from 'jotai';
 import { roomAtom } from '@/store/roomsAtom';

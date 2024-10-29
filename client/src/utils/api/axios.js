@@ -23,8 +23,6 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   response => {
-    const cookie = response.headers.get('Set-Cookie');
-    console.log({ cookie });
     /*if (response.data?.token) {
       Cookies.set('token', response.data.token, {
         expires: 7, // Token expires in 7 days
@@ -40,9 +38,9 @@ api.interceptors.response.use(
     // Handle 401 Unauthorized errors
     if (error.response?.status === 401 && !originalRequest._retry) {
       //originalRequest._retry = true;
-      //Cookies.remove('token');
-      //localStorage.removeItem('AUTH');
-      //window.location.href = '/signin';
+      Cookies.remove('token');
+      localStorage.removeItem('AUTH');
+      window.location.href = '/signin';
       console.error(ERROR_MESSAGES.UNAUTHORIZED);
       console.info(ERROR_MESSAGES.REDIRECT_SIGNIN);
 

@@ -2,7 +2,9 @@ import { SOCKET_URL } from '@/utils/api/socket';
 import StartGame from '@/utils/phaser';
 import { SCENE_KEYS } from '@/utils/phaser/consts';
 import { EventBus } from '@/utils/phaser/EventBus';
+import { OfficeScene } from '@/utils/phaser/scenes/OfficeScene';
 import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 
 const PhaserContainer = ({ roomId }) => {
   const gameRef = useRef(null);
@@ -12,10 +14,14 @@ const PhaserContainer = ({ roomId }) => {
     if (gameRef.current) {
       game = StartGame(gameRef.current);
       EventBus.on(SCENE_KEYS.SCENE_READY, mainScene => {
-        mainScene.socket = io(`${SOCKET_URL}/${roomId || ''}`, {
-          autoConnect: false,
-        });
-        // mainScene.setupSocketListeners();
+        if (mainScene instanceof OfficeScene) {
+          mainScene.socket = io(SOCKET_URL, {
+            withCredentials: true,
+            autoConnect: true,
+          });
+          mainScene.socket.connect();
+          mainScene.setupSocketListeners(roomId);
+        }
       });
     }
 

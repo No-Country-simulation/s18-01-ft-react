@@ -16,7 +16,6 @@ const Office = () => {
   const { roomId } = useParams();
   const user = getCurrentUserAtom();
   const userRole = getUserRole(user);
-  console.log({ userRole });
   return (
     <OfficeLayouts hasTools={!!roomId}>
       <div
@@ -25,7 +24,7 @@ const Office = () => {
           hasAccessToToolbar(userRole) ? 'h-[85dvh]' : ''
         )}>
         <RoomName roomId={roomId} />
-        {roomId ? <PhaserContainer /> : <UserEmptyLobby />}
+        {roomId ? <PhaserContainer roomId={roomId} /> : <UserEmptyLobby />}
         {hasAccessToToolbar(userRole) || roomId ? (
           <UserToolbar hasId={!!roomId} />
         ) : null}

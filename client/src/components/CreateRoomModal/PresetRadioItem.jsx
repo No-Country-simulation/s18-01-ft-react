@@ -1,17 +1,4 @@
-import centralImg from '/public/images/CENTRAL.png';
-import dailyImg from '/public/images/DAILY.png';
-import designImg from '/public/images/DESIGN.png';
-import forgeImg from '/public/images/FORGE.png';
-import zenzoneImg from '/public/images/ZENZONE.png';
-
-const getImage = val => {
-  if (val === 'CENTRAL') return centralImg;
-  if (val === 'DAILY') return dailyImg;
-  if (val === 'DESIGN') return designImg;
-  if (val === 'FORGE') return forgeImg;
-  if (val === 'ZENZONE') return zenzoneImg;
-  return '';
-};
+import { getRoomImage } from '@/data/getRoomImage';
 
 export const PresetRadioItem = ({ title, sub, value, id, name, img }) => {
   return (
@@ -20,7 +7,7 @@ export const PresetRadioItem = ({ title, sub, value, id, name, img }) => {
       htmlFor={id}>
       <input className="hidden" type="radio" name={name} id={id} value={value} />
       <img
-        src={getImage(value)}
+        src={getRoomImage(value)}
         alt="Preset"
         className="aspect-square size-14 rounded-md"
         width={56}

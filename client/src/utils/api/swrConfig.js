@@ -1,5 +1,5 @@
 export const defaultConfig = {
-  keepPreviousData: false,
+  keepPreviousData: true,
   revalidateOnReconnect: false,
   revalidateOnFocus: false,
   revalidateOnMount: false,

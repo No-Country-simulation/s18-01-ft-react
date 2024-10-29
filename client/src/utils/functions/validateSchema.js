@@ -1,5 +1,4 @@
 export const validateSchema = (schema, data) => {
-  console.log({ data });
   const schemaVerified = schema.safeParse(data);
   if (!schemaVerified.success) {
     const errors = Object.fromEntries(

@@ -3,9 +3,22 @@ import useSWR from 'swr';
 import { getData } from './getData';
 import { defaultConfig } from '@/utils/api/swrConfig';
 
+const mapUserList = data => {
+  return data.map(item => {
+    return {
+      id: item.id,
+      name: item.username || 'No-name',
+      picture: item.profilePicture || '',
+      status: item.status,
+      roomId: item?.roomId || '',
+      sub: item?.roomName ? `En la sala ${item?.roomName || ''}` : 'Offline',
+    };
+  });
+};
+
 export const useGetUserList = () => {
   //TODO: Cambiar key por el path correcta para la lista de usuarios de la empresa
-  const swrKeYRef = useRef('/users/list');
+  const swrKeYRef = useRef('emp/viewusers');
 
   const { data, mutate, isLoading, isValidating } = useSWR(
     swrKeYRef.current,
@@ -21,7 +34,7 @@ export const useGetUserList = () => {
   };
 
   return {
-    data: data ? data : [],
+    data: data?.users ? mapUserList(data.users) : [],
     isLoading: isLoading || isValidating,
     refetch,
   };

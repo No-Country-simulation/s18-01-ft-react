@@ -6,7 +6,6 @@ const LoginButton = () => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      console.log('Login exitoso:', user);
     }
   }, [isAuthenticated, user]);
 

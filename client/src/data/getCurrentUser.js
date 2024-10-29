@@ -10,10 +10,10 @@ export const getCurrentUser = () => {
 };
 
 export const isNormalUser = user => {
-  return user && !user.isEmp && user.hasOwnProperty('id_emp');
+  return user && !user.isEmp && user?.id_emp === '';
 };
 export const isNormalUserWithoutCompany = user => {
-  return user && !user.isEmp && !user.hasOwnProperty('id_emp');
+  return user && !user.isEmp && user?.id_emp !== '';
 };
 
 export const isEnterpriseUser = user => {
