@@ -81,8 +81,8 @@ const handleSocketEvents = (io) => {
 
 					socket.emit("userList", room.users);
 					socket.to(roomId).emit("newUserJoined", newUser);
-					console.log("newUser",newUser);
-					
+					console.log("newUser", newUser);
+
 					io.to(room._id).emit("userCountUpdate", room.users.length);
 					console.log(`${user.username} se ha unido a la sala ${roomId}.`);
 				}
@@ -94,9 +94,9 @@ const handleSocketEvents = (io) => {
 		socket.on("updatePosition", async ({ x, y, prevDirection, direction }) => {
 			const roomId = Array.from(socket.rooms).find(room => room !== socket.id);
 			console.log("roomId", roomId);
-			
+
 			if (roomId) {
-				const a = await Rooms.findOneAndUpdate(
+				await Rooms.findOneAndUpdate(
 					{ _id: roomId, "users.userId": user._id },  // Busca la sala y el usuario dentro de esa sala
 					{
 						$set: {
@@ -105,10 +105,8 @@ const handleSocketEvents = (io) => {
 						}
 					}, { new: true }
 				);
-				console.log(a);
-				
-				console.log("condenada",x,y);
-				
+				console.log("condenada", x, y);
+
 				io.to(roomId).emit("userMoved", { userId: user._id, x, y, prevDirection, direction });
 			}
 		});
