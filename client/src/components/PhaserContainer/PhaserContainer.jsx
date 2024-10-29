@@ -1,3 +1,4 @@
+import { getCurrentUserAtom } from '@/data/getCurrentUser';
 import { SOCKET_URL } from '@/utils/api/socket';
 import StartGame from '@/utils/phaser';
 import { SCENE_KEYS } from '@/utils/phaser/consts';

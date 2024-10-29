@@ -10,12 +10,17 @@ import { EnterpriseSignin } from '@/views/EnterpriseSignin/EnterpriseSignin';
 import { Outlet } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { OnlyNoAuth } from './OnlyNoAuth';
+import { Navigate } from 'react-router-dom';
 
 const AppRouter = () => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Home />,
+      element: (
+        <ProtectedRoute>
+          <Navigate to="/office" />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/office',

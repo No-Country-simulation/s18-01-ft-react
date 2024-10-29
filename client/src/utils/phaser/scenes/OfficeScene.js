@@ -200,19 +200,16 @@ export class OfficeScene extends Scene {
     this.socket.on('userList', players => {
       console.log({ players });
       Object.values(players).forEach(playerInfo => {
-        const userId = playerInfo['_id'];
+        const userId = playerInfo['userId'];
         const socketId = playerInfo['socketId'];
-        console.log({ socketId });
-        console.log({ has: this.players.has(socketId) });
-        if (!this.players.has(socketId)) {
-          console.log('Agrego al user');
+        if (!this.players.has(userId)) {
           this.addPlayer(
             {
               id: userId,
               socketId: socketId,
               x: playerInfo.x,
               y: playerInfo.y,
-              username: 'Guest',
+              username: playerInfo.username || 'Guest',
               colors: getPlayerColor(),
             },
             socketId === this.socket.id
@@ -222,9 +219,18 @@ export class OfficeScene extends Scene {
     });
 
     this.socket.on('newUserJoined', playerInfo => {
-      console.log('Entre al new user joined', { playerInfo });
-      if (this.players.has(playerInfo.id)) {
-        //this.addPlayer(playerInfo);
+      const userId = playerInfo['userId'];
+      const socketId = playerInfo['socketId'];
+      console.log({ playerInfo });
+      if (!this.players.has(userId)) {
+        this.addPlayer({
+          id: userId,
+          socketId: socketId,
+          x: playerInfo.x,
+          y: playerInfo.y,
+          username: playerInfo.username || 'Guest',
+          colors: getPlayerColor(),
+        });
       }
     });
 
@@ -235,39 +241,29 @@ export class OfficeScene extends Scene {
 
     // UserLeft no estoy seguro ??
     // La ides es que cuando un jugar cambie de sala se notifica la salida de la anterior
-    this.socket.on('userLeft', ({ username, userId }) => {
-      console.log(`${username} abandonó la sala, con ID ${userId}`);
-      this.removePlayer(userId);
+    this.socket.on('userLeft', info => {
+      console.log(`abandonó la sala, con ID`, { info });
+      //this.removePlayer(userId);
     });
-
-    /*this.socket.on('currentPlayers', players => {
-      Object.values(players).forEach(playerInfo => {
-        this.addPlayer(playerInfo, playerInfo.playerId === this.socket.id);
-      });
+    this.socket.on('disconnect', info => {
+      console.log(`abandonó la sala, con ID`, { info });
+      //this.removePlayer(userId);
     });
-
-    this.socket.on('newPlayer', playerInfo => {
-      this.addPlayer(playerInfo);
-    });
-
-    this.socket.on('userLeft', playerId => {
-      this.removePlayer(playerId);
-    });
-
-    this.socket.on('playerMoved', playerInfo => {
+    this.socket.on('userMoved', playerInfo => {
+      console.log({ playerInfo });
       this.updatePlayerPosition(playerInfo);
-    });*/
+    });
   }
 
   updatePlayerPosition(playerInfo) {
-    if (this.players.has(playerInfo.id)) {
-      const { sprite, name } = this.players.get(playerInfo.id);
+    if (this.players.has(playerInfo.userId)) {
+      const { sprite, name } = this.players.get(playerInfo.userId);
       sprite.setPosition(playerInfo.x, playerInfo.y);
       name.setPosition(playerInfo.x, playerInfo.y);
       this.updatePlayerAnimation(
         sprite,
-        playerInfo.lastMoveTo,
-        playerInfo.prevMoveTo
+        playerInfo.direction,
+        playerInfo.prevDirection
       );
     }
   }
@@ -304,7 +300,7 @@ export class OfficeScene extends Scene {
       this.otherPlayers.add(player);
     }
 
-    this.players.set(playerInfo.socketId, { sprite: player, name: playerName });
+    this.players.set(playerInfo.id, { sprite: player, name: playerName });
   }
 
   createPlayerSprite(playerInfo) {
@@ -435,12 +431,12 @@ export class OfficeScene extends Scene {
     const isIdleIdle = direction === 'idle' && prevDirection === 'idle';
     if (this.hasPositionChanged(direction, [x, y], oldPosition) && !isIdleIdle) {
       //TODO: Verificar datos enviados al socket al mover el player
-      /*this.socket.emit('playerMovement', {
+      this.socket.emit('updatePosition', {
         x,
         y,
         direction: direction,
         prevDirection,
-      });*/
+      });
     }
     this.player.oldPosition = { x, y, direction: direction };
   }
