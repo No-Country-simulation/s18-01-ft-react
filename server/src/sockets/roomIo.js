@@ -97,7 +97,7 @@ const handleSocketEvents = (io) => {
 			
 			if (roomId) {
 				Rooms.findOneAndUpdate(
-					{ _id: roomId, "users._id": user._id },  // Busca la sala y el usuario dentro de esa sala
+					{ roomId: roomId, "users._id": user._id },  // Busca la sala y el usuario dentro de esa sala
 					{
 						$set: {
 							"users.$.x": x,
