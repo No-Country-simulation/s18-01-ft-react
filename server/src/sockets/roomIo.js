@@ -91,20 +91,22 @@ const handleSocketEvents = (io) => {
 			}
 		});
 
-		socket.on("updatePosition", ({ x, y, prevDirection, direction }) => {
+		socket.on("updatePosition", async ({ x, y, prevDirection, direction }) => {
 			const roomId = Array.from(socket.rooms).find(room => room !== socket.id);
 			console.log("roomId", roomId);
 			
 			if (roomId) {
-				Rooms.findOneAndUpdate(
-					{ roomId: roomId, "users._id": user._id },  // Busca la sala y el usuario dentro de esa sala
+				const a = await Rooms.findOneAndUpdate(
+					{ _id: roomId, "users.userId": user._id },  // Busca la sala y el usuario dentro de esa sala
 					{
 						$set: {
 							"users.$.x": x,
 							"users.$.y": y,
 						}
-					}
+					}, { arrayFilters: [{ 'user.userId': user._id }], new: true }
 				);
+				console.log(a);
+				
 				console.log("condenada",x,y);
 				
 				io.to(roomId).emit("userMoved", { userId: user._id, x, y, prevDirection, direction });
