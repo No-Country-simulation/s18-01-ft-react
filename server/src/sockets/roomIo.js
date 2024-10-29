@@ -103,7 +103,7 @@ const handleSocketEvents = (io) => {
 							"users.$.x": x,
 							"users.$.y": y,
 						}
-					}, { arrayFilters: [{ 'user.userId': user._id }], new: true }
+					}, { new: true }
 				);
 				console.log(a);
 				
