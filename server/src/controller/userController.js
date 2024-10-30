@@ -89,7 +89,7 @@ exports.login = async (req, res) => {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				profilePicture: user.profilePicture,
-				id_emp: user.id_emp|| nulll,
+				id_emp: user.id_emp|| null,
 				rol: user.rol,
 				username: user.username,
 				isEmp: false
