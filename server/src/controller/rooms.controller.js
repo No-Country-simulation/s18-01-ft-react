@@ -74,6 +74,7 @@ exports.getRooms = async (req, res) => {
 
 // ver Room de empresa por Id
 exports.getRoomsByEmpId = async (req, res) => {
+	const empId = req.user ? req.user.id_emp : req.empresa.id;
 	try {
 		const empId = req.empresa?._id; // Asegúrate de que req.empresa está definido
 		console.log(empId);
