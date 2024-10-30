@@ -12,6 +12,5 @@ const verifyAccessToken = (token) => {
     });
 };
 
-module.exports = {
-    verifyAccessToken
-};
+module.exports = verifyAccessToken
+;

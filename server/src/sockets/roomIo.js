@@ -63,7 +63,7 @@ const handleSocketEvents = (io) => {
 				socket.rooms.forEach((room) => {
 					if (room !== socket.id) {
 						socket.leave(room);
-						io.to(room).emit("userLeft", { username: user.username, userId: user._id });
+						io.to(room).emit("userLeft", { user: user._id });
 					}
 				});
 

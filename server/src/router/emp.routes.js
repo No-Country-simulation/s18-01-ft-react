@@ -6,7 +6,9 @@ const { registerEmp,
         createPermissions, 
         assignUPermissions,
         assignRPermissions, 
-        viewusers } = require('../controller/emp.controller.js');
+        viewusers,
+        pview,
+        pdelete } = require('../controller/emp.controller.js');
 const express = require('express');
 const router = express.Router();
 const { tokenMiddleware } = require('../middlewares/middleware.js');
@@ -230,7 +232,7 @@ router.post('/resetpassword', resetPassword);
  *                   type: string
  *                   example: "Error en el servidor"
  */
-router.post('/createPermissions', createPermissions);
+router.post('/createPermissions', tokenMiddleware, createPermissions);
 /**
  * @swagger
  * /emp/assignRPermissions:
@@ -298,7 +300,7 @@ router.post('/createPermissions', createPermissions);
  *                   type: string
  *                   example: "Error en el servidor"
  */
-router.post('/assignRPermissions', assignRPermissions);
+router.post('/assignRPermissions', tokenMiddleware, assignRPermissions);
 /**
  * @swagger
  * /emp/assignUPermissions:
@@ -376,7 +378,9 @@ router.post('/assignRPermissions', assignRPermissions);
  *                   type: string
  *                   example: "Error en el servidor"
  */
-router.post('/assignUPermissions', assignUPermissions);
+router.post('/assignUPermissions', tokenMiddleware, assignUPermissions);
 router.get('/viewusers', tokenMiddleware, viewusers)
+router.get('/pview', tokenMiddleware, pview)
+router.put('/pdelete', tokenMiddleware, pdelete)
 
 module.exports = router;

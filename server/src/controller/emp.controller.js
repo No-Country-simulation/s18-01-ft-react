@@ -210,13 +210,11 @@ const resetPassword = async (req, res) => {
 };
 
 const createPermissions = async (req, res) => {
-    const { permissions } = req.body
-    const { token } = req.cookies
-    const decode = verifyAccessToken(token)
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
+    const { permissions}= req.body
     try {
-        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
-        const pre = await Emp.findById(decode.id)
-        if (!per) { return res.status(404).json({ message: 'nonexistent emp' }); }
+        const pre = await Emp.findById(empId)
+        if (!pre) { return res.status(404).json({ message: 'not existent ' }); }
         if (!pre.permissions_emp.includes(permissions)) {
             pre.permissions_emp.push(permissions);
         } else {
@@ -225,7 +223,7 @@ const createPermissions = async (req, res) => {
         await pre.save();
 
         return res.status(200).json({
-            message: 'Permissions created', user: pre.permissions_emp
+            message: 'Permissions created', permissions: pre.permissions_emp
         });
     } catch (error) {
         console.error(error);
@@ -235,15 +233,13 @@ const createPermissions = async (req, res) => {
 
 const assignUPermissions = async (req, res) => {
     const { permissions, id_user } = req.body
-    const { token } = req.cookies
-    const decode = verifyAccessToken(token)
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
     try {
-        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
-        const pre = await Emp.findById(decode.id)
-        if (!per) { return res.status(404).json({ message: 'nonexistent user' }); }
+        const pre = await Emp.findById(empId)
+        if (!per) { return res.status(404).json({ message: 'nonexistent emp' }); }
         const user = await User.findById(id_user)
         if (!user) { return res.status(404).json({ message: 'nonexistent user' }); }
-        if (!(user.id_emp == decode.id)) { return res.status(404).json({ message: 'not permit' }); }
+        if (!(user.id_emp == empId)) { return res.status(404).json({ message: 'not permit' }); }
         if (!pre.permissions_emp.includes(permissions)) { return res.status(404).json({ message: 'Permissions no create' }); }
         if (!user.permissions.includes(permissions)) {
             user.permissions.push(permissions);
@@ -261,16 +257,14 @@ const assignUPermissions = async (req, res) => {
 };
 
 const assignRPermissions = async (req, res) => {
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
     const { permissions, id_room } = req.body
-    const { token } = req.cookies
-    const decode = verifyAccessToken(token)
     try {
-        if (!decode.id) { return res.status(404).json({ message: 'token invalid' }); }
-        const pre = await Emp.findById(decode.id)
-        if (!per) { return res.status(404).json({ message: 'nonexistent emp' }); }
+        const pre = await Emp.findById(empId)
+        if (!pre) { return res.status(404).json({ message: 'not existent ' }); }
         const room = Rooms.findById(id_room)
         if (!room) { return res.status(404).json({ message: 'nonexistent room' }); }
-        if (room.id_emp == decode.id) { return res.status(404).json({ message: 'nonexistent room' }); }
+        if (room.id_emp == empId) { return res.status(404).json({ message: 'nonexistent room' }); }
         if (!pre.permissions_emp.includes(permissions)) { return res.status(404).json({ message: 'Permissions no create' }); }
         if (!room.permissions.includes(permissions)) {
             room.permissions.push(permissions);
@@ -318,8 +312,9 @@ const viewusers = async (req, res) => {
 };
 
 const pview = async (req, res) => {
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
     try {
-        const empresa= await Emp.findById(req.empresa.id)
+        const empresa = await Emp.findById(empId)
         if (!empresa){
             return res.status(400).json({ message: 'Enp not exist' });
         }
@@ -330,7 +325,30 @@ const pview = async (req, res) => {
     }
 };
 
+const pdelete = async (req, res) => {
+    const { permissions } = req.body
+    const empId = req.user ? req.user.id_emp : req.empresa.id;
+    try {
+        const pre = await Emp.findById(empId)
+        if (!pre.permissions_emp.includes(permissions)){
+            return res.status(400).json({ message: 'permissions no exist' });
+        }
+        const empresa = await Emp.findByIdAndUpdate(empId,
+            { $pull: { permissions_emp: permissions } },
+            { new: true }
+        )
+        if (!empresa) {
+            return res.status(400).json({ message: 'Enp not exist' });
+        }
+        return res.status(204).json(empresa);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
+    pdelete,
     pview,
     registerEmp,
     loginEmp,
