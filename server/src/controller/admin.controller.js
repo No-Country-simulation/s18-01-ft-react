@@ -48,7 +48,7 @@ exports.search_user = async (req, res) => {
 // Controlador que asocia un usuario a una empresa
 exports.associateUserToCompany = async (req, res) => {
   try {
-    const { userId } = req.body; // Solo se necesita el userId
+    const { email } = req.body; // Solo se necesita el userId
     const empresa = req.empresa; // La empresa ya está disponible desde el middleware
     console.log(empresa)
     console.log(req.empresa)
@@ -60,14 +60,14 @@ exports.associateUserToCompany = async (req, res) => {
     }
 
     // Verificar que se proporcione el userId
-    if (!userId) {
+    if (!email) {
       return res.status(400).json({
-        message: 'Debe proporcionar el userId.'
+        message: 'Debe proporcionar el email.'
       });
     }
 
-    // Buscar usuario por ID
-    const user = await User.findById(userId);
+    // Buscar usuario por email
+    const user = await User.find(email);
     if (!user) {
       return res.status(404).json({
         message: 'Usuario no encontrado.'

@@ -317,7 +317,21 @@ const viewusers = async (req, res) => {
     }
 };
 
+const pview = async (req, res) => {
+    try {
+        const empresa= await Emp.findById(req.empresa.id)
+        if (!empresa){
+            return res.status(400).json({ message: 'Enp not exist' });
+        }
+        return res.status(200).json(empresa.permissions_emp);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error en el servidor' });
+    }
+};
+
 module.exports = {
+    pview,
     registerEmp,
     loginEmp,
     confirmEmail,
