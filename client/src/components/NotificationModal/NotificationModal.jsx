@@ -4,32 +4,27 @@ import {
 } from '@/utils/functions/notificationService';
 import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import NotificationItem from './NotificationItem';
-import { useState } from 'react';
 
-const NotificationModal = ({ notifications, closeModal }) => {
+const NotificationModal = ({
+  notifications,
+  closeModal,
+  refreshNotifications,
+  loading,
+}) => {
   const MODAL_ID = 'notification';
 
-  const handleAcceptNotification = token => {
-    // const data = await putAcceptInvitation(token);
-    // if (data) {
-    //   console.log('Invitación aceptada:', data);
-    // }
+  const handleAcceptNotification = async token => {
+    const data = await putAcceptInvitation(token);
     console.log(`Invitación aceptada: ${token}`);
+    refreshNotifications();
+    return data;
   };
 
-  const handleReadNotification = id => {
-    // const data = putReadNotification(id);
-
-    // if (data) {
-    //   console.log(`Notificación ${id} marcada como leída`);
-    //   // Opcional: actualiza el estado para reflejar el cambio en la notificación
-    //   setAllNotifications(prev =>
-    //     prev.map(notif =>
-    //       notif.id === id ? { ...notif, read: true } : notif
-    //     )
-    //   );
-    // }
+  const handleReadNotification = async id => {
+    const data = await putReadNotification(id);
     console.log(`Notificación marcada como leida: ${id}`);
+    refreshNotifications();
+    return data;
   };
 
   return (
@@ -44,7 +39,9 @@ const NotificationModal = ({ notifications, closeModal }) => {
           </button>
         </div>
         <div className="flex size-full flex-col items-center gap-y-4 rounded-b-4xl bg-accent-100 py-4">
-          {notifications.length === 0 ? (
+          {loading ? (
+            <p>Cargando...</p>
+          ) : notifications.length === 0 ? (
             <p>No tienes notificaciones por el momento</p>
           ) : (
             <div>

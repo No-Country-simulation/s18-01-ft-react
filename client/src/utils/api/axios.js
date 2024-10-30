@@ -135,11 +135,13 @@ export const apiService = {
   },
 
   async readNotification(notificationId) {
-    return handleRequest(() => api.put(`/notifications/${notificationId}`));
+    return handleRequest(() =>
+      api.put(`/notifications/${notificationId}`, { isRead: true })
+    );
   },
 
   async acceptInvitation(token) {
-    return handleRequest(() => api.put('/notifications/accept', token));
+    return handleRequest(() => api.put('/notifications/accept', { token }));
   },
 };
 

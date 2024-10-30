@@ -2,30 +2,50 @@ import { useAtom } from 'jotai';
 import NotificationModal from './NotificationModal';
 import { modalAtom } from '@/store/modalAtom';
 import { useEffect, useState } from 'react';
-import { getAllNotifications } from '@/utils/functions/notificationService';
+import {
+  getAllNotifications,
+  getUnreadNotifications,
+} from '@/utils/functions/notificationService';
 
 const Notifications = () => {
   const [modal, setModal] = useAtom(modalAtom);
   const [notifications, setNotifications] = useState([]);
-  // // const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllNotifications();
+      setNotifications(data);
+    } catch (error) {
+      console.log('Error al obtener las notificaciones:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchUnreadNotifications = async () => {
+    try {
+      const unreadData = await getUnreadNotifications();
+      setNotifications(prev =>
+        prev.map(notif =>
+          unreadData.some(unread => unread.id === notif.id)
+            ? { ...notif, read: false }
+            : notif
+        )
+      );
+    } catch (error) {
+      console.log('Error al obtener las notificaciones no leídas:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      const data = await getAllNotifications();
-      if (data.length) {
-        setNotifications(data);
-      } else {
-        setError('Error al cargar las notificaciones');
-      }
-    };
-
     fetchNotifications();
   }, []);
 
   // const notifications = [
   //   {
-  //     id: 1,
+  //     _id: 1,
   //     icon: '',
   //     title: 'Tarea asignada',
   //     description: 'Admin te ha asignado una nueva tarea.',
@@ -58,10 +78,10 @@ const Notifications = () => {
           notifications={notifications}
           isOpen={modal.open}
           closeModal={() => setModal(prev => ({ ...prev, open: false }))}
+          refreshNotifications={fetchUnreadNotifications}
+          loading={loading}
         />
       )}
-      {/* {loading && <p>Cargando notificaciones...</p>} */}
-      {error && <p>{error}</p>}
     </>
   );
 };
