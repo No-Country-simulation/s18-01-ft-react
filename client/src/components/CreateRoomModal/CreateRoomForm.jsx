@@ -1,11 +1,30 @@
 import Button from '../Button/Button';
-import FormInput from '../FormInput/FormInput';
+import { FormInput } from '../FormInput/FormInput';
 import { PresetRadioItem } from './PresetRadioItem';
 import { useForm } from '@/utils/hooks/useForm';
 import { createRoom } from '@/data/createRoom';
+import { roomAtom } from '@/store/roomsAtom';
+import { modalAtom } from '@/store/modalAtom';
+import { useAtom, useSetAtom } from 'jotai';
 
 export const CreateRoomForm = ({ close }) => {
-  const { errors, isPending, submit } = useForm(createRoom);
+  const setRoom = useSetAtom(roomAtom);
+  const [modalA, setModal] = useAtom(modalAtom);
+  const handleSuccess = async form => {
+    const result = await createRoom(form);
+    if (!result || result.status !== 'SUCCESS') {
+      return result;
+    }
+    setRoom({
+      id: result.data.id,
+      name: result.data.name,
+      isActive: result.data.users.length > 0,
+      permissions: result.data.permissions,
+    });
+    setModal(val => ({ ...val, modalId: val.prevModal, prevModal: modalA.modalId }));
+  };
+
+  const { errors, isPending, submit } = useForm(handleSuccess);
   return (
     <form className="mt-5 flex flex-col gap-y-4" onSubmit={submit}>
       <label

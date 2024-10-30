@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/utils/functions/cn';
 import EyeButton from '../EyeButton/EyeButton';
 import IconBox from '../IconBox/IconBox';
-import FormInput from '../FormInput/FormInput';
+import { FormInput } from '../FormInput/FormInput';
 
 const formFieldCVA = cva(
   'autofill-removed no-outline shadow-inset-small border-neutral-1000 relative mt-px h-11 w-full rounded-4xl border-2 border-solid bg-white px-4 text-sm text-black transition-all duration-300 ease-in-out placeholder:text-neutral-800 focus:border-neutral-700',

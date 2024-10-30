@@ -1,5 +1,4 @@
-import React from 'react';
-import FormInput from '../FormInput/FormInput';
+import { FormInput } from '../FormInput/FormInput';
 
 function AppSearchBar() {
   return (

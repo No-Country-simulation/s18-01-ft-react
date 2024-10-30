@@ -68,7 +68,11 @@ const AppRouter = () => {
     },
     {
       path: '/welcome',
-      element: <UserWelcomePage />,
+      element: (
+        <ProtectedRoute isAllowed={user => !user.isEmp}>
+          <UserWelcomePage />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '*',

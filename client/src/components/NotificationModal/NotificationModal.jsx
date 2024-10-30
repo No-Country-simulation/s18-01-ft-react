@@ -5,14 +5,13 @@ import {
 import { ModalTitleWrapper } from '../ModalWrapper/ModalTitleWrapper';
 import NotificationItem from './NotificationItem';
 
+const MODAL_ID = 'notification';
 const NotificationModal = ({
   notifications,
   closeModal,
   refreshNotifications,
   loading,
 }) => {
-  const MODAL_ID = 'notification';
-
   const handleAcceptNotification = async token => {
     const data = await putAcceptInvitation(token);
     console.log(`Invitación aceptada: ${token}`);

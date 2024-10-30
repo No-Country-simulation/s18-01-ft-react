@@ -61,6 +61,7 @@ export const useMoveModal = id => {
   );
 
   useLayoutEffect(() => {
+    const margin = 20;
     if (
       modalA.open &&
       modalA.modalId === id &&
@@ -70,12 +71,33 @@ export const useMoveModal = id => {
       const modalHeight = modal.current.offsetHeight;
       const modalWidth = modal.current.offsetWidth;
       const [currentY, currentX] = modalA.coords;
-
+      console.log('modalA.coords', modalA.coords);
+      let newY = currentY;
       if (!initialAdjustmentMade.current) {
-        let newY = currentY;
-        if (modalA.position === 'top') newY = newY - modalHeight;
-        else if (modalA.position === 'bottom') newY = newY + modalHeight;
-        setPosition({ y: newY, x: currentX - modalWidth / 2.5 });
+        if (modalA.position === 'top') {
+          newY -= modalHeight;
+        } else if (modalA.position === 'bottom') {
+          newY += modalHeight;
+        }
+
+        // Asegura que el modal no salga de los límites de la pantalla
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+
+        let adjustedX = currentX - modalWidth / 2.5;
+        let adjustedY = newY;
+
+        // Ajusta X si está fuera de los límites
+        if (adjustedX < 0) adjustedX = 0;
+        else if (adjustedX + modalWidth > viewportWidth)
+          adjustedX = viewportWidth - modalWidth - margin;
+
+        // Ajusta Y si está fuera de los límites
+        if (adjustedY < 0) adjustedY = 0;
+        else if (adjustedY + modalHeight > viewportHeight)
+          adjustedY = viewportHeight - modalHeight - margin;
+
+        setPosition({ y: adjustedY, x: adjustedX });
         initialAdjustmentMade.current = true;
       }
     }

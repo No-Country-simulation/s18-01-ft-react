@@ -8,7 +8,7 @@ export const signupSubmit = async form => {
     email: form.get('email'),
   });
   if (schemaErrors) return schemaErrors;
-  const [error, _] = await apiService.post('/user/register', data);
+  const [error, success] = await apiService.post('/user/register', data);
 
   if (error) {
     return {
@@ -20,5 +20,6 @@ export const signupSubmit = async form => {
   return {
     id: crypto.randomUUID(),
     status: 'SUCCESS',
+    data: success.data,
   };
 };

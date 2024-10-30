@@ -6,4 +6,5 @@ export const modalAtom = atom({
   coords: [0, 0],
   position: '',
   firstOpen: false,
+  prevModal: '',
 });

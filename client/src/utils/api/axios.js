@@ -126,10 +126,6 @@ export const apiService = {
 
   // notifications
 
-  async allNotifications() {
-    return handleRequest(() => api.get('/notifications'));
-  },
-
   async unreadNotifications() {
     return handleRequest(() => api.get('/notifications/unread'));
   },

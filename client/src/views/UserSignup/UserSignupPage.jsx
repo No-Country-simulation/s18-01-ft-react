@@ -33,8 +33,11 @@ export const UserSignupPage = () => {
   const navigate = useNavigate();
   const handleSuccess = async form => {
     const result = await signupSubmit(form);
-    if (result && result.status === 'SUCCESS') navigate('/welcome');
-    return result;
+    if (!result || result.status !== 'SUCCESS') {
+      return result;
+    }
+    setAuth({ isAuth: true, user: result.data });
+    navigate('/office');
   };
 
   return (

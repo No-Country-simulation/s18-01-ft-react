@@ -9,6 +9,7 @@ import { roomAtom } from '@/store/roomsAtom';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useGetUserList } from '@/data/useGetUserList';
+import { CreateRoleModal } from '../CreateRoleModal/CreateRoleModal';
 
 const usersList = [
   {
@@ -26,10 +27,14 @@ export const UsersModal = () => {
   const user = getCurrentUserAtom();
   const isUserCompany = isEnterpriseUser(user);
   const [modal, setModal] = useAtom(modalAtom);
-  const { data, refetch, isLoading } = useGetUserList();
-  const openCreate = () => {
+  const { data, refetch } = useGetUserList();
+  const openInviteUser = () => {
     if (!isUserCompany) return;
-    setModal(val => ({ ...val, modalId: 'userCreate' }));
+    setModal(val => ({ ...val, modalId: 'userCreate', prevModal: MODAL_ID }));
+  };
+  const openCreateRole = () => {
+    if (!isUserCompany) return;
+    setModal(val => ({ ...val, modalId: 'CreateRole', prevModal: MODAL_ID }));
   };
   useEffect(() => {
     if (modal.open && modal.modalId === MODAL_ID) {
@@ -47,11 +52,14 @@ export const UsersModal = () => {
         <div className="flex size-full flex-col gap-y-4 rounded-b-4xl bg-accent-100">
           <UserModalTabs users={data} />
           {isUserCompany && (
-            <div className="mt-auto flex w-full items-center justify-center pb-8">
+            <div className="mt-auto flex w-full items-center justify-between gap-x-3 px-4 pb-8">
+              <Button size="full" variant="accent-outline" onClick={openCreateRole}>
+                Crear role
+              </Button>
               <Button
-                className="max-w-[75%] text-accent-100"
+                className="text-accent-100"
                 size="full"
-                onClick={openCreate}>
+                onClick={openInviteUser}>
                 Invitar al equipo
               </Button>
             </div>
@@ -59,6 +67,7 @@ export const UsersModal = () => {
         </div>
       </ModalTitleWrapper>
       <UserCreateModal />
+      <CreateRoleModal />
     </>
   );
 };

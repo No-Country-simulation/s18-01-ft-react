@@ -53,8 +53,10 @@ export const UserWelcomePage = () => {
   const navigate = useNavigate();
   const handleSuccess = async form => {
     const result = await userWelcomeSubmit(form);
-    if (result && result.status === 'SUCCESS') navigate('/office');
-    return result;
+    if (!result || result.status !== 'SUCCESS') {
+      return result;
+    }
+    navigate('/office');
   };
   return (
     <AuthLayout

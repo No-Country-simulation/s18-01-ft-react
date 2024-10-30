@@ -11,7 +11,7 @@ export const enterpriseSignup = async form => {
   });
   if (schemaErrors) return schemaErrors;
 
-  const [error, _] = await apiService.post('/emp/register', data);
+  const [error, success] = await apiService.post('/emp/register', data);
 
   if (error) {
     return {
@@ -23,5 +23,6 @@ export const enterpriseSignup = async form => {
   return {
     id: crypto.randomUUID(),
     status: 'SUCCESS',
+    data: success,
   };
 };

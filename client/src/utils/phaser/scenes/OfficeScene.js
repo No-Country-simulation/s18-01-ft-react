@@ -198,10 +198,11 @@ export class OfficeScene extends Scene {
 
     // UserList equivalente a currentPlayers
     this.socket.on('userList', players => {
-      console.log({ players });
+      console.log('La lista de usuarios eS: ', { players });
       Object.values(players).forEach(playerInfo => {
         const userId = playerInfo['userId'];
         const socketId = playerInfo['socketId'];
+
         if (!this.players.has(userId)) {
           this.addPlayer(
             {
@@ -221,7 +222,7 @@ export class OfficeScene extends Scene {
     this.socket.on('newUserJoined', playerInfo => {
       const userId = playerInfo['userId'];
       const socketId = playerInfo['socketId'];
-      console.log({ playerInfo });
+      console.log('Se conecto:', { playerInfo });
       if (!this.players.has(userId)) {
         this.addPlayer({
           id: userId,
@@ -241,17 +242,18 @@ export class OfficeScene extends Scene {
 
     // UserLeft no estoy seguro ??
     // La ides es que cuando un jugar cambie de sala se notifica la salida de la anterior
-    this.socket.on('userLeft', info => {
-      console.log(`abandonó la sala, con ID`, { info });
-      //this.removePlayer(userId);
+    this.socket.on('userLeft', playerInfo => {
+      const userId = playerInfo['user'];
+      if (this.players.has(userId)) {
+        this.removePlayer(userId);
+      }
     });
-    this.socket.on('disconnect', info => {
-      console.log(`abandonó la sala, con ID`, { info });
-      //this.removePlayer(userId);
-    });
+
     this.socket.on('userMoved', playerInfo => {
-      console.log({ playerInfo });
-      this.updatePlayerPosition(playerInfo);
+      const socketId = playerInfo.socketId;
+      if (socketId !== this.socket.id) {
+        this.updatePlayerPosition(playerInfo);
+      }
     });
   }
 
@@ -259,7 +261,7 @@ export class OfficeScene extends Scene {
     if (this.players.has(playerInfo.userId)) {
       const { sprite, name } = this.players.get(playerInfo.userId);
       sprite.setPosition(playerInfo.x, playerInfo.y);
-      name.setPosition(playerInfo.x, playerInfo.y);
+      name.setPosition(playerInfo.x, playerInfo.y + 10);
       this.updatePlayerAnimation(
         sprite,
         playerInfo.direction,
@@ -316,6 +318,7 @@ export class OfficeScene extends Scene {
         new Geom.Rectangle(32.25, 32, 15.5 * 1.8, 16 * 1.8),
         Geom.Rectangle.Contains
       );
+
     player.open = false;
     player.socketId = playerInfo.socketId;
     player.id = playerInfo.id;
@@ -337,14 +340,16 @@ export class OfficeScene extends Scene {
     return player;
   }
   createPlayerName(playerInfo) {
+    //.setOrigin(-1.13, 2.5)
     return this.add
       .text(playerInfo?.x, playerInfo?.y, playerInfo?.username, {
         font: '16px Arial',
         fill: '#ffffff',
-        stroke: '#000000',
-        strokeThickness: 4,
+        stroke: '#1010108a',
+        strokeThickness: 3,
       })
-      .setOrigin(-1.13, 2.5);
+      .setOrigin(0.5, 1)
+      .setPosition(playerInfo.x, playerInfo.y + 10);
   }
 
   resize(gameSize) {
@@ -430,7 +435,6 @@ export class OfficeScene extends Scene {
 
     const isIdleIdle = direction === 'idle' && prevDirection === 'idle';
     if (this.hasPositionChanged(direction, [x, y], oldPosition) && !isIdleIdle) {
-      //TODO: Verificar datos enviados al socket al mover el player
       this.socket.emit('updatePosition', {
         x,
         y,

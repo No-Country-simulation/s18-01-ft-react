@@ -12,18 +12,6 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchNotifications = async () => {
-    setLoading(true);
-    try {
-      const data = await getAllNotifications();
-      setNotifications(data);
-    } catch (error) {
-      console.log('Error al obtener las notificaciones:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const fetchUnreadNotifications = async () => {
     try {
       const unreadData = await getUnreadNotifications();
@@ -40,6 +28,17 @@ const Notifications = () => {
   };
 
   useEffect(() => {
+    const fetchNotifications = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllNotifications();
+        setNotifications(data);
+      } catch (error) {
+        console.log('Error al obtener las notificaciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchNotifications();
   }, []);
 
@@ -72,17 +71,12 @@ const Notifications = () => {
   // ];
 
   return (
-    <>
-      {modal.open && modal.modalId === 'notification' && (
-        <NotificationModal
-          notifications={notifications}
-          isOpen={modal.open}
-          closeModal={() => setModal(prev => ({ ...prev, open: false }))}
-          refreshNotifications={fetchUnreadNotifications}
-          loading={loading}
-        />
-      )}
-    </>
+    <NotificationModal
+      notifications={notifications}
+      closeModal={() => setModal(prev => ({ ...prev, open: false }))}
+      refreshNotifications={fetchUnreadNotifications}
+      loading={loading}
+    />
   );
 };
 

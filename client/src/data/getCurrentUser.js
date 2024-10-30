@@ -8,12 +8,11 @@ export const getCurrentUser = () => {
   const parsedValue = value ? JSON.parse(value) : null;
   return parsedValue?.user;
 };
-
-export const isNormalUser = user => {
-  return user && !user.isEmp && user?.id_emp === '';
-};
 export const isNormalUserWithoutCompany = user => {
-  return user && !user.isEmp && user?.id_emp !== '';
+  return user && !user.isEmp && !user?.id_emp;
+};
+export const isNormalUser = user => {
+  return user && !user.isEmp && !!user?.id_emp && user?.id_emp !== '';
 };
 
 export const isEnterpriseUser = user => {

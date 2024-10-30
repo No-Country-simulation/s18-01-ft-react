@@ -1,13 +1,13 @@
 import { apiService } from '../api/axios';
 
 export const getAllNotifications = async () => {
-  const [error, data] = await apiService.allNotifications();
+  const [error, data] = await apiService.get('/notifications');
 
   if (error) {
     console.error('Error al obtener todas las notificaciones:', error);
     return [];
   }
-  return data;
+  return data && Array.isArray(data) ? data : [];
 };
 
 export const getUnreadNotifications = async () => {

@@ -1,15 +1,13 @@
 import { apiService } from '@/utils/api/axios';
 import { validateSchema } from '@/utils/functions/validateSchema';
-import { inviteSchema } from '@/utils/schemas/userSchemas';
+import { permissionsSchema } from '@/utils/schemas/permissionsSchema';
 
-export const inviteUser = async formData => {
-  const [error, data] = validateSchema(inviteSchema, {
-    email: formData.get('email'),
-    role: formData.get('role'),
+export const createRole = async formData => {
+  const [error, data] = validateSchema(permissionsSchema, {
+    permissions: formData.get('permissions'),
   });
   if (error) return error;
-
-  const [errorApi, success] = await apiService.put('/admin/associate', data);
+  const [errorApi, success] = await apiService.post('/emp/createPermissions', data);
   if (errorApi) {
     console.log('errorApi', errorApi);
     return {

@@ -15,7 +15,7 @@ const formFieldCVA = cva(
   }
 );
 
-const FormInput = forwardRef(function FormInput(
+export const FormInput = forwardRef(function FormInput(
   { className = '', type = 'text', password, ...props },
   ref
 ) {
@@ -33,5 +33,3 @@ const FormInput = forwardRef(function FormInput(
     />
   );
 });
-
-export default FormInput;

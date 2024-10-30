@@ -24,7 +24,7 @@ export const RoomModal = () => {
   const { data, refetch, isLoading } = useGetRoomList();
   const openCreate = () => {
     if (!isUserCompany) return;
-    setModal(val => ({ ...val, modalId: 'createRoom' }));
+    setModal(val => ({ ...val, modalId: 'createRoom', prevModal: MODAL_ID }));
   };
   useEffect(() => {
     if (modal.open && modal.modalId === MODAL_ID) {
