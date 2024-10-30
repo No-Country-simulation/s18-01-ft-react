@@ -50,14 +50,14 @@ const NotificationModal = ({ notifications, closeModal }) => {
             <div>
               {notifications.map(notification => (
                 <NotificationItem
-                  key={notification.id}
-                  id={notification.id}
-                  title={notification.title}
-                  description={notification.description}
-                  date={notification.date}
+                  key={notification._id}
+                  id={notification._id}
+                  title={notification.Titel}
+                  description={notification.message}
+                  date={notification.createdAt}
                   icon={notification.icon}
                   type={notification.type}
-                  token={notification.token}
+                  token={notification.link}
                   onAccept={handleAcceptNotification}
                   onHover={handleReadNotification}
                 />
