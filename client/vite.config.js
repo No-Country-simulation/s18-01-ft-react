@@ -13,7 +13,7 @@ for (const x in raw) {
 }
 
 export default defineConfig({
-  base: './',
+  base: '/',
   publicDir: 'public',
   root: './',
   plugins: [react()],

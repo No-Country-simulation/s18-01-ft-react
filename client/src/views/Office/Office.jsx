@@ -1,11 +1,11 @@
-import PhaserContainer from '@/components/PhaserContainer/PhaserContainer';
-import RoomName from '@/components/RoomName/RoomName';
-import { UserEmptyLobby } from '@/components/UserEmptyLobby/UserEmptyLobby';
-import UserToolbar from '@/components/UserToolbar/UserToolbar';
-import { getCurrentUserAtom, getUserRole } from '@/data/getCurrentUser';
-import { USER_ROLES } from '@/data/roles';
-import OfficeLayouts from '@/layouts/OfficeLayouts';
-import { cn } from '@/utils/functions/cn';
+import PhaserContainer from '@/components/PhaserContainer/PhaserContainer.jsx';
+import RoomName from '@/components/RoomName/RoomName.jsx';
+import { UserEmptyLobby } from '@/components/UserEmptyLobby/UserEmptyLobby.jsx';
+import UserToolbar from '@/components/UserToolbar/UserToolbar.jsx';
+import { getCurrentUserAtom, getUserRole } from '@/data/getCurrentUser.js';
+import { USER_ROLES } from '@/data/roles.js';
+import OfficeLayouts from '@/layouts/OfficeLayouts.jsx';
+import { cn } from '@/utils/functions/cn.js';
 import { useParams } from 'react-router-dom';
 
 const hasAccessToToolbar = userRole => {

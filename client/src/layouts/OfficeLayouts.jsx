@@ -1,6 +1,5 @@
 import AppHeader from '@/components/AppHeader/AppHeader';
 import { RoomModal } from '@/components/RoomModal/RoomModal';
-import AppSearchBar from '@/components/Search/AppSearchBar';
 import { UsersModal } from '@/components/UsersModal/UsersModal';
 import ZoomControls from '@/components/ZoomControls/ZoomControls';
 

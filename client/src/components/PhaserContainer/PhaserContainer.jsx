@@ -1,8 +1,8 @@
-import { SOCKET_URL } from '@/utils/api/socket';
+import { SOCKET_URL } from '@/utils/api/socket.js';
 import StartGame from '@/utils/phaser';
-import { SCENE_KEYS } from '@/utils/phaser/consts';
-import { EventBus } from '@/utils/phaser/EventBus';
-import { OfficeScene } from '@/utils/phaser/scenes/OfficeScene';
+import { SCENE_KEYS } from '@/utils/phaser/consts.js';
+import { EventBus } from '@/utils/phaser/EventBus.js';
+import { OfficeScene } from '@/utils/phaser/scenes/OfficeScene.js';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 

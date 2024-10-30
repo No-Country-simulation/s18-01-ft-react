@@ -13,7 +13,7 @@ function AppSearchBar() {
         <button className="cursor-pointer">
           <img
             target="_blank"
-            src="../../../public/images/searchBar.png"
+            src="/images/searchBar.png"
             className="flex h-10 w-auto justify-center rounded-full bg-white p-2"
           />
         </button>

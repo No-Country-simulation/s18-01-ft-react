@@ -11,19 +11,18 @@ export class PreloaderScene extends Scene {
   preload() {
     this.createLoadingBar();
     // En esta funcion se agregan los assets necesarios para la escena
-    this.load.setPath('/');
-    this.load.image(ASSETS_KEYS.GRASS_IMG, 'room/images/GRASS TILE - DAY.png');
-    this.load.image(ASSETS_KEYS.STAIR_IMG, 'room/images/STAIRS - DAY.png');
+    this.load.image(ASSETS_KEYS.GRASS_IMG, '/room/images/GRASS TILE - DAY.png');
+    this.load.image(ASSETS_KEYS.STAIR_IMG, '/room/images/STAIRS - DAY.png');
     this.load.image(
       ASSETS_KEYS.TERRAIN_SET3_IMG,
-      'room/images/TERRAIN SET 3 - DAY.png'
+      '/room/images/TERRAIN SET 3 - DAY.png'
     );
-    this.load.image(ASSETS_KEYS.HOUSE_IMG, 'room/images/HOUSE 1 - DAY.png');
-    this.load.tilemapTiledJSON(ASSETS_KEYS.MAP, 'room/room.json');
+    this.load.image(ASSETS_KEYS.HOUSE_IMG, '/room/images/HOUSE 1 - DAY.png');
+    this.load.tilemapTiledJSON(ASSETS_KEYS.MAP, '/room/room.json');
     /* 
     Ejemplo de como cargar un Sprite
     */
-    this.load.spritesheet(ASSETS_KEYS.PLAYER, 'images/sprites/walk.png', {
+    this.load.spritesheet(ASSETS_KEYS.PLAYER, '/images/sprites/walk.png', {
       frameWidth: 80,
       frameHeight: 80,
       startFrame: 0,
