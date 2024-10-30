@@ -67,7 +67,7 @@ exports.associateUserToCompany = async (req, res) => {
     }
 
     // Buscar usuario por email
-    const user = await User.find(email);
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(404).json({
         message: 'Usuario no encontrado.'
