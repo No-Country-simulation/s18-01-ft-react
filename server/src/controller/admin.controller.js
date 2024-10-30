@@ -88,6 +88,8 @@ exports.associateUserToCompany = async (req, res) => {
       message: `Has sido invitado a unirte a la empresa ${empresa.name}. visita la siguiente Direccion`,
     });
 
+    
+    
     const savedNotification = await notification.save(); // Guardamos la notificación
 
     // Generar el token JWT con empId y notificationId
@@ -99,7 +101,7 @@ exports.associateUserToCompany = async (req, res) => {
     const token = jwt.sign(tokenPayload ,process.env.JWT_SECRET,{ expiresIn: '1d' });
 
     // Actualizar el link de la notificación con el token generado
-    savedNotification.link = `${process.env.FRONTEND}/aceptar-invitacion?token=${token}`;
+    savedNotification.link = token;
     await savedNotification.save();
 
     // Enviar respuesta exitosa
