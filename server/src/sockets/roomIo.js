@@ -113,6 +113,8 @@ const handleSocketEvents = (io) => {
 
 		socket.on("disconnect", async () => {
 			console.log(`${user.username} se ha desconectado.`);
+			const roomId = Array.from(socket.rooms).find(room => room !== socket.id);
+			console.log("roomId", roomId);
 			try {
 				await User.findByIdAndUpdate(user._id, { status: "offline", socketId: "" });
 				const room = await Rooms.findOneAndUpdate(
@@ -120,9 +122,11 @@ const handleSocketEvents = (io) => {
 					{ $pull: { users: { socketId: socket.id } } },
 					{ new: true }
 				);
-				if (room) {
-					io.to(room._id).emit("userLeft", user._id);
-					io.to(room._id).emit("userCountUpdate", room.users.length);
+				//console.log(room,);
+				
+				if (roomId) {
+					socket.emit("userLeft", {user:user._id});
+					io.emit("userCountUpdate", room.users.length);
 				}
 			} catch (error) {
 				console.error("Error al manejar desconexión:", error);
