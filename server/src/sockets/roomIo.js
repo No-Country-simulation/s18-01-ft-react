@@ -59,6 +59,7 @@ const handleSocketEvents = (io) => {
 				const room = await Rooms.findById(roomId);
 				if (!room) return;
 
+				socket.roomId = roomId;
 				socket.rooms.forEach((room) => {
 					if (room !== socket.id) {
 						socket.leave(room);
@@ -113,20 +114,28 @@ const handleSocketEvents = (io) => {
 
 		socket.on("disconnect", async () => {
 			console.log(`${user.username} se ha desconectado.`);
-			const roomId = Array.from(socket.rooms).find(room => room !== socket.id);
-			console.log("roomId", roomId);
+
+			// Usa socket.roomId directamente
+			const roomId = socket.roomId;
+
+			if (!roomId) {
+				console.error("No se encontró un roomId válido.");
+				return;
+			}
+
 			try {
 				await User.findByIdAndUpdate(user._id, { status: "offline", socketId: "" });
+
 				const room = await Rooms.findOneAndUpdate(
-					{ "users.socketId": socket.id },
-					{ $pull: { users: { socketId: socket.id } } },
+					{ _id: roomId },
+					{ $pull: { users: { userId: user._id } } },
 					{ new: true }
 				);
-				//console.log(room,);
-				
-				if (roomId) {
-					socket.emit("userLeft", {user:user._id});
-					io.emit("userCountUpdate", room.users.length);
+
+				if (room) {
+					socket.to(roomId).emit("userLeft", { user: user._id });
+					socket.to(roomId).emit("userCountUpdate", room.users.length);
+					console.log(`El usuario ${user.username} ha dejado la sala ${room._id}.`);
 				}
 			} catch (error) {
 				console.error("Error al manejar desconexión:", error);
