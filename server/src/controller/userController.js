@@ -34,9 +34,17 @@ exports.register = async (req, res) => {
 		const user=await newUser.save();
 
 		// Genera el token JWT
-		const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
+		const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
 			expiresIn: JWT_EXPIRATION,
 		});
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "none",
+			maxAge: 24 * 60 * 60 * 1000, // 1 día
+			path: "/",
+		});
+		
 		return res.status(201).json({
 			id: user.id,
 			email: user.email,
@@ -48,6 +56,7 @@ exports.register = async (req, res) => {
 			username: user.username,
 			isEmp: false
 		});
+		
 	} catch (error) {
 		return res.status(500).json({ message: "Error en el servidor", error });
 	}
