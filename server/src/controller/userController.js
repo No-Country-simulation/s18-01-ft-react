@@ -232,6 +232,10 @@ exports.updateProfile = async (req, res) => {
 			},
 			{ new: true },
 		);
+		if (!updatedUser) {
+			return res.status(404).json({ message: "Usuario no encontrado" });
+		}
+		console.log(updatedUser)
 
 		return res.status(200).json(updatedUser);
 	} catch (error) {
