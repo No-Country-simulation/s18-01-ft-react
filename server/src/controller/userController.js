@@ -31,13 +31,23 @@ exports.register = async (req, res) => {
 			authId: null,
 		});
 
-		await newUser.save();
+		const user=await newUser.save();
 
 		// Genera el token JWT
 		const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
 			expiresIn: JWT_EXPIRATION,
 		});
-		return res.status(201).json({ token });
+		return res.status(201).json({
+			id: user.id,
+			email: user.email,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			profilePicture: user.profilePicture,
+			id_emp: user.id_emp || null,
+			rol: user.rol,
+			username: user.username,
+			isEmp: false
+		});
 	} catch (error) {
 		return res.status(500).json({ message: "Error en el servidor", error });
 	}
