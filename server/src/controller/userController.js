@@ -44,7 +44,7 @@ exports.register = async (req, res) => {
 			maxAge: 24 * 60 * 60 * 1000, // 1 día
 			path: "/",
 		});
-		
+
 		return res.status(201).json({
 			id: user.id,
 			email: user.email,
@@ -217,7 +217,7 @@ exports.resetPassword = async (req, res) => {
 
 // Actualización del perfil
 exports.updateProfile = async (req, res) => {
-	const userId = req.user.userId;
+	const userId = req.user._id;
 	const { firstName, lastName, username, rol, profilePicture } = req.body;
 
 	try {
