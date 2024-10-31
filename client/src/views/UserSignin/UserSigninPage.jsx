@@ -45,7 +45,7 @@ export const UserSigninPage = () => {
   };
 
   return (
-    <AuthLayout h1="Hola Bienvenido a Escape Co" h2="Login">
+    <AuthLayout h1="Hola Bienvenido a CollabZone" h2="Login">
       <div className="flex w-full flex-col items-center justify-center">
         <FormComponent
           id="user-signin"
@@ -57,7 +57,7 @@ export const UserSigninPage = () => {
           <ButtonBox boxText="¿Deseas entrar con tu cuenta de Google?">
             Iniciar sesion Google
           </ButtonBox>
-          <ButtonBox boxText="¿Todabia no tienes cuenta?" className="!p-0">
+          <ButtonBox boxText="¿Todavia no tienes cuenta?" className="!p-0">
             <Link
               to="/signup"
               className="no-outline flex size-full items-center justify-center bg-transparent">
