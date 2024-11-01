@@ -51,9 +51,9 @@ CollabZone ofrece un espacio virtual donde los usuarios pueden moverse librement
 ## 🚀 Demo
 Puede ver el sitio en: [CollabZone](https://no-countrys18.netlify.app)
 
-## 🤝 Colaboradores
+## 🤝 Contribuidores
 
-### 🧑‍💻 TL:
+### 📌 Team Leader:
 
 |<img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50>|
 |:-:|
@@ -61,14 +61,14 @@ Puede ver el sitio en: [CollabZone](https://no-countrys18.netlify.app)
 | <a href="https://www.linkedin.com/in/diego-cristian-alfredo-v-54b459249/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
 
 
-### 🧑‍💻 Designers:
+### 🎨 Designers:
 
 | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> |
 |:-:|:-:|
 | **Sasha Sawosz** | **Diego Alexander** |
 | <a href="https://www.linkedin.com/in/sasha-sawosz/"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> | <a href="https://www.linkedin.com/in/diego-alexander-918a62210"><img src="https://img.shields.io/badge/linkedin%20-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white"/></a> |
 
-### 🧑‍💻 Developer:
+### 🧑‍💻 Developers:
 
 | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> | <img src="https://www.nicepng.com/png/full/128-1280406_user-icon-png.png" width=50> |
 |:-:|:-:|:-:|:-:|:-:|
