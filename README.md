@@ -35,7 +35,7 @@ CollabZone ofrece un espacio virtual donde los usuarios pueden moverse librement
 
 ## Backend
 <div style="display: flex; align-items: center; gap: 14px;">
-  <img height="35" alt="Node JS" src="https://cdn.simpleicons.org/nodejs/5FA04E?viewbox=auto" />
+  <img height="35" alt="Node JS" src="https://cdn.simpleicons.org/nodedotjs/5FA04E?viewbox=auto" />
   <img height="35" alt="Express" src="https://cdn.simpleicons.org/express/000000?viewbox=auto" />
   <img height="35" alt="Nodemon" src="https://cdn.simpleicons.org/nodemon/76D04B?viewbox=auto" />
   <img height="35" alt="Docker" src="https://cdn.simpleicons.org/docker/2496ED?viewbox=auto" />
